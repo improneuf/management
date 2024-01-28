@@ -117,7 +117,7 @@ func ReadShowScheduleFromFile(filePath string) {
 				continue
 			}
 			for c, cell := range row {
-				if c > 10 {
+				if c > 9 {
 					break
 				}
 				fmt.Print(cell, "\t")
