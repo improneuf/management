@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/xuri/excelize/v2"
@@ -21,6 +22,14 @@ const (
 	SHOW_PROGRAM_SHEET_NAME  string = "ShowProgram"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 )
+
+type Event struct {
+	Date          time.Time
+	Day           string
+	CrewSjefTeam  string
+	Teams         []string
+	ShowLanguages []string
+}
 
 // retrieve the last modified date of a file on Google Drive.
 func GetGoogleDriveFileModifiedTime(service *drive.Service, fileID string) (time.Time, error) {
@@ -89,7 +98,9 @@ func DownloadFileFromGoogleDrive(service *drive.Service, file_id string) (string
 }
 
 // ReadExcelFile reads and prints the contents of the given Excel file.
-func ReadShowScheduleFromFile(filePath string) {
+func ReadShowScheduleFromFile(filePath string) []Event {
+	events := make([]Event, 0)
+
 	// Open the Excel file
 	f, err := excelize.OpenFile(filePath)
 	if err != nil {
@@ -114,15 +125,56 @@ func ReadShowScheduleFromFile(filePath string) {
 			if r < 10 {
 				continue
 			}
+
+			var teams []string
+			var date time.Time
+			var day string
+			var crewSjefTeam string
+			var showLanguages []string
+
 			for c, cell := range row {
 				if c > 9 {
 					break
 				}
-				fmt.Print(cell, "\t")
+				cellTrimmed := strings.TrimSpace(cell)
+				fmt.Printf("|%s|", cellTrimmed)
+				switch c {
+				case 0:
+					date, err = time.Parse("2 Jan 2006", cellTrimmed)
+					if err != nil {
+						date2, err2 := time.Parse("2-Jan-06", cellTrimmed)
+						if err2 != nil {
+							log.Fatalf("Failed to parse date: %v", cellTrimmed)
+						}
+						date = date2
+					}
+				case 1:
+					day = cellTrimmed
+				case 2:
+					crewSjefTeam = cellTrimmed
+				case 4, 5, 6, 7, 8:
+					if cellTrimmed != "" {
+						teams = append(teams, cellTrimmed)
+					}
+				case 9:
+					showLanguages := strings.Split(cellTrimmed, "/")
+					for i, language := range showLanguages {
+						showLanguages[i] = strings.TrimSpace(language)
+					}
+				}
 			}
+			event := Event{
+				Date:          date,
+				Day:           day,
+				CrewSjefTeam:  crewSjefTeam,
+				Teams:         teams,
+				ShowLanguages: showLanguages,
+			}
+			events = append(events, event)
 			fmt.Println()
 		}
 	}
+	return events
 }
 
 // Retrieve a token, save the token, then return the token
@@ -261,5 +313,5 @@ func main() {
 		os.Rename(downloadedFileTemp, xlsxFilePath)
 	}
 
-	ReadShowScheduleFromFile(xlsxFilePath)
+	fmt.Println(ReadShowScheduleFromFile(xlsxFilePath))
 }
