@@ -10,6 +10,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/xuri/excelize/v2"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
@@ -17,9 +18,10 @@ import (
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
-	SHOW_PROGRAM_SHEET_ID string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
-	CLIENT_SECRET_FILE    string = "client_secret_77315275075-hlot0424jnl8ohc1r4fn6qm4lkq11mtp.apps.googleusercontent.com.json"
-	TOKEN_FILE            string = "token.json"
+	SHOW_PROGRAM_SHEET_ID   string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
+	SHOW_PROGRAM_SHEET_NAME string = "ShowProgram"
+	CLIENT_SECRET_FILE      string = "client_secret_77315275075-hlot0424jnl8ohc1r4fn6qm4lkq11mtp.apps.googleusercontent.com.json"
+	TOKEN_FILE              string = "token.json"
 )
 
 // retrieve the last modified date of a file on Google Drive.
@@ -86,6 +88,43 @@ func DownloadFileFromGoogleDrive(service *drive.Service, file_id string) (string
 	fmt.Println("Wrote downloaded content to the temporary file: " + tmpFile.Name() + ".")
 
 	return tmpFile.Name(), nil
+}
+
+// ReadExcelFile reads and prints the contents of the given Excel file.
+func ReadShowScheduleFromFile(filePath string) {
+	// Open the Excel file
+	f, err := excelize.OpenFile(filePath)
+	if err != nil {
+		log.Fatalf("Failed to open file: %v", err)
+	}
+
+	// Get the names of all the sheets
+	sheets := f.GetSheetList()
+
+	// Iterate through each sheet and print its contents
+	for _, sheet := range sheets {
+		fmt.Printf("Sheet: %s\n", sheet)
+		if sheet != SHOW_PROGRAM_SHEET_NAME {
+			continue
+		}
+		rows, err := f.GetRows(sheet)
+		if err != nil {
+			log.Fatalf("Failed to get rows for sheet %s: %v", sheet, err)
+		}
+
+		for r, row := range rows {
+			if r < 10 {
+				continue
+			}
+			for c, cell := range row {
+				if c > 10 {
+					break
+				}
+				fmt.Print(cell, "\t")
+			}
+			fmt.Println()
+		}
+	}
 }
 
 // Retrieve a token, save the token, then return the token
@@ -211,4 +250,5 @@ func main() {
 		os.Rename(downloadedFileTemp, xlsxFilePath)
 	}
 
+	ReadShowScheduleFromFile(xlsxFilePath)
 }
