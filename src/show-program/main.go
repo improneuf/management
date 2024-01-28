@@ -14,6 +14,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
+	"google.golang.org/api/option"
 )
 
 const (
@@ -255,20 +256,20 @@ func saveToken(path string, token *oauth2.Token) {
 }
 
 func main() {
-	// Load your client_secret.json
+	ctx := context.Background()
+
 	b, err := os.ReadFile(SERVICE_ACCOUNT_KEY_FILE)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 
-	// If modifying these scopes, delete your previously saved token.json.
 	config, err := google.JWTConfigFromJSON(b, drive.DriveReadonlyScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := config.Client(context.Background())
+	client := config.Client(ctx)
 
-	srv, err := drive.New(client)
+	srv, err := drive.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		log.Fatalf("Unable to retrieve Drive client: %v", err)
 	}
