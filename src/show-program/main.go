@@ -24,12 +24,76 @@ const (
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 )
 
+type ShowType string
+
+const (
+	Normal        ShowType = "Normal"
+	Jam           ShowType = "Jam"
+	ClashOfTitans ShowType = "ClashOfTitans"
+	StoryNight    ShowType = "StoryNight"
+	DuoLab        ShowType = "DuoLab"
+	CProject      ShowType = "CProject"
+	Other         ShowType = "Other"
+)
+
+type ShowLanguage string
+
+const (
+	English   ShowLanguage = "English"
+	Norwegian ShowLanguage = "Norwegian"
+)
+
 type Event struct {
 	Date          time.Time
 	Day           string
 	CrewSjefTeam  string
 	Teams         []string
-	ShowLanguages []string
+	ShowLanguages []ShowLanguage
+	ShowTypes     []ShowType
+}
+
+func getShowLanguage(language string) ShowLanguage {
+	language = strings.ToUpper(language)
+	switch language {
+	case "ENGLISH", "EN":
+		return English
+	case "NORWEGIAN", "NORSK", "NO", "NB":
+		return Norwegian
+	default:
+		return English
+	}
+}
+
+func getShowType(teamName string) ShowType {
+	teamName = strings.ToUpper(teamName)
+	switch teamName {
+	case "CLASH OF TITANS":
+		return ClashOfTitans
+	case "DUOLAB":
+		return DuoLab
+	case "STORY NIGHT":
+		return StoryNight
+	case "CPROJ":
+		return CProject
+	case "JAM":
+		return Jam
+	default:
+		return Normal
+	}
+}
+
+func removeDuplicates(slice []ShowType) []ShowType {
+	set := make(map[ShowType]struct{})
+	var uniqueSlice []ShowType
+
+	for _, element := range slice {
+		if _, exists := set[element]; !exists {
+			set[element] = struct{}{}
+			uniqueSlice = append(uniqueSlice, element)
+		}
+	}
+
+	return uniqueSlice
 }
 
 // retrieve the last modified date of a file on Google Drive.
@@ -131,7 +195,8 @@ func ReadShowScheduleFromFile(filePath string) []Event {
 			var date time.Time
 			var day string
 			var crewSjefTeam string
-			var showLanguages []string
+			var showLanguages []ShowLanguage
+			var showTypes []ShowType
 
 			for c, cell := range row {
 				if c > 9 {
@@ -156,20 +221,24 @@ func ReadShowScheduleFromFile(filePath string) []Event {
 				case 4, 5, 6, 7, 8:
 					if cellTrimmed != "" {
 						teams = append(teams, cellTrimmed)
+						showTypes = append(showTypes, getShowType(cellTrimmed))
 					}
 				case 9:
-					showLanguages := strings.Split(cellTrimmed, "/")
-					for i, language := range showLanguages {
-						showLanguages[i] = strings.TrimSpace(language)
+					showLanguagesStr := strings.Split(cellTrimmed, "/")
+					for _, languageStr := range showLanguagesStr {
+						languageStr = strings.TrimSpace(languageStr)
+						showLanguages = append(showLanguages, getShowLanguage(languageStr))
 					}
 				}
 			}
+			showTypes = removeDuplicates(showTypes)
 			event := Event{
 				Date:          date,
 				Day:           day,
 				CrewSjefTeam:  crewSjefTeam,
 				Teams:         teams,
 				ShowLanguages: showLanguages,
+				ShowTypes:     showTypes,
 			}
 			events = append(events, event)
 			fmt.Println()
