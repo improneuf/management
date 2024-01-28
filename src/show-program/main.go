@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"time"
 
@@ -18,10 +17,9 @@ import (
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
-	SHOW_PROGRAM_SHEET_ID   string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
-	SHOW_PROGRAM_SHEET_NAME string = "ShowProgram"
-	CLIENT_SECRET_FILE      string = "client_secret_77315275075-hlot0424jnl8ohc1r4fn6qm4lkq11mtp.apps.googleusercontent.com.json"
-	TOKEN_FILE              string = "token.json"
+	SHOW_PROGRAM_SHEET_ID    string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
+	SHOW_PROGRAM_SHEET_NAME  string = "ShowProgram"
+	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 )
 
 // retrieve the last modified date of a file on Google Drive.
@@ -165,6 +163,32 @@ func getTokenFromWeb(config *oauth2.Config) (*oauth2.Token, error) {
 	return token, nil
 }
 
+// getServiceAccountToken retrieves an OAuth2 token using service account credentials.
+func getServiceAccountToken(serviceAccountKeyFile string) (*oauth2.Token, error) {
+	// Read the service account key file
+	data, err := os.ReadFile(serviceAccountKeyFile)
+	if err != nil {
+		return nil, fmt.Errorf("unable to read service account key file: %v", err)
+	}
+
+	// Parse the service account key
+	conf, err := google.JWTConfigFromJSON(data, "https://www.googleapis.com/auth/drive.readonly")
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse service account key file: %v", err)
+	}
+
+	// Get the HTTP client using the service account's JWT configuration
+	client := conf.Client(context.Background())
+
+	// Fetch the token
+	token, err := client.Transport.(*oauth2.Transport).Source.Token()
+	if err != nil {
+		return nil, fmt.Errorf("unable to retrieve token from service account: %v", err)
+	}
+
+	return token, nil
+}
+
 // Save a token to a file path
 func saveToken(path string, token *oauth2.Token) {
 	// Open the file for writing.
@@ -178,32 +202,19 @@ func saveToken(path string, token *oauth2.Token) {
 	json.NewEncoder(file).Encode(token)
 }
 
-// getClient retrieves a token, saves the token, then returns the generated client.
-func getClient(tokenFile string, config *oauth2.Config) *http.Client {
-	tok, err := tokenFromFile(tokenFile)
-	if err != nil {
-		tok, err = getTokenFromWeb(config)
-		if err != nil {
-			log.Fatalf("Unable to get token from web: %v", err)
-		}
-		saveToken(tokenFile, tok)
-	}
-	return config.Client(context.Background(), tok)
-}
-
 func main() {
 	// Load your client_secret.json
-	b, err := os.ReadFile(CLIENT_SECRET_FILE)
+	b, err := os.ReadFile(SERVICE_ACCOUNT_KEY_FILE)
 	if err != nil {
 		log.Fatalf("Unable to read client secret file: %v", err)
 	}
 
 	// If modifying these scopes, delete your previously saved token.json.
-	config, err := google.ConfigFromJSON(b, drive.DriveReadonlyScope)
+	config, err := google.JWTConfigFromJSON(b, drive.DriveReadonlyScope)
 	if err != nil {
 		log.Fatalf("Unable to parse client secret file to config: %v", err)
 	}
-	client := getClient(TOKEN_FILE, config)
+	client := config.Client(context.Background())
 
 	srv, err := drive.New(client)
 	if err != nil {
