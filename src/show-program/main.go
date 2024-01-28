@@ -16,10 +16,10 @@ import (
 )
 
 const (
-	SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1"
-	// SHOW_PROGRAM_SHEET_ID string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z"
-	CLIENT_SECRET_FILE string = "client_secret_77315275075-hlot0424jnl8ohc1r4fn6qm4lkq11mtp.apps.googleusercontent.com.json"
-	TOKEN_FILE         string = "token.json"
+	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
+	SHOW_PROGRAM_SHEET_ID string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
+	CLIENT_SECRET_FILE    string = "client_secret_77315275075-hlot0424jnl8ohc1r4fn6qm4lkq11mtp.apps.googleusercontent.com.json"
+	TOKEN_FILE            string = "token.json"
 )
 
 // retrieve the last modified date of a file on Google Drive.
@@ -210,4 +210,5 @@ func main() {
 		// move tempfile to the correct location
 		os.Rename(downloadedFileTemp, xlsxFilePath)
 	}
+
 }
