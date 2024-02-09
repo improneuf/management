@@ -12,6 +12,10 @@
           background-position: center;
           background-repeat: no-repeat;
         }
+        .thin-border {
+          border: 0.25px solid #D1D5DB; /* This is Tailwind's gray-300 color */
+          border-style: hidden;
+        }
     </style>
     <link href="https://fonts.cdnfonts.com/css/carton-six" rel="stylesheet"/>
 </head>
@@ -45,34 +49,34 @@
 
     <!-- Performance Slots -->
     <div class="absolute bottom-10 left-0 right-0 flex justify-evenly"
-        style="padding-bottom: 30px">
+         style="padding-bottom: 30px">
         <!-- Each Image Container -->
-        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
-          <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-          <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Aree and a Friend</p>
+        <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
+            <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1 ">Aree and a Friend</p>
         </div>
-        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+        <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="2.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Arti' Combo</p>
+            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Arti' Combo</p>
         </div>
-        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+        <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="3.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Bubbly Thoughts</p>
+            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Bubbly Thoughts</p>
         </div>
-        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+        <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="4.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Petunias</p>
+            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Petunias</p>
         </div>
-        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+        <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="5.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Far og resten of familien</p>
+            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Far og resten of familien</p>
         </div>
         <!-- Repeat for each performance slot -->
     </div>
 
     <!-- Pricing and Timing -->
     <div class="absolute bottom-0 left-0 right-0 flex items-center justify-evenly font-extrabold"
-        style="padding-bottom: 20px">
+         style="padding-bottom: 20px">
         <p class="text-white text-xs lg:text-sm">50 Kr / 70 Kr / 100 Kr</p>
         <p class="text-white text-xs lg:text-sm">20:00 - 22:30</p>
         <p class="text-white text-xs lg:text-sm">Lillesalen, Chateau Neuf</p>
