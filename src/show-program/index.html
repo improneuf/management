@@ -13,6 +13,7 @@
           background-repeat: no-repeat;
         }
     </style>
+    <link href="https://fonts.cdnfonts.com/css/carton-six" rel="stylesheet"/>
 </head>
 <body>
 <div class="banner-background relative h-[502px] w-[960px] overflow-hidden">
@@ -22,51 +23,80 @@
     </div>
 
     <!-- Date Badge -->
-    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-2">
+    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-2"
+         style="padding-top: 20px;">
         <div class="bg-white rounded-full flex flex-col items-center justify-center shadow-lg"
              style="width: 90px; height: 90px;"> <!-- Adjust width and height for your badge size -->
-            <span class="text-black font-bold text-xl" style="margin-bottom: -10px;">January</span>
+            <span class="text-black font-bold" style="margin-bottom: -10px;">Sept.</span>
             <!-- Negative margin for closer spacing -->
             <span class="text-black font-bold text-5xl">17</span>
         </div>
     </div>
 
     <!-- Top Text -->
-    <div class="absolute top-0  left-0 right-0 flex flex-col items-center justify-center p-8"
-         style="padding-top: 130px;">
-        <h1 class="text-red-600 text-5xl lg:text-6xl font-bold uppercase">Improv Wednesday Show</h1>
+    <div class="absolute top-0  left-0 right-0 flex flex-col items-center justify-center text-center"
+         style="padding-top: 140px;">
+        <h1 class="text-red-600 text-9xl lg:text-6xl font-bold uppercase subpixel-antialiased tracking-widest"
+            style="font-family: 'Carton Six';">
+            Improv Wednesday Show
+        </h1>
         <p class="text-white text-lg lg:text-xl mt-2">Laugh, cry, and everything in between</p>
     </div>
 
     <!-- Performance Slots -->
-    <div class="absolute bottom-10 left-0 right-0 flex justify-evenly">
+    <div class="absolute bottom-10 left-0 right-0 flex justify-evenly"
+        style="padding-bottom: 30px">
         <!-- Each Image Container -->
-        <div class="text-center">
-            <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="text-white text-sm lg:text-md">Performance Name</p>
+        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+          <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+          <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Aree and a Friend</p>
         </div>
-        <div class="text-center">
+        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
             <img src="2.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="text-white text-sm lg:text-md">Performance Name</p>
+            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Arti' Combo</p>
         </div>
-        <div class="text-center">
+        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
             <img src="3.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="text-white text-sm lg:text-md">Performance Name</p>
+            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Bubbly Thoughts</p>
         </div>
-        <div class="text-center">
+        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
             <img src="4.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="text-white text-sm lg:text-md">Performance Name</p>
+            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Petunias</p>
+        </div>
+        <div class="text-center p-2 bg-white border-gray-300 rounded-lg">
+            <img src="5.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="performance-name text-black font-bold text-lg pt-2 pb-1">Far og resten of familien</p>
         </div>
         <!-- Repeat for each performance slot -->
     </div>
 
     <!-- Pricing and Timing -->
-    <div class="absolute bottom-0 left-0 p-4">
+    <div class="absolute bottom-0 left-0 right-0 flex items-center justify-evenly font-extrabold"
+        style="padding-bottom: 20px">
         <p class="text-white text-xs lg:text-sm">50 Kr / 70 Kr / 100 Kr</p>
         <p class="text-white text-xs lg:text-sm">20:00 - 22:30</p>
         <p class="text-white text-xs lg:text-sm">Lillesalen, Chateau Neuf</p>
     </div>
 
 </div>
+<script>
+    function adjustTextSize(textElement) {
+      const textLength = textElement.innerText.length;
+      if (textLength > 15) {
+        textElement.classList.remove('text-lg', 'text-md', 'text-base');
+        textElement.classList.add('text-sm');
+      } else if (textLength > 10) {
+        textElement.classList.remove('text-lg', 'text-sm', 'text-base');
+        textElement.classList.add('text-md');
+      } else {
+        textElement.classList.remove('text-md', 'text-sm', 'text-base');
+        textElement.classList.add('text-lg');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.performance-name').forEach(adjustTextSize);
+    });
+</script>
 </body>
 </html>
