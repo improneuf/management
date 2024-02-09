@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improv Wednesday Show Banner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .banner-background {
+          background-image: url('bg.png');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+        /* Custom styling for the date badge to look like a speech bubble */
+        .date-badge {
+          position: absolute;
+          top: 1rem;
+          left: 50%; /* Center the badge horizontally */
+          transform: translateX(-50%); /* Offset by half of the badge's width to truly center it */
+          background: white;
+          padding: 0.5rem 1rem;
+          border-radius: 9999px; /* This will create a circular shape */
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="banner-background relative h-[502px] w-[960px] overflow-hidden">
+    <!-- Logo -->
+    <div class="absolute top-0 right-0 p-4">
+        <img src="logo.png" alt="Improv Neuf Logo" class="h-12 w-auto"> <!-- Adjust the h-12 class for the logo size -->
+    </div>
+
+    <!-- Date Badge -->
+    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4">
+        <div class="bg-white rounded-full text-black font-bold text-sm lg:text-lg px-4 py-2">
+            January 17
+        </div>
+    </div>
+
+    <!-- Top Text -->
+    <div class="absolute top-0 left-0 p-8">
+        <h1 class="text-white text-5xl lg:text-6xl font-bold uppercase">Improv Wednesday Show</h1>
+        <p class="text-red-600 text-lg lg:text-xl mt-2">Laugh, cry, and everything in between</p>
+    </div>
+
+    <!-- Performance Slots -->
+    <div class="absolute bottom-10 left-0 right-0 flex justify-evenly">
+        <!-- Each Image Container -->
+        <!-- Adjust the width and height of the images using Tailwind's size classes -->
+        <div class="text-center">
+            <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="text-white text-sm lg:text-md">Performance Name</p>
+        </div>
+        <div class="text-center">
+            <img src="2.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="text-white text-sm lg:text-md">Performance Name</p>
+        </div>
+        <div class="text-center">
+            <img src="3.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="text-white text-sm lg:text-md">Performance Name</p>
+        </div>
+        <div class="text-center">
+            <img src="4.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
+            <p class="text-white text-sm lg:text-md">Performance Name</p>
+        </div>
+        <!-- Repeat for each performance slot -->
+    </div>
+
+    <!-- Pricing and Timing -->
+    <div class="absolute bottom-0 left-0 p-4">
+      <p class="text-white text-xs lg:text-sm">50 Kr / 70 Kr / 100 Kr</p>
+      <p class="text-white text-xs lg:text-sm">20:00 - 22:30</p>
+      <p class="text-white text-xs lg:text-sm">Lillesalen, Chateau Neuf</p>
+    </div>
+
+</div>
+</body>
+</html>
