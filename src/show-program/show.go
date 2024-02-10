@@ -16,6 +16,7 @@ type Show struct {
 	Teams         []string
 	ShowLanguages []ShowLanguage
 	ShowTypes     []ShowType
+	ShowName      string
 }
 
 func GetShowFromRow(row []string) Show {
@@ -68,6 +69,7 @@ func GetShowFromRow(row []string) Show {
 		Teams:         teams,
 		ShowLanguages: showLanguages,
 		ShowTypes:     showTypes,
+		ShowName:      getShowNameFromType(showTypes[0], date),
 	}
 }
 
