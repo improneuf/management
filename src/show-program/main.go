@@ -95,13 +95,14 @@ func main() {
 		os.Rename(downloadedFileTemp, xlsxFilePath)
 	}
 
-	fmt.Println(ReadShowScheduleFromFile(xlsxFilePath))
+	showSchedule := ReadShowScheduleFromFile(xlsxFilePath)
 
 	funcMap := template.FuncMap{
 		"GetTeamPhoto": GetTeamPhoto,
+		"formatMonth":  formatMonth,
 	}
 
-	for _, show := range ReadShowScheduleFromFile(xlsxFilePath) {
+	for _, show := range showSchedule {
 		if show.Types[0] != ShowTypeRegular {
 			continue
 		}

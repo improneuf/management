@@ -127,3 +127,11 @@ func deduplicateStrings(slice []string) []string {
 
 	return unique
 }
+
+func formatMonth(date time.Time) string {
+	month := date.Month().String() // Get the full month name
+	if len(month) >= 8 {
+		return date.Format("Jan")
+	}
+	return date.Format("January")
+}
