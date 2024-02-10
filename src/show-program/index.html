@@ -28,7 +28,7 @@
 
     <!-- Date Badge -->
     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 mt-2"
-         style="padding-top: 20px;">
+         style="padding-top: 5px;">
         <div class="bg-white rounded-full flex flex-col items-center justify-center shadow-lg"
              style="width: 90px; height: 90px;"> <!-- Adjust width and height for your badge size -->
             <span class="text-black font-bold" style="margin-bottom: -10px;">Sept.</span>
@@ -39,7 +39,7 @@
 
     <!-- Top Text -->
     <div class="absolute top-0  left-0 right-0 flex flex-col items-center justify-center text-center"
-         style="padding-top: 140px;">
+         style="padding-top: 110px;">
         <h1 class="text-red-600 text-9xl lg:text-6xl font-bold uppercase subpixel-antialiased tracking-widest"
             style="font-family: 'Carton Six';">
             Improv Wednesday Show
@@ -49,27 +49,27 @@
 
     <!-- Performance Slots -->
     <div class="absolute bottom-10 left-0 right-0 flex justify-evenly"
-         style="padding-bottom: 30px">
+         style="padding-bottom: 20px">
         <!-- Each Image Container -->
         <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="1.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1 ">Aree and a Friend</p>
+            <p class="performance-name text-gray-200 font-bold text-lg pt-2 pb-1 ">Aree and a Friend</p>
         </div>
         <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="2.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Arti' Combo</p>
+            <p class="performance-name text-gray-200 font-bold text-lg pt-2 pb-1">Arti' Combo</p>
         </div>
         <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="3.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Bubbly Thoughts</p>
+            <p class="performance-name text-gray-200 font-bold text-lg pt-2 pb-1">Bubbly Thoughts</p>
         </div>
         <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="4.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Petunias</p>
+            <p class="performance-name text-gray-200 font-bold text-lg pt-2 pb-1">Petunias</p>
         </div>
         <div class="text-center p-2 bg-zinc-600 bg-opacity-50 thin-border rounded-lg">
             <img src="5.png" alt="Performance" class="w-40 h-40 object-cover rounded-lg mb-1 shadow-xl">
-            <p class="performance-name text-cyan-50 font-bold text-lg pt-2 pb-1">Far og resten of familien</p>
+            <p class="performance-name text-gray-200 font-bold text-lg pt-2 pb-1">Far og resten of familien</p>
         </div>
         <!-- Repeat for each performance slot -->
     </div>
@@ -77,30 +77,34 @@
     <!-- Pricing and Timing -->
     <div class="absolute bottom-0 left-0 right-0 flex items-center justify-evenly font-extrabold"
          style="padding-bottom: 20px">
-        <p class="text-white text-xs lg:text-sm">50 Kr / 70 Kr / 100 Kr</p>
-        <p class="text-white text-xs lg:text-sm">20:00 - 22:30</p>
-        <p class="text-white text-xs lg:text-sm">Lillesalen, Chateau Neuf</p>
+        <p class="text-white text-xs lg:text-lg">50 Kr / 70 Kr / 100 Kr</p>
+        <p class="text-white text-xs lg:text-lg">20:00 - 22:00</p>
+        <p class="text-white text-xs lg:text-lg">Lillesalen, Chateau Neuf</p>
     </div>
 
 </div>
 <script>
     function adjustTextSize(textElement) {
-      const textLength = textElement.innerText.length;
-      if (textLength > 15) {
-        textElement.classList.remove('text-lg', 'text-md', 'text-base');
-        textElement.classList.add('text-sm');
-      } else if (textLength > 10) {
-        textElement.classList.remove('text-lg', 'text-sm', 'text-base');
-        textElement.classList.add('text-md');
-      } else {
-        textElement.classList.remove('text-md', 'text-sm', 'text-base');
-        textElement.classList.add('text-lg');
+      const maxLength = 15; // Define the maximum length for the base font size
+      const baseFontSize = 20; // Base font size in pixels
+      const scaleDownFactor = 0.618033988; // Factor to reduce the font size by per character over the max length
+
+      let textLength = textElement.innerText.length;
+      let fontSize = baseFontSize;
+
+      if (textLength > maxLength) {
+        // Calculate the font size reduction based on how much the text length exceeds maxLength
+        fontSize *= Math.max(scaleDownFactor, (maxLength / textLength));
       }
+
+      // Apply the font size to the element
+      textElement.style.fontSize = `${fontSize}px`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.performance-name').forEach(adjustTextSize);
     });
+
 </script>
 </body>
 </html>
