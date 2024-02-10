@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"time"
@@ -95,4 +96,29 @@ func main() {
 	}
 
 	fmt.Println(ReadShowScheduleFromFile(xlsxFilePath))
+
+	for _, show := range ReadShowScheduleFromFile(xlsxFilePath) {
+		if show.Types[0] != ShowTypeRegular {
+			continue
+		}
+
+		// Parse the template file
+		tmpl, err := template.ParseFiles("regular.tmpl")
+		if err != nil {
+			panic(err)
+		}
+
+		// Create output file
+		outputFile, err := os.Create("output/" + show.Title + " - " + show.Date.Format("2006-01-02") + ".html")
+		if err != nil {
+			panic(err)
+		}
+		defer outputFile.Close()
+
+		// Execute the template
+		err = tmpl.Execute(outputFile, show)
+		if err != nil {
+			panic(err)
+		}
+	}
 }

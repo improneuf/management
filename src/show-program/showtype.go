@@ -8,59 +8,59 @@ import (
 type ShowType string
 
 const (
-	Normal        ShowType = "Normal"
-	Jam           ShowType = "Jam"
-	ClashOfTitans ShowType = "ClashOfTitans"
-	StoryNight    ShowType = "StoryNight"
-	DuoLab        ShowType = "DuoLab"
-	CProject      ShowType = "CProject"
-	Project       ShowType = "Project"
-	Other         ShowType = "Other"
+	ShowTypeRegular       ShowType = "Regular"
+	ShowTypeJam           ShowType = "Jam"
+	ShowTypeClashOfTitans ShowType = "ClashOfTitans"
+	ShowTypeStoryNight    ShowType = "StoryNight"
+	ShowTypeDuoLab        ShowType = "DuoLab"
+	ShowTypeCProject      ShowType = "CProject"
+	Project               ShowType = "Project"
+	ShowTypeOther         ShowType = "Other"
 )
 
 func getShowType(teamName string) ShowType {
 	teamName = strings.ToUpper(teamName)
 	switch teamName {
 	case "CLASH OF TITANS":
-		return ClashOfTitans
+		return ShowTypeClashOfTitans
 	case "DUOLAB":
-		return DuoLab
+		return ShowTypeDuoLab
 	case "STORY NIGHT":
-		return StoryNight
+		return ShowTypeStoryNight
 	case "PROJ":
-		return CProject
+		return ShowTypeCProject
 	case "CPROJ":
 		return Project
 	case "JAM":
-		return Jam
+		return ShowTypeJam
 	default:
-		return Normal
+		return ShowTypeRegular
 	}
 }
 
-func getShowNameFromType(showType ShowType, dt time.Time) string {
+func getShowTitleAndSubtitle(showType ShowType, dt time.Time) (string, string) {
 	switch showType {
-	case ClashOfTitans:
-		return "Clash of Titans"
-	case DuoLab:
-		return "DuoLab"
-	case StoryNight:
-		return "Story Night"
+	case ShowTypeClashOfTitans:
+		return "Clash of Titans", ""
+	case ShowTypeDuoLab:
+		return "DuoLab", ""
+	case ShowTypeStoryNight:
+		return "Story Night", ""
 	case Project:
-		return "Project"
-	case CProject:
-		return "CProject"
-	case Jam:
-		return "Impro Neuf Jam"
-	case Normal:
+		return "Project", ""
+	case ShowTypeCProject:
+		return "CProject", ""
+	case ShowTypeJam:
+		return "Impro Neuf Jam", ""
+	case ShowTypeRegular:
 		switch dt.Weekday() {
 		case time.Wednesday:
-			return "Impro Neuf Wednesday Show"
+			return "Impro Neuf Wednesday Show", "Laugh, cry, and everything in between"
 		case time.Tuesday:
-			return "Impro Tirsdagshow"
+			return "Impro Tirsdagshow", ""
 		}
 	}
-	return ""
+	return "", ""
 }
 
 func removeDuplicateShowTypes(slice []ShowType) []ShowType {

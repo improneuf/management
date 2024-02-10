@@ -10,13 +10,16 @@ import (
 )
 
 type Show struct {
-	Date          time.Time
-	Day           string
-	CrewSjefTeam  string
-	Teams         []string
-	ShowLanguages []ShowLanguage
-	ShowTypes     []ShowType
-	ShowName      string
+	Date         time.Time
+	Day          string
+	CrewSjefTeam string
+	Teams        []string
+	Languages    []ShowLanguage
+	Types        []ShowType
+	Title        string
+	Subtitle     string
+	Venue        string
+	Price        Price
 }
 
 func GetShowFromRow(row []string) Show {
@@ -62,14 +65,18 @@ func GetShowFromRow(row []string) Show {
 		}
 	}
 	showTypes = removeDuplicateShowTypes(showTypes)
+	showTitle, showSubtitle := getShowTitleAndSubtitle(showTypes[0], date)
 	return Show{
-		Date:          date,
-		Day:           day,
-		CrewSjefTeam:  crewSjefTeam,
-		Teams:         teams,
-		ShowLanguages: showLanguages,
-		ShowTypes:     showTypes,
-		ShowName:      getShowNameFromType(showTypes[0], date),
+		Date:         date,
+		Day:          day,
+		CrewSjefTeam: crewSjefTeam,
+		Teams:        teams,
+		Languages:    showLanguages,
+		Types:        showTypes,
+		Title:        showTitle,
+		Subtitle:     showSubtitle,
+		Venue:        "Lillesalen, Chateau Neuf",
+		Price:        GetPriceFromShowType(showTypes[0]),
 	}
 }
 

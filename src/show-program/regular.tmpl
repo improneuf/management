@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ .Title }}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            .banner-background {
+                background-image: url("../bg.png");
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            .thin-border {
+                border: 0.25px solid #d1d5db; /* This is Tailwind's gray-300 color */
+                border-style: hidden;
+            }
+
+            .performance-name {
+                font-family: "CactronRegular";
+                font-weight: bold;
+                font-style: normal;
+            }
+            .title {
+                font-family: "Carton Six";
+            }
+            .subtitle {
+                font-family: "Hussar Szturm";
+                font-weight: bold;
+                font-style: italic;
+            }
+            .price-and-timing-footer {
+                font-family: "Code New Roman";
+                font-color: #d1d5db;
+            }
+        </style>
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fonts.cdnfonts.com/css/carton-six"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/hussar-szturm"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/code-new-roman"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/echotopia"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/lemon"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/clickuper"
+            type="text/css"
+        />
+        <link
+            rel="stylesheet"
+            media="screen"
+            href="https://fontlibrary.org//face/cactron"
+            type="text/css"
+        />
+    </head>
+    <body>
+        <div
+            class="banner-background relative h-[502px] w-[960px] overflow-hidden"
+        >
+            <!-- Logo -->
+            <div class="absolute right-0 top-0 p-2 opacity-60">
+                <img
+                    src="logo.png"
+                    alt="Improv Neuf Logo"
+                    class="h-20 w-auto"
+                />
+                <!-- Adjust the h-8 class for the logo size -->
+            </div>
+
+            <!-- Date Badge -->
+            <div
+                class="absolute left-1/2 top-0 mt-2 -translate-x-1/2 transform"
+                style="padding-top: 5px"
+            >
+                <div
+                    class="flex flex-col items-center justify-center rounded-full bg-white shadow-lg"
+                    style="width: 90px; height: 90px"
+                >
+                    <!-- Adjust width and height for your badge size -->
+                    <span
+                        class="font-bold text-black"
+                        style="margin-bottom: -10px"
+                        >{{ .Date.Format "Jan" }}</span
+                    >
+                    <!-- Negative margin for closer spacing -->
+                    <span class="text-5xl font-bold text-black"
+                        >{{ .Date.Format "02" }}</span
+                    >
+                </div>
+            </div>
+
+            <!-- Top Text -->
+            <div
+                class="absolute left-0 right-0 top-0 flex flex-col items-center justify-center text-center"
+                style="padding-top: 110px"
+            >
+                <h1
+                    class="title text-9xl font-bold uppercase tracking-widest text-red-600 subpixel-antialiased lg:text-6xl"
+                >
+                    {{ .Title }}
+                </h1>
+                <p
+                    class="subtitle mt-2 text-lg text-slate-200 text-white opacity-80 lg:text-xl"
+                >
+                    {{ .Subtitle }}
+                </p>
+            </div>
+
+            <!-- Performance Slots -->
+            <div
+                class="absolute bottom-10 left-0 right-0 flex justify-evenly"
+                style="padding-bottom: 20px"
+            >
+                <!-- Each Image Container -->
+                {{ range .Teams }}
+                <div
+                    class="thin-border rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center"
+                >
+                    <img
+                        src="../team-photos/{{ . }}.png"
+                        alt="{{ . }}"
+                        class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl"
+                    />
+                    <p
+                        class="performance-name pb-1 pt-2 text-lg font-bold text-white"
+                    >
+                        {{ . }}
+                    </p>
+                </div>
+                {{ end }}
+                <!-- Repeat for each performance slot -->
+            </div>
+
+            <!-- Pricing and Timing -->
+            <div
+                class="price-and-timing-footer absolute bottom-0 left-0 right-0 flex items-center justify-evenly font-extrabold text-slate-200 opacity-80"
+                style="padding-bottom: 20px"
+            >
+                <p class="text-xs text-white lg:text-lg">
+                    50 Kr / 70 Kr / 100 Kr
+                </p>
+                <p class="text-xs text-white lg:text-lg">20:00 - 22:00</p>
+                <p class="text-xs text-white lg:text-lg">{{ .Venue }}</p>
+            </div>
+        </div>
+        <script>
+            function adjustTextSize(textElement) {
+                const maxLength = 15; // Define the maximum length for the base font size
+                const baseFontSize = 20; // Base font size in pixels
+                const scaleDownFactor = 0.7; // Factor to reduce the font size by per character over the max length
+
+                let textLength = textElement.innerText.length;
+                let fontSize = baseFontSize;
+
+                if (textLength > maxLength) {
+                    // Calculate the font size reduction based on how much the text length exceeds maxLength
+                    fontSize *= Math.max(
+                        scaleDownFactor,
+                        maxLength / textLength,
+                    );
+                }
+
+                // Apply the font size to the element
+                textElement.style.fontSize = `${fontSize}px`;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                document
+                    .querySelectorAll(".performance-name")
+                    .forEach(adjustTextSize);
+            });
+        </script>
+    </body>
+</html>
