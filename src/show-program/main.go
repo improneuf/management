@@ -112,8 +112,10 @@ func main() {
 			panic(err)
 		}
 
+		show.Teams = deduplicateStrings(show.Teams)
+
 		// Create output file
-		outputFile, err := os.Create("output/" + show.Title + " - " + show.Date.Format("2006-01-02") + ".html")
+		outputFile, err := os.Create("output/" + show.Date.Format("2006-01-02") + " - " + show.Title + ".html")
 		if err != nil {
 			panic(err)
 		}

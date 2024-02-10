@@ -113,3 +113,17 @@ func ReadShowScheduleFromFile(filePath string) []Show {
 	}
 	return shows
 }
+
+func deduplicateStrings(slice []string) []string {
+	seen := make(map[string]struct{})
+	unique := []string{}
+
+	for _, item := range slice {
+		if _, ok := seen[item]; !ok {
+			seen[item] = struct{}{}
+			unique = append(unique, item)
+		}
+	}
+
+	return unique
+}
