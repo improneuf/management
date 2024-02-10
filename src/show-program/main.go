@@ -97,13 +97,17 @@ func main() {
 
 	fmt.Println(ReadShowScheduleFromFile(xlsxFilePath))
 
+	funcMap := template.FuncMap{
+		"GetTeamPhoto": GetTeamPhoto,
+	}
+
 	for _, show := range ReadShowScheduleFromFile(xlsxFilePath) {
 		if show.Types[0] != ShowTypeRegular {
 			continue
 		}
 
 		// Parse the template file
-		tmpl, err := template.ParseFiles("regular.tmpl")
+		tmpl, err := template.New("regular.tmpl").Funcs(funcMap).ParseFiles("regular.tmpl")
 		if err != nil {
 			panic(err)
 		}
