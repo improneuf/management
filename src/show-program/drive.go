@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"time"
 
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
+	"google.golang.org/api/option"
 )
 
 // retrieve the last modified date of a file on Google Drive.
@@ -57,4 +61,64 @@ func DownloadFileFromGoogleDrive(service *drive.Service, file_id string) (string
 	fmt.Println("Wrote downloaded content to the temporary file: " + tmpFile.Name() + ".")
 
 	return tmpFile.Name(), nil
+}
+
+func GetGoogleSheetsPath(sheetId string) string {
+	xlsxFilePath := sheetId + ".xlsx"
+	ctx := context.Background()
+
+	b, err := os.ReadFile(SERVICE_ACCOUNT_KEY_FILE)
+	if err != nil {
+		log.Fatalf("Unable to read client secret file: %v", err)
+	}
+
+	config, err := google.JWTConfigFromJSON(b, drive.DriveReadonlyScope)
+	if err != nil {
+		log.Fatalf("Unable to parse client secret file to config: %v", err)
+	}
+	client := config.Client(ctx)
+
+	srv, err := drive.NewService(ctx, option.WithHTTPClient(client))
+	if err != nil {
+		log.Fatalf("Unable to retrieve Drive client: %v", err)
+	}
+
+	// if the file already exists
+	_, err = os.Stat(xlsxFilePath)
+	fileExistsLocally := !os.IsNotExist(err)
+	localFileIsUpToDate := false
+
+	// if the file exists locally, check if it's up to date
+	if fileExistsLocally {
+		localFileModifiedTime, err := GetLocalFileModifiedTime(xlsxFilePath)
+		if err != nil {
+			log.Fatalf("Unable to get local file modified date: %v", err)
+		}
+		googleDriveFileModifiedTime, err := GetGoogleDriveFileModifiedTime(srv, SHOW_PROGRAM_SHEET_ID)
+		if err != nil {
+			log.Fatalf("Unable to get google drive file modified date: %v", err)
+		}
+
+		if localFileModifiedTime.After(googleDriveFileModifiedTime) {
+			localFileIsUpToDate = true
+		}
+	}
+
+	if fileExistsLocally && localFileIsUpToDate {
+		fmt.Println("File already exists and is up to date, not downloading again.")
+	} else {
+		fmt.Println("File does not exist or is out of date, downloading...")
+
+		downloadedFileTemp, err := DownloadFileFromGoogleDrive(srv, SHOW_PROGRAM_SHEET_ID)
+
+		if err != nil {
+			log.Fatalf("Unable to download file: %v", err)
+		}
+
+		fmt.Println("Downloaded file to: " + downloadedFileTemp)
+
+		// move tempfile to the correct location
+		os.Rename(downloadedFileTemp, xlsxFilePath)
+	}
+	return xlsxFilePath
 }

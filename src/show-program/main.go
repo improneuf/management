@@ -1,22 +1,18 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"html/template"
-	"log"
 	"os"
 	"time"
-
-	"golang.org/x/oauth2/google"
-	"google.golang.org/api/drive/v3"
-	"google.golang.org/api/option"
 )
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
 	SHOW_PROGRAM_SHEET_ID    string = "167cJAqP9fON3ExyLnJLFaJ0MHdu5K--z" // Live Sheet
 	SHOW_PROGRAM_SHEET_NAME  string = "ShowProgram"
+	SHOW_SCHEDULE_SHEET_ID   string = "15cDopxkZDbFwIcIU5tuqAUCM4U0GXf7O"
+	SHOW_SCHEDULE_SHEET_NAME string = "Yesplan"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 )
 
@@ -37,65 +33,8 @@ func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
 }
 
 func main() {
-	ctx := context.Background()
-
-	b, err := os.ReadFile(SERVICE_ACCOUNT_KEY_FILE)
-	if err != nil {
-		log.Fatalf("Unable to read client secret file: %v", err)
-	}
-
-	config, err := google.JWTConfigFromJSON(b, drive.DriveReadonlyScope)
-	if err != nil {
-		log.Fatalf("Unable to parse client secret file to config: %v", err)
-	}
-	client := config.Client(ctx)
-
-	srv, err := drive.NewService(ctx, option.WithHTTPClient(client))
-	if err != nil {
-		log.Fatalf("Unable to retrieve Drive client: %v", err)
-	}
-
-	xlsxFilePath := SHOW_PROGRAM_SHEET_ID + ".xlsx"
-
-	// if the file already exists
-	_, err = os.Stat(xlsxFilePath)
-	fileExistsLocally := !os.IsNotExist(err)
-	localFileIsUpToDate := false
-
-	// if the file exists locally, check if it's up to date
-	if fileExistsLocally {
-		localFileModifiedTime, err := GetLocalFileModifiedTime(xlsxFilePath)
-		if err != nil {
-			log.Fatalf("Unable to get local file modified date: %v", err)
-		}
-		googleDriveFileModifiedTime, err := GetGoogleDriveFileModifiedTime(srv, SHOW_PROGRAM_SHEET_ID)
-		if err != nil {
-			log.Fatalf("Unable to get google drive file modified date: %v", err)
-		}
-
-		if localFileModifiedTime.After(googleDriveFileModifiedTime) {
-			localFileIsUpToDate = true
-		}
-	}
-
-	if fileExistsLocally && localFileIsUpToDate {
-		fmt.Println("File already exists and is up to date, not downloading again.")
-	} else {
-		fmt.Println("File does not exist or is out of date, downloading...")
-
-		downloadedFileTemp, err := DownloadFileFromGoogleDrive(srv, SHOW_PROGRAM_SHEET_ID)
-
-		if err != nil {
-			log.Fatalf("Unable to download file: %v", err)
-		}
-
-		fmt.Println("Downloaded file to: " + downloadedFileTemp)
-
-		// move tempfile to the correct location
-		os.Rename(downloadedFileTemp, xlsxFilePath)
-	}
-
-	showSchedule := ReadShowScheduleFromFile(xlsxFilePath)
+	showProgramXlsxFilePath := GetGoogleSheetsPath(SHOW_PROGRAM_SHEET_ID)
+	showSchedule := ReadShowScheduleFromFile(showProgramXlsxFilePath)
 
 	funcMap := template.FuncMap{
 		"GetTeamPhoto": GetTeamPhoto,

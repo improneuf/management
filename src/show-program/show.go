@@ -80,7 +80,7 @@ func GetShowFromRow(row []string) Show {
 	}
 }
 
-// ReadExcelFile reads and prints the contents of the given Excel file.
+// reads and prints the contents of the given Excel file.
 func ReadShowScheduleFromFile(filePath string) []Show {
 	shows := make([]Show, 0)
 
