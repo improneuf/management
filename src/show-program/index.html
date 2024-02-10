@@ -16,13 +16,36 @@
           border: 0.25px solid #D1D5DB; /* This is Tailwind's gray-300 color */
           border-style: hidden;
         }
+        .performance-name {
+          font-family: 'CactronRegular';
+          font-weight: bold;
+          font-style: normal;
+        }
+        .title {
+          font-family: 'Carton Six';
+        }
+        .subtitle {
+          font-family: 'Hussar Szturm';
+          font-weight: bold;
+          font-style: italic;
+        }
+        .price-and-timing-footer {
+          font-family: 'Code New Roman';
+          font-color: #D1D5DB;
+        }
     </style>
-    <link href="https://fonts.cdnfonts.com/css/carton-six" rel="stylesheet"/>
+    <link rel="stylesheet" media="screen" href="https://fonts.cdnfonts.com/css/carton-six" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/hussar-szturm" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/code-new-roman" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/echotopia" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/lemon" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/clickuper" type="text/css"/>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/cactron" type="text/css"/>
 </head>
 <body>
 <div class="relative overflow-hidden banner-background h-[502px] w-[960px]">
     <!-- Logo -->
-    <div class="absolute top-0 right-0 p-2">
+    <div class="absolute top-0 right-0 p-2 opacity-60">
         <img src="logo.png" alt="Improv Neuf Logo" class="h-20 w-auto"> <!-- Adjust the h-8 class for the logo size -->
     </div>
 
@@ -40,42 +63,41 @@
     <!-- Top Text -->
     <div class="absolute top-0 right-0 left-0 flex flex-col items-center justify-center text-center"
          style="padding-top: 110px;">
-        <h1 class="text-9xl font-bold uppercase tracking-widest text-red-600 subpixel-antialiased lg:text-6xl"
-            style="font-family: 'Carton Six';">
+        <h1 class="title text-9xl font-bold uppercase tracking-widest text-red-600 subpixel-antialiased lg:text-6xl">
             Improv Wednesday Show
         </h1>
-        <p class="mt-2 text-lg text-white lg:text-xl">Laugh, cry, and everything in between</p>
+        <p class="subtitle mt-2 text-lg text-white lg:text-xl opacity-80 text-slate-200">Laugh, cry, and everything in between</p>
     </div>
 
     <!-- Performance Slots -->
     <div class="absolute right-0 bottom-10 left-0 flex justify-evenly"
          style="padding-bottom: 20px">
         <!-- Each Image Container -->
-        <div class="rounded-lg bg-zinc-600 bg-opacity-50 p-2 text-center thin-border">
+        <div class="rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center thin-border">
             <img src="1.png" alt="Performance" class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl">
-            <p class="pt-2 pb-1 text-lg font-bold text-gray-200 performance-name">Aree and a Friend</p>
+            <p class="pt-2 pb-1 text-lg font-bold text-white performance-name">Aree and a Friend</p>
         </div>
-        <div class="rounded-lg bg-zinc-600 bg-opacity-50 p-2 text-center thin-border">
+        <div class="rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center thin-border">
             <img src="2.png" alt="Performance" class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl">
-            <p class="pt-2 pb-1 text-lg font-bold text-gray-200 performance-name">Arti' Combo</p>
+            <p class="pt-2 pb-1 text-lg font-bold text-white performance-name">Arti' Combo</p>
         </div>
-        <div class="rounded-lg bg-zinc-600 bg-opacity-50 p-2 text-center thin-border">
+        <div class="rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center thin-border">
             <img src="3.png" alt="Performance" class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl">
-            <p class="pt-2 pb-1 text-lg font-bold text-gray-200 performance-name">Bubbly Thoughts</p>
+            <p class="pt-2 pb-1 text-lg font-bold text-white performance-name">Bubbly Thoughts</p>
         </div>
-        <div class="rounded-lg bg-zinc-600 bg-opacity-50 p-2 text-center thin-border">
+        <div class="rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center thin-border">
             <img src="4.png" alt="Performance" class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl">
-            <p class="pt-2 pb-1 text-lg font-bold text-gray-200 performance-name">Petunias</p>
+            <p class="pt-2 pb-1 text-lg font-bold text-white performance-name">Petunias</p>
         </div>
-        <div class="rounded-lg bg-zinc-600 bg-opacity-50 p-2 text-center thin-border">
+        <div class="rounded-lg bg-zinc-700 bg-opacity-60 p-2 text-center thin-border">
             <img src="5.png" alt="Performance" class="mb-1 h-40 w-40 rounded-lg object-cover shadow-xl">
-            <p class="pt-2 pb-1 text-lg font-bold text-gray-200 performance-name">Far og resten of familien</p>
+            <p class="pt-2 pb-1 text-lg font-bold text-white performance-name">Far og resten of familien</p>
         </div>
         <!-- Repeat for each performance slot -->
     </div>
 
     <!-- Pricing and Timing -->
-    <div class="absolute right-0 bottom-0 left-0 flex items-center justify-evenly font-extrabold"
+    <div class="price-and-timing-footer absolute right-0 bottom-0 left-0 flex items-center justify-evenly font-extrabold opacity-80 text-slate-200"
          style="padding-bottom: 20px">
         <p class="text-xs text-white lg:text-lg">50 Kr / 70 Kr / 100 Kr</p>
         <p class="text-xs text-white lg:text-lg">20:00 - 22:00</p>
@@ -86,8 +108,8 @@
 <script>
     function adjustTextSize(textElement) {
       const maxLength = 15; // Define the maximum length for the base font size
-      const baseFontSize = 16; // Base font size in pixels
-      const scaleDownFactor = 0.8; // Factor to reduce the font size by per character over the max length
+      const baseFontSize = 20; // Base font size in pixels
+      const scaleDownFactor = 0.7; // Factor to reduce the font size by per character over the max length
 
       let textLength = textElement.innerText.length;
       let fontSize = baseFontSize;
