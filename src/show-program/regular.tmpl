@@ -6,6 +6,39 @@
         <title>{{ .Title }}</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
+            @font-face {
+                font-family: HussarSzturm;
+                src: url("../fonts/HussarSzturm.otf") format("opentype");
+            }
+            @font-face {
+                font-family: CactronRegular;
+                src: url("../fonts/Cactron Regular 400.otf") format("opentype");
+            }
+            @font-face {
+                font-family: 'Carton Six Regular';
+                font-style: normal;
+                font-weight: normal;
+                src: local('Carton Six Regular'), url('../fonts/Carton_Six.woff') format('woff');
+            }
+            @font-face{
+                font-family:code new roman;
+                font-style:normal;
+                font-weight:400;
+                src:local('Code New Roman'), url('../fonts/Code New Roman.woff') format('woff')
+            }
+            @font-face{
+                font-family:code new roman;
+                font-style:italic;
+                font-weight:400;
+                src:local('Code New Roman'), url('../fonts/Code New Roman i.woff') format('woff')
+            }
+            @font-face{
+                font-family:code new roman;
+                font-style:normal;
+                font-weight:700;
+                src:local('Code New Roman'), url('../fonts/Code New Roman b.woff') format('woff')
+            }
+
             .banner-background {
                 background-image: url("../bg.png");
                 background-size: cover;
@@ -23,10 +56,10 @@
                 font-style: normal;
             }
             .title {
-                font-family: "Carton Six";
+                font-family: "Carton Six Regular";
             }
             .subtitle {
-                font-family: "Hussar Szturm";
+                font-family: "HussarSzturm";
                 font-weight: bold;
                 font-style: italic;
             }
@@ -35,48 +68,6 @@
                 font-color: #d1d5db;
             }
         </style>
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fonts.cdnfonts.com/css/carton-six"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/hussar-szturm"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/code-new-roman"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/echotopia"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/lemon"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/clickuper"
-            type="text/css"
-        />
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="https://fontlibrary.org//face/cactron"
-            type="text/css"
-        />
     </head>
     <body>
         <div
