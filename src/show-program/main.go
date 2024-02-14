@@ -1,10 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"html/template"
+	"io/ioutil"
+	"log"
 	"os"
+	"path/filepath"
 	"time"
+
+	"github.com/chromedp/chromedp"
 )
 
 const (
@@ -33,8 +39,12 @@ func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
 }
 
 func main() {
+	// bookingXlsxFilePath := GetGoogleSheetsPath(SHOW_SCHEDULE_SHEET_ID)
+
+	// bookings := ReadBookingsFromFile(bookingXlsxFilePath, SHOW_SCHEDULE_SHEET_NAME)
+
 	showProgramXlsxFilePath := GetGoogleSheetsPath(SHOW_PROGRAM_SHEET_ID)
-	showSchedule := ReadShowScheduleFromFile(showProgramXlsxFilePath)
+	showSchedule := ReadShowScheduleFromFile(showProgramXlsxFilePath, SHOW_PROGRAM_SHEET_NAME)
 
 	funcMap := template.FuncMap{
 		"GetTeamPhoto": GetTeamPhoto,
@@ -65,6 +75,35 @@ func main() {
 		err = tmpl.Execute(outputFile, show)
 		if err != nil {
 			panic(err)
+		}
+
+		// screenshot the html file
+		screenshotFile := "output/screenshots/" + show.Date.Format("2006-01-02") + " - " + show.Title + ".jpg"
+		path, _ := os.Getwd()
+		fileUrl := "file://" + filepath.Join(path, outputFile.Name())
+		log.Println("fileUrl:", fileUrl)
+
+		// Create a context
+		ctx, cancel := chromedp.NewContext(context.Background())
+		defer cancel()
+
+		// Capture screenshot of an entire webpage in JPEG format
+		var buf []byte
+		if err := chromedp.Run(ctx,
+			chromedp.EmulateViewport(1920, 1004),
+			chromedp.Navigate(fileUrl),
+			chromedp.ActionFunc(func(ctx context.Context) error {
+				// Set the zoom level by scaling the CSS
+				return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
+			}),
+			chromedp.FullScreenshot(&buf, 100),
+		); err != nil {
+			log.Fatal(err)
+		}
+
+		// Save the screenshot to a file
+		if err := ioutil.WriteFile(screenshotFile, buf, 0644); err != nil {
+			log.Fatal(err)
 		}
 	}
 }

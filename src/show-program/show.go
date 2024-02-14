@@ -81,7 +81,7 @@ func GetShowFromRow(row []string) Show {
 }
 
 // reads and prints the contents of the given Excel file.
-func ReadShowScheduleFromFile(filePath string) []Show {
+func ReadShowScheduleFromFile(filePath string, sheetName string) []Show {
 	shows := make([]Show, 0)
 
 	// Open the Excel file
@@ -96,7 +96,7 @@ func ReadShowScheduleFromFile(filePath string) []Show {
 	// Iterate through each sheet and print its contents
 	for _, sheet := range sheets {
 		fmt.Printf("Sheet: %s\n", sheet)
-		if sheet != SHOW_PROGRAM_SHEET_NAME {
+		if sheet != sheetName {
 			continue
 		}
 		rows, err := f.GetRows(sheet)
