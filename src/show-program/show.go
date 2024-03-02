@@ -64,6 +64,25 @@ func GetShowFromRow(row []string) Show {
 			}
 		}
 	}
+
+	// special handling for Problemfixers
+	for i, team := range teams {
+		if team == "Problemfikserne/Problemfixers" {
+			found := false
+			for _, lang := range showLanguages {
+				if lang == Norwegian {
+					found = true
+					break
+				}
+			}
+			if found {
+				teams[i] = "Problemfikserne" // Norwegian is in showLanguages
+			} else {
+				teams[i] = "The Problem Fixers" // Norwegian is not in showLanguages
+			}
+		}
+	}
+
 	showTypes = removeDuplicateShowTypes(showTypes)
 	showTitle, showSubtitle := getShowTitleAndSubtitle(showTypes[0], date)
 	return Show{

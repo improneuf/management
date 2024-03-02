@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -102,7 +101,7 @@ func main() {
 		}
 
 		// Save the screenshot to a file
-		if err := ioutil.WriteFile(screenshotFile, buf, 0644); err != nil {
+		if err := os.WriteFile(screenshotFile, buf, 0644); err != nil {
 			log.Fatal(err)
 		}
 	}
