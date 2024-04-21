@@ -163,6 +163,8 @@ func GetShowEndTime(startTime string, show Show) (string, error) {
 	}
 
 	// Calculate duration based on number of teams
+	// This is not the best way to calculate
+	// Some teams can have 40 minute shows (for example, The Sound of Neuf)
 	var duration time.Duration
 	switch len(show.Teams) {
 	case 1:
