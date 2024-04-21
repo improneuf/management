@@ -154,3 +154,33 @@ func formatMonth(date time.Time) string {
 	}
 	return date.Format("January")
 }
+
+func GetShowEndTime(startTime string, show Show) (string, error) {
+	// Parse the start time using the same format as the input
+	start, err := time.Parse("15:04", startTime)
+	if err != nil {
+		return "", err
+	}
+
+	// Calculate duration based on number of teams
+	var duration time.Duration
+	switch len(show.Teams) {
+	case 1:
+		duration = 30 * time.Minute
+	case 2:
+		duration = 45 * time.Minute
+	case 3:
+		duration = 1*time.Hour + 30*time.Minute
+	case 4:
+		duration = 1*time.Hour + 45*time.Minute
+	case 5:
+		duration = 2*time.Hour + 5*time.Minute
+	}
+
+	// Add the duration to the start time to get the end time
+	endTime := start.Add(duration)
+
+	// Format the end time as a string in the same format as the input
+	return endTime.Format("15:04"), nil
+
+}

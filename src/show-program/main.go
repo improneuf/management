@@ -46,8 +46,9 @@ func main() {
 	showSchedule := ReadShowScheduleFromFile(showProgramXlsxFilePath, SHOW_PROGRAM_SHEET_NAME)
 
 	funcMap := template.FuncMap{
-		"GetTeamPhoto": GetTeamPhoto,
-		"formatMonth":  formatMonth,
+		"GetTeamPhoto":   GetTeamPhoto,
+		"formatMonth":    formatMonth,
+		"GetShowEndTime": GetShowEndTime,
 	}
 
 	for _, show := range showSchedule {
