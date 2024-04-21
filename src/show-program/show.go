@@ -170,11 +170,11 @@ func GetShowEndTime(startTime string, show Show) (string, error) {
 	case 2:
 		duration = 45 * time.Minute
 	case 3:
-		duration = 1*time.Hour + 30*time.Minute
+		duration = 1*time.Hour + 15*time.Minute
 	case 4:
 		duration = 1*time.Hour + 45*time.Minute
 	case 5:
-		duration = 2*time.Hour + 5*time.Minute
+		duration = 2*time.Hour + 20*time.Minute
 	}
 
 	// Add the duration to the start time to get the end time
