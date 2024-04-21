@@ -155,6 +155,15 @@ func formatMonth(date time.Time) string {
 	return date.Format("January")
 }
 
+func GetTeamShowDuration(teamName string) int {
+	switch teamName {
+	case "The sound of Neuf":
+		return 40
+	default:
+		return 20
+	}
+}
+
 func GetShowEndTime(startTime string, show Show) (string, error) {
 	// Parse the start time using the same format as the input
 	start, err := time.Parse("15:04", startTime)
@@ -162,27 +171,32 @@ func GetShowEndTime(startTime string, show Show) (string, error) {
 		return "", err
 	}
 
-	// Calculate duration based on number of teams
-	// This is not the best way to calculate
-	// Some teams can have 40 minute shows (for example, The Sound of Neuf)
-	var duration time.Duration
-	switch len(show.Teams) {
-	case 1:
-		duration = 30 * time.Minute
-	case 2:
-		duration = 45 * time.Minute
-	case 3:
-		duration = 1*time.Hour + 15*time.Minute
-	case 4:
-		duration = 1*time.Hour + 45*time.Minute
-	case 5:
-		duration = 2*time.Hour + 5*time.Minute
+	// Calculate duration based on teams
+	var duration int
+	// iterate through the teams and add the extra time
+	for _, team := range show.Teams {
+		duration += GetTeamShowDuration(team)
 	}
 
+	var extraTime int
+	switch duration / 20 {
+	case 1:
+		extraTime = 10
+	case 2:
+		extraTime = 5
+	case 3:
+		extraTime = 15
+	case 4:
+		extraTime = 25
+	case 5:
+		extraTime = 25
+	}
+
+	duration += extraTime
+
 	// Add the duration to the start time to get the end time
-	endTime := start.Add(duration)
+	endTime := start.Add(time.Duration(duration) * time.Minute)
 
 	// Format the end time as a string in the same format as the input
 	return endTime.Format("15:04"), nil
-
 }
