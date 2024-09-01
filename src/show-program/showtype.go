@@ -25,7 +25,7 @@ func getShowType(teamName string) ShowType {
 		return ShowTypeClashOfTitans
 	case "DUOLAB":
 		return ShowTypeDuoLab
-	case "STORY NIGHT":
+	case "STORYNIGHT":
 		return ShowTypeStoryNight
 	case "PROJ":
 		return ShowTypeCProject
@@ -57,7 +57,7 @@ func getShowTitleAndSubtitle(showType ShowType, dt time.Time) (string, string) {
 		case time.Wednesday:
 			return "Impro Neuf Wednesday Show", "Laugh, cry, and everything in between"
 		case time.Tuesday:
-			return "Impro Tirsdagshow", ""
+			return "Impro Neuf Tirsdagsshow", ""
 		}
 	}
 	return "", ""

@@ -51,12 +51,14 @@ func GetShowFromRow(row []string) Show {
 			day = cellTrimmed
 		case 2:
 			crewSjefTeam = cellTrimmed
-		case 4, 5, 6, 7, 8:
+		case 3:
+			showTypes = append(showTypes, getShowType(cellTrimmed))
+		case 4, 5, 6:
 			if cellTrimmed != "" {
 				teams = append(teams, cellTrimmed)
 				showTypes = append(showTypes, getShowType(cellTrimmed))
 			}
-		case 9:
+		case 7:
 			showLanguagesStr := strings.Split(cellTrimmed, "/")
 			for _, languageStr := range showLanguagesStr {
 				languageStr = strings.TrimSpace(languageStr)
@@ -64,6 +66,8 @@ func GetShowFromRow(row []string) Show {
 			}
 		}
 	}
+
+	fmt.Println(showTypes)
 
 	// special handling for Problemfixers
 	for i, team := range teams {
@@ -125,6 +129,9 @@ func ReadShowScheduleFromFile(filePath string, sheetName string) []Show {
 
 		for r, row := range rows {
 			if r < 10 {
+				continue
+			}
+			if r > 27 {
 				continue
 			}
 			shows = append(shows, GetShowFromRow(row))

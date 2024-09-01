@@ -17,7 +17,9 @@ func main() {
 	var buf []byte
 	if err := chromedp.Run(ctx,
 		chromedp.EmulateViewport(1920, 1004),
-		chromedp.Navigate(`http://localhost:8000/output/2024-02-14%20-%20Impro%20Neuf%20Wednesday%20Show.html`),
+		chromedp.Navigate(`
+			file:///Users/pravindahal/impro-neuf-management/src/show-program/output/2024-08-26%20-%20Impro%20Neuf%20Wednesday%20Show.html
+		`),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			// Set the zoom level by scaling the CSS
 			return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
