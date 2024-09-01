@@ -1,2 +1,4 @@
 .idea
 output/
+src/show-program/client_secret_*.com.json
+src/show-program/impro-neuf-management-*.json
