@@ -38,6 +38,7 @@ jobs:
       - name: Build site
         run: |
           cd src/show-program
+          echo $SERVICE_ACCOUNT_KEY_FILE > impro-neuf-management-99d59b5d3102.json
           go run main.go price.go  showtype.go showlanguage.go show.go drive.go photo.go
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
