@@ -93,6 +93,62 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 	}
 }
 
+func CreateIndex(shows []Show) {
+	// Create or open the index.html file
+	indexFile, err := os.Create("output/screenshots/index.html")
+	if err != nil {
+		panic(err)
+	}
+	defer indexFile.Close()
+
+	// Start writing HTML content
+	indexFile.WriteString("<!DOCTYPE html>\n<html>\n<head>\n")
+	indexFile.WriteString("<title>Show Index</title>\n")
+	indexFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
+	indexFile.WriteString("</head>\n<body>\n")
+	indexFile.WriteString("<h1>Show Index</h1>\n")
+	indexFile.WriteString("<ul>\n")
+
+	for _, show := range shows {
+		dateStr := show.Date.Format("2006-01-02")
+		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html\">%s - %s</a></li>\n", dateStr, dateStr, show.Title))
+	}
+
+	indexFile.WriteString("</ul>\n")
+	indexFile.WriteString("</body>\n</html>")
+}
+
+func CreateShowPage(show Show) {
+	dateStr := show.Date.Format("2006-01-02")
+	fileName := "output/screenshots/" + dateStr + ".html"
+
+	// Create or open the date-specific HTML file
+	showFile, err := os.Create(fileName)
+	if err != nil {
+		panic(err)
+	}
+	defer showFile.Close()
+
+	// Start writing HTML content
+	showFile.WriteString("<!DOCTYPE html>\n<html>\n<head>\n")
+	showFile.WriteString(fmt.Sprintf("<title>%s - %s</title>\n", dateStr, show.Title))
+	showFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
+	showFile.WriteString("</head>\n<body>\n")
+	showFile.WriteString(fmt.Sprintf("<h1>%s - %s</h1>\n", dateStr, show.Title))
+	showFile.WriteString("<ul>\n")
+
+	// List of types
+	types := []string{"fb", "sio", "meetup", "insta"}
+
+	for _, tmplType := range types {
+		imageFileName := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, tmplType)
+		showFile.WriteString(fmt.Sprintf("<li><a href=\"%s\">%s</a></li>\n", imageFileName, tmplType))
+	}
+
+	showFile.WriteString("</ul>\n")
+	showFile.WriteString("</body>\n</html>")
+}
+
 func main() {
 	// bookingXlsxFilePath := GetGoogleSheetsPath(SHOW_SCHEDULE_SHEET_ID)
 
@@ -106,6 +162,8 @@ func main() {
 		"formatMonth":    formatMonth,
 		"GetShowEndTime": GetShowEndTime,
 	}
+
+	var shows []Show
 
 	for _, show := range showSchedule {
 		if show.Types[0] != ShowTypeRegular {
@@ -131,9 +189,18 @@ func main() {
 		}
 		//show.Teams = deduplicateStrings(show.Teams)
 
+		// Save the show for index generation
+		shows = append(shows, show)
+
 		SaveScreenshot(tmplFb, show, "fb")
 		SaveScreenshot(tmplInsta, show, "insta")
 		SaveScreenshot(tmplSio, show, "sio")
 		SaveScreenshot(tmplMeetup, show, "meetup")
+
+		// Generate date-specific HTML file with links
+		CreateShowPage(show)
 	}
+
+	// Generate the index.html
+	CreateIndex(shows)
 }
