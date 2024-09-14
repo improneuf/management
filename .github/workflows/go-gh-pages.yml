@@ -35,10 +35,12 @@ jobs:
         with:
           # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
           go-version: 1.21.5
+          cache-dependency-path: |
+            src/show-program/go.sum
       - name: Build site
         run: |
           cd src/show-program
-          echo $SERVICE_ACCOUNT_KEY_FILE > impro-neuf-management-99d59b5d3102.json
+          echo $GOOGLE_SERVICE_ACCOUNT_KEYFILE_BASE64 | base64 -d > impro-neuf-management-99d59b5d3102.json
           go run main.go price.go  showtype.go showlanguage.go show.go drive.go photo.go
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
