@@ -63,9 +63,20 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 	defer cancel()
 
 	// Capture screenshot of an entire webpage in JPEG format
+	imageWidth := int64(1920)
+	imageHeight := int64(1004)
+
+	if tmplType == "meetup" || tmplType == "sio" {
+		imageHeight = int64(1080)
+	}
+	if tmplType == "insta" {
+		imageWidth = int64(2160)
+		imageHeight = int64(2160)
+	}
+
 	var buf []byte
 	if err := chromedp.Run(ctx,
-		chromedp.EmulateViewport(1920, 1004),
+		chromedp.EmulateViewport(imageWidth, imageHeight),
 		chromedp.Navigate(fileUrl),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			// Set the zoom level by scaling the CSS
@@ -103,14 +114,26 @@ func main() {
 
 		// Parse the template file
 		tmplFb, err := template.New("regular-fb.tmpl").Funcs(funcMap).ParseFiles("regular-fb.tmpl")
+		if err != nil {
+			panic(err)
+		}
 		tmplInsta, err := template.New("regular-insta.tmpl").Funcs(funcMap).ParseFiles("regular-insta.tmpl")
 		if err != nil {
 			panic(err)
 		}
-
+		tmplSio, err := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
+		if err != nil {
+			panic(err)
+		}
+		tmplMeetup, err := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
+		if err != nil {
+			panic(err)
+		}
 		//show.Teams = deduplicateStrings(show.Teams)
 
 		SaveScreenshot(tmplFb, show, "fb")
 		SaveScreenshot(tmplInsta, show, "insta")
+		SaveScreenshot(tmplSio, show, "sio")
+		SaveScreenshot(tmplMeetup, show, "meetup")
 	}
 }
