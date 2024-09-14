@@ -103,10 +103,10 @@ func CreateIndex(shows []Show) {
 
 	// Start writing HTML content
 	indexFile.WriteString("<!DOCTYPE html>\n<html>\n<head>\n")
-	indexFile.WriteString("<title>Show Index</title>\n")
+	indexFile.WriteString("<title>Shows</title>\n")
 	indexFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
 	indexFile.WriteString("</head>\n<body>\n")
-	indexFile.WriteString("<h1>Show Index</h1>\n")
+	indexFile.WriteString("<h1>Shows</h1>\n")
 	indexFile.WriteString("<ul>\n")
 
 	for _, show := range shows {
@@ -135,6 +135,7 @@ func CreateShowPage(show Show) {
 	showFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
 	showFile.WriteString("</head>\n<body>\n")
 	showFile.WriteString(fmt.Sprintf("<h1>%s - %s</h1>\n", dateStr, show.Title))
+	showFile.WriteString("<a href='index.html'>back</h1>\n")
 	showFile.WriteString("<ul>\n")
 
 	// List of types
