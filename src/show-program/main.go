@@ -37,6 +37,51 @@ func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
 	return modifiedTime, nil
 }
 
+func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
+	// Create output file
+	fileName := show.Date.Format("2006-01-02") + " - " + show.Title + " - " + tmplType
+	outputFile, err := os.Create("output/" + fileName + ".html")
+	if err != nil {
+		panic(err)
+	}
+	defer outputFile.Close()
+
+	// Execute the template
+	err = tmpl.Execute(outputFile, show)
+	if err != nil {
+		panic(err)
+	}
+
+	// screenshot the html file
+	screenshotFile := "output/screenshots/" + fileName + ".jpg"
+	path, _ := os.Getwd()
+	fileUrl := "file://" + filepath.Join(path, outputFile.Name())
+	log.Println("fileUrl:", fileUrl)
+
+	// Create a context
+	ctx, cancel := chromedp.NewContext(context.Background())
+	defer cancel()
+
+	// Capture screenshot of an entire webpage in JPEG format
+	var buf []byte
+	if err := chromedp.Run(ctx,
+		chromedp.EmulateViewport(1920, 1004),
+		chromedp.Navigate(fileUrl),
+		chromedp.ActionFunc(func(ctx context.Context) error {
+			// Set the zoom level by scaling the CSS
+			return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
+		}),
+		chromedp.FullScreenshot(&buf, 100),
+	); err != nil {
+		log.Fatal(err)
+	}
+
+	// Save the screenshot to a file
+	if err := os.WriteFile(screenshotFile, buf, 0644); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	// bookingXlsxFilePath := GetGoogleSheetsPath(SHOW_SCHEDULE_SHEET_ID)
 
@@ -57,53 +102,15 @@ func main() {
 		}
 
 		// Parse the template file
-		tmpl, err := template.New("regular.tmpl").Funcs(funcMap).ParseFiles("regular.tmpl")
+		tmplFb, err := template.New("regular-fb.tmpl").Funcs(funcMap).ParseFiles("regular-fb.tmpl")
+		tmplInsta, err := template.New("regular-insta.tmpl").Funcs(funcMap).ParseFiles("regular-insta.tmpl")
 		if err != nil {
 			panic(err)
 		}
 
 		//show.Teams = deduplicateStrings(show.Teams)
 
-		// Create output file
-		outputFile, err := os.Create("output/" + show.Date.Format("2006-01-02") + " - " + show.Title + ".html")
-		if err != nil {
-			panic(err)
-		}
-		defer outputFile.Close()
-
-		// Execute the template
-		err = tmpl.Execute(outputFile, show)
-		if err != nil {
-			panic(err)
-		}
-
-		// screenshot the html file
-		screenshotFile := "output/screenshots/" + show.Date.Format("2006-01-02") + " - " + show.Title + ".jpg"
-		path, _ := os.Getwd()
-		fileUrl := "file://" + filepath.Join(path, outputFile.Name())
-		log.Println("fileUrl:", fileUrl)
-
-		// Create a context
-		ctx, cancel := chromedp.NewContext(context.Background())
-		defer cancel()
-
-		// Capture screenshot of an entire webpage in JPEG format
-		var buf []byte
-		if err := chromedp.Run(ctx,
-			chromedp.EmulateViewport(1920, 1004),
-			chromedp.Navigate(fileUrl),
-			chromedp.ActionFunc(func(ctx context.Context) error {
-				// Set the zoom level by scaling the CSS
-				return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
-			}),
-			chromedp.FullScreenshot(&buf, 100),
-		); err != nil {
-			log.Fatal(err)
-		}
-
-		// Save the screenshot to a file
-		if err := os.WriteFile(screenshotFile, buf, 0644); err != nil {
-			log.Fatal(err)
-		}
+		SaveScreenshot(tmplFb, show, "fb")
+		SaveScreenshot(tmplInsta, show, "insta")
 	}
 }
