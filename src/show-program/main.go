@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/chromedp/chromedp"
@@ -168,6 +169,8 @@ func main() {
 
 	var shows []Show
 
+	var wg sync.WaitGroup // WaitGroup to synchronize goroutines
+
 	for _, show := range showSchedule {
 		if show.Types[0] != ShowTypeRegular {
 			continue
@@ -195,14 +198,25 @@ func main() {
 		// Save the show for index generation
 		shows = append(shows, show)
 
-		SaveScreenshot(tmplFb, show, "fb")
-		SaveScreenshot(tmplInsta, show, "insta")
-		SaveScreenshot(tmplSio, show, "sio")
-		SaveScreenshot(tmplMeetup, show, "meetup")
+		// Increment the WaitGroup counter
+		wg.Add(1)
 
-		// Generate date-specific HTML file with links
-		CreateShowPage(show)
+		// Run screenshot and show page generation in a goroutine
+		go func(show Show) {
+			defer wg.Done() // Decrement counter when goroutine completes
+
+			SaveScreenshot(tmplFb, show, "fb")
+			SaveScreenshot(tmplInsta, show, "insta")
+			SaveScreenshot(tmplSio, show, "sio")
+			SaveScreenshot(tmplMeetup, show, "meetup")
+
+			// Generate date-specific HTML file with links
+			CreateShowPage(show)
+		}(show)
 	}
+
+	// Wait for all goroutines to finish
+	wg.Wait()
 
 	// Generate the index.html
 	CreateIndex(shows)
