@@ -79,17 +79,21 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 
 	// Set image dimensions
 	imageWidth := int64(1920)
-	imageHeight := int64(1004)
+	imageHeight := int64(1080)
 
 	switch tmplType {
-	case "meetup", "sio":
+	case POST_TYPE_MEETUP, POST_TYPE_SIO:
+		imageWidth = int64(1920)
 		imageHeight = int64(1080)
-	case "insta":
-		imageWidth = int64(1080 * 2)
-		imageHeight = int64(1080 * 2)
-	case "story":
-		imageWidth = int64(1080 * 2)
-		imageHeight = int64(1920 * 2)
+	case POST_TYPE_INSTA:
+		imageWidth = int64(1080)
+		imageHeight = int64(1080)
+	case POST_TYPE_STORY:
+		imageWidth = int64(1080)
+		imageHeight = int64(1920)
+	case POST_TYPE_FB:
+		imageWidth = int64(1080)
+		imageHeight = int64(1920)
 	}
 
 	var buf []byte
@@ -110,10 +114,6 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 				time.Sleep(50 * time.Millisecond) // Adjust the sleep duration as needed
 			}
 			return fmt.Errorf("timeout waiting for window.layoutAdjusted to be true")
-		}),
-		// Optional: Adjust zoom for higher resolution
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
 		}),
 		chromedp.FullScreenshot(&buf, 100),
 	); err != nil {
