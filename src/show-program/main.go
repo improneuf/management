@@ -143,16 +143,31 @@ func CreateIndex(shows []Show) {
 	indexFile.WriteString("<ul>\n")
 
 	timestamp := time.Now().Unix()
+	today := TruncateToDate(time.Now()) // Get today's date with time set to midnight
+
 	for _, show := range shows {
 		if len(show.Teams) == 0 {
 			continue
 		}
 		dateStr := show.Date.Format("2006-01-02")
-		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html?%d\">%s - %s</a></li>\n", dateStr, timestamp, dateStr, show.Title))
+		showDate := TruncateToDate(show.Date)
+
+		linkFormat := "<li><a href=\"%s.html?%d\">%s - %s</a></li>\n"
+		if !showDate.Before(today) {
+			// If the show's date is today or in the future, make the link bold
+			linkFormat = "<li><strong><a href=\"%s.html?%d\">%s - %s</a></strong></li>\n"
+		}
+
+		indexFile.WriteString(fmt.Sprintf(linkFormat, dateStr, timestamp, dateStr, show.Title))
 	}
 
 	indexFile.WriteString("</ul>\n")
 	indexFile.WriteString("</body>\n</html>")
+}
+
+// Helper function to truncate time to midnight
+func TruncateToDate(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
 }
 
 func CreateShowPage(show Show) {
