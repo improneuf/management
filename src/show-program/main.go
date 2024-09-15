@@ -113,7 +113,7 @@ func CreateIndex(shows []Show) {
 	timestamp := time.Now().Unix()
 	for _, show := range shows {
 		dateStr := show.Date.Format("2006-01-02")
-		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html?%s\">%s - %s</a></li>\n", dateStr, timestamp, dateStr, show.Title))
+		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html?%d\">%s - %s</a></li>\n", dateStr, timestamp, dateStr, show.Title))
 	}
 
 	indexFile.WriteString("</ul>\n")
