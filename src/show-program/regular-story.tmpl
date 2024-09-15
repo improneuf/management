@@ -190,7 +190,7 @@
         <script>
             function adjustTextSize(textElement) {
                 const maxLength = 16; 
-                const baseFontSize = 40; 
+                const baseFontSize = 40;
                 const scaleDownFactor = 0.60; 
 
                 let textLength = textElement.innerText.length;
@@ -247,6 +247,7 @@
                         div.style.width = '420px';
                         div.style.margin = '12px';
                         teamContainer.appendChild(div);
+                    });
 
                 } else if (numTeams === 4) {
                     // Arrange in a 2x2 grid
@@ -270,7 +271,6 @@
                         div.style.margin = '16px';
                         teamContainer.appendChild(div);
                     });
-
                 }
             }
 
