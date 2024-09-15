@@ -152,11 +152,11 @@
             <div
                 class="price-and-timing-footer absolute bottom-0 left-0 right-0 flex flex-col items-center font-extrabold text-slate-200 opacity-80 mb-10"
             >
-                <p class="text-3xl text-cyan-500">
+                <p class="text-5xl text-cyan-500">
                     50 Kr / 70 Kr / 100 Kr
                 </p>
-                <p class="text-3xl text-yellow-500 mt-2">20:00 - {{ GetShowEndTime "20:15" . }}</p>
-                <p class="text-3xl text-rose-500 mt-2">{{ .Venue }}</p>
+                <p class="text-5xl text-yellow-500 mt-2">20:00 - {{ GetShowEndTime "20:15" . }}</p>
+                <p class="text-5xl text-rose-500 mt-2">{{ .Venue }}</p>
             </div>
 
             <!-- Logo at the bottom-right corner -->
@@ -241,21 +241,20 @@
                 } else if (numTeams === 3) {
                     // Arrange three teams vertically
                     teamContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center');
-                    teamContainer.style.paddingTop = '220px';
+                    teamContainer.style.paddingTop = '200px';
 
                     teamDivs.forEach((div) => {
                         div.style.width = '420px';
-                        div.style.margin = '16px';
+                        div.style.margin = '12px';
                         teamContainer.appendChild(div);
-                    });
 
                 } else if (numTeams === 4) {
                     // Arrange in a 2x2 grid
                     teamContainer.classList.add('grid', 'justify-items-center');
-                    teamContainer.style.paddingTop = '440px';
-                    //teamContainer.style.display = 'grid';
+                    teamContainer.style.paddingTop = '400px';
+                    teamContainer.style.display = 'grid';
                     teamContainer.style.gridTemplateColumns = 'repeat(2, auto)';
-                    //teamContainer.style.gap = '32px';
+                    teamContainer.style.gap = '32px';
 
                     teamDivs.forEach((div) => {
                         div.style.width = '400px';
@@ -271,6 +270,7 @@
                         div.style.margin = '16px';
                         teamContainer.appendChild(div);
                     });
+                    
                 }
             }
 
