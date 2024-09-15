@@ -92,8 +92,8 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 		imageWidth = int64(1080)
 		imageHeight = int64(1920)
 	case POST_TYPE_FB:
-		imageWidth = int64(1080)
-		imageHeight = int64(1920)
+		imageWidth = int64(1920)
+		imageHeight = int64(1004)
 	}
 
 	var buf []byte
