@@ -20,7 +20,19 @@ const (
 	SHOW_SCHEDULE_SHEET_ID   string = "15cDopxkZDbFwIcIU5tuqAUCM4U0GXf7O"
 	SHOW_SCHEDULE_SHEET_NAME string = "Yesplan"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
+
+	POST_TYPE_FB     = "fb"
+	POST_TYPE_SIO    = "sio"
+	POST_TYPE_MEETUP = "meetup"
+	POST_TYPE_INSTA  = "insta"
 )
+
+var POST_TYPES = []string{
+	POST_TYPE_FB,
+	POST_TYPE_INSTA,
+	POST_TYPE_MEETUP,
+	POST_TYPE_SIO,
+}
 
 // GetLocalFileModifiedDate returns the last modified date of the file at the given filePath.
 func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
@@ -144,10 +156,9 @@ func CreateShowPage(show Show) {
 	showFile.WriteString("<ul>\n")
 
 	// List of types
-	types := []string{"fb", "sio", "meetup", "insta"}
 
 	timestamp := time.Now().Unix()
-	for _, tmplType := range types {
+	for _, tmplType := range POST_TYPES {
 		imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
 		showFile.WriteString(fmt.Sprintf("<li><a href=\"%s\">%s</a></li>\n", imageFileName, tmplType))
 	}
@@ -208,10 +219,10 @@ func main() {
 		go func(show Show) {
 			defer wg.Done() // Decrement counter when goroutine completes
 
-			SaveScreenshot(tmplFb, show, "fb")
-			SaveScreenshot(tmplInsta, show, "insta")
-			SaveScreenshot(tmplSio, show, "sio")
-			SaveScreenshot(tmplMeetup, show, "meetup")
+			SaveScreenshot(tmplFb, show, POST_TYPE_FB)
+			SaveScreenshot(tmplInsta, show, POST_TYPE_INSTA)
+			SaveScreenshot(tmplSio, show, POST_TYPE_SIO)
+			SaveScreenshot(tmplMeetup, show, POST_TYPE_MEETUP)
 
 			// Generate date-specific HTML file with links
 			CreateShowPage(show)
