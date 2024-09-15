@@ -109,9 +109,10 @@ func CreateIndex(shows []Show) {
 	indexFile.WriteString("<h1>Shows</h1>\n")
 	indexFile.WriteString("<ul>\n")
 
+	timestamp := time.Now().Unix()
 	for _, show := range shows {
 		dateStr := show.Date.Format("2006-01-02")
-		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html\">%s - %s</a></li>\n", dateStr, dateStr, show.Title))
+		indexFile.WriteString(fmt.Sprintf("<li><a href=\"%s.html?%s\">%s - %s</a></li>\n", dateStr, timestamp, dateStr, show.Title))
 	}
 
 	indexFile.WriteString("</ul>\n")
@@ -141,8 +142,9 @@ func CreateShowPage(show Show) {
 	// List of types
 	types := []string{"fb", "sio", "meetup", "insta"}
 
+	timestamp := time.Now().Unix()
 	for _, tmplType := range types {
-		imageFileName := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, tmplType)
+		imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
 		showFile.WriteString(fmt.Sprintf("<li><a href=\"%s\">%s</a></li>\n", imageFileName, tmplType))
 	}
 
