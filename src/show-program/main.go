@@ -98,7 +98,7 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 
 	var buf []byte
 	if err := chromedp.Run(ctx,
-		chromedp.EmulateViewport(imageWidth, imageHeight),
+		chromedp.EmulateViewport(imageWidth*2, imageHeight*2),
 		chromedp.Navigate(fileUrl),
 		// Wait until window.layoutAdjusted === true
 		chromedp.ActionFunc(func(ctx context.Context) error {
@@ -114,6 +114,10 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 				time.Sleep(50 * time.Millisecond) // Adjust the sleep duration as needed
 			}
 			return fmt.Errorf("timeout waiting for window.layoutAdjusted to be true")
+		}),
+		// Optional: Adjust zoom for higher resolution
+		chromedp.ActionFunc(func(ctx context.Context) error {
+			return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
 		}),
 		chromedp.FullScreenshot(&buf, 100),
 	); err != nil {
