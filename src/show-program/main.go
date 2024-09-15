@@ -54,7 +54,8 @@ func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
 func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 	// Create output file
 	fileName := show.Date.Format("2006-01-02") + " - " + show.Title + " - " + tmplType
-	outputFile, err := os.Create("output/" + fileName + ".html")
+	outputFilePath := "output/" + fileName + ".html"
+	outputFile, err := os.Create(outputFilePath)
 	if err != nil {
 		panic(err)
 	}
@@ -66,38 +67,52 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 		panic(err)
 	}
 
-	// screenshot the html file
+	// Prepare screenshot file path
 	screenshotFile := "output/screenshots/" + fileName + ".jpg"
 	path, _ := os.Getwd()
 	fileUrl := "file://" + filepath.Join(path, outputFile.Name())
 	log.Println("fileUrl:", fileUrl)
 
-	// Create a context
+	// Create a context with a timeout to prevent hanging
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
 
-	// Capture screenshot of an entire webpage in JPEG format
+	// Set image dimensions
 	imageWidth := int64(1920)
 	imageHeight := int64(1004)
 
-	if tmplType == "meetup" || tmplType == "sio" {
+	switch tmplType {
+	case "meetup", "sio":
 		imageHeight = int64(1080)
-	}
-	if tmplType == "insta" {
-		imageWidth = int64(2160)
-		imageHeight = int64(2160)
-	}
-	if tmplType == "story" {
-		imageWidth = int64(2160)
-		imageHeight = int64(3840)
+	case "insta":
+		imageWidth = int64(1080 * 2)
+		imageHeight = int64(1080 * 2)
+	case "story":
+		imageWidth = int64(1080 * 2)
+		imageHeight = int64(1920 * 2)
 	}
 
 	var buf []byte
 	if err := chromedp.Run(ctx,
 		chromedp.EmulateViewport(imageWidth, imageHeight),
 		chromedp.Navigate(fileUrl),
+		// Wait until window.layoutAdjusted === true
 		chromedp.ActionFunc(func(ctx context.Context) error {
-			// Set the zoom level by scaling the CSS
+			var isAdjusted bool
+			for i := 0; i < 100; i++ { // Adjust the number of iterations as needed
+				err := chromedp.Evaluate(`window.layoutAdjusted === true`, &isAdjusted).Do(ctx)
+				if err != nil {
+					return err
+				}
+				if isAdjusted {
+					return nil
+				}
+				time.Sleep(50 * time.Millisecond) // Adjust the sleep duration as needed
+			}
+			return fmt.Errorf("timeout waiting for window.layoutAdjusted to be true")
+		}),
+		// Optional: Adjust zoom for higher resolution
+		chromedp.ActionFunc(func(ctx context.Context) error {
 			return chromedp.Evaluate(`document.body.style.zoom = "2"`, nil).Do(ctx)
 		}),
 		chromedp.FullScreenshot(&buf, 100),

@@ -234,8 +234,9 @@
                 // Remove existing layout classes
                 teamContainer.className = "";
                 teamContainer.style.top = "300px";
-
-                if (numTeams === 1) {
+                if (numTeams === 0) {
+                    // Nothing to do
+                } else if (numTeams === 1) {
                     // Center the single team div
                     teamContainer.classList.add(
                         "flex",
@@ -338,6 +339,7 @@
                     .forEach(adjustTextSize);
 
                 adjustLayout();
+                window.layoutAdjusted = true;
             });
         </script>
     </body>

@@ -216,8 +216,9 @@
                 // Remove existing layout classes
                 teamContainer.className = '';
                 teamContainer.style.top = '400px';
-
-                if (numTeams === 1) {
+                if (numTeams === 0) {
+                    // Nothing to do
+                } else if (numTeams === 1) {
                     // Center the single team div
                     teamContainer.classList.add('flex', 'items-center', 'justify-center');
                     teamContainer.style.paddingTop = '400px';
@@ -280,6 +281,7 @@
                     .forEach(adjustTextSize);
 
                 adjustLayout();
+                window.layoutAdjusted = true;
             });
         </script>
     </body>
