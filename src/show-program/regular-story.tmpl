@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Head content remains the same -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ .Title }}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            /* Custom fonts and styles remain the same */
+            @font-face {
+                font-family: HussarSzturm;
+                src: url("../fonts/HussarSzturm.otf") format('opentype');
+            }
+            @font-face {
+                font-family: 'Carton Six Regular';
+                font-style: normal;
+                font-weight: normal;
+                src: local('Carton Six Regular'), url('../fonts/Carton_Six.woff') format('woff');
+            }
+            @font-face {
+                font-family: "Code New Roman";
+                src: local('Code New Roman'), url('../fonts/Code New Roman.woff') format('woff');
+                font-style: normal;
+                font-weight: 400;
+            }
+            @font-face {
+                font-family: "Code New Roman";
+                src: local('Code New Roman'), url('../fonts/Code New Roman i.woff') format('woff');
+                font-style: italic;
+                font-weight: 400;
+            }
+            @font-face {
+                font-family: "Code New Roman";
+                src: local('Code New Roman'), url('../fonts/Code New Roman b.woff') format('woff');
+                font-style: normal;
+                font-weight: 700;
+            }
+            @font-face {
+                font-family: RobotoMono;
+                src: local('RobotoMono-VariableFont_wght'), url('../fonts/RobotoMono-VariableFont_wght.ttf') format('truetype');
+                font-style: normal;
+                font-weight: normal;
+            }
+            @font-face {
+                font-family: RobotoMono;
+                src: local('RobotoMono-Italic-VariableFont_wght'), url('../fonts/RobotoMono-Italic-VariableFont_wght.ttf') format('truetype');
+                font-style: italic;
+                font-weight: normal;
+            }
+
+            .banner-background {
+                background-image: url("../bg.png");
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            .thin-border {
+                border: 0.25px solid #d1d5db;  
+                border-style: hidden;
+            }
+
+            .performance-name {
+                font-family: "HussarSzturm";
+                font-weight: bold;
+                font-style: normal;
+            }
+            .title {
+                font-family: "Carton Six Regular";
+            }
+            .subtitle {
+                font-family: "HussarSzturm";
+                font-weight: bold;
+                font-style: italic;
+            }
+            .price-and-timing-footer {
+                font-family: "Code New Roman";
+                color: #d1d5db;
+            }
+            /* Additional styles for square images */
+            .square-image-container {
+                position: relative;
+                width: 100%;
+                padding-bottom: 100%; /* 1:1 Aspect Ratio */
+            }
+            .square-image-container img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .logo {
+                height: 145px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="banner-background relative h-[1920px] w-[1080px] overflow-hidden">
+            <!-- Title centered at the top -->
+            <div
+                class="absolute left-0 right-0 top-0 flex flex-col items-center justify-center text-center"
+                style="padding-top: 120px"
+            >
+                <h1
+                    class="title text-7xl font-bold uppercase tracking-widest text-red-600 subpixel-antialiased"
+                >
+                    {{ .Title }}
+                </h1>
+            </div>
+
+            <!-- Team images and names -->
+            <div
+                id="team-container"
+                class="absolute left-0 right-0 flex flex-wrap items-center justify-center"
+                style="top: 400px; padding: 0 40px;"
+            >
+                {{ range .Teams }}
+                <div
+                    class="team-div thin-border rounded-lg bg-zinc-700 bg-opacity-60 p-4 text-center m-4"
+                >
+                    <div class="square-image-container mb-2">
+                        <img
+                            src="../team-photos/{{ GetTeamPhoto . }}"
+                            alt="{{ . }}"
+                            class="rounded-lg object-cover shadow-xl"
+                        />
+                    </div>
+                    <p
+                        class="performance-name pb-1 pt-2 text-3xl font-bold text-white"
+                    >
+                        {{ . }}
+                    </p>
+                </div>
+                {{ end }}
+            </div>
+
+            <!-- Footer with price, timing, and location -->
+            <div
+                class="price-and-timing-footer absolute bottom-0 left-0 right-0 flex flex-col items-center font-extrabold text-slate-200 opacity-80 mb-10"
+            >
+                <p class="text-3xl text-cyan-500">
+                    50 Kr / 70 Kr / 100 Kr
+                </p>
+                <p class="text-3xl text-yellow-500 mt-2">20:00 - {{ GetShowEndTime "20:15" . }}</p>
+                <p class="text-3xl text-rose-500 mt-2">{{ .Venue }}</p>
+            </div>
+
+            <!-- Logo at the top-right corner -->
+            <div class="absolute right-0 bottom-220 p-4 opacity-60">
+                <img
+                    src="../logo.png"
+                    alt="Improv Neuf Logo"
+                    class="logo w-auto"
+                />
+            </div>
+
+            <!-- Date circle at the top-left corner -->
+            <div class="absolute left-0 bottom-220 mt-4 ml-4">
+                <div
+                    class="flex flex-col items-center justify-center rounded-full bg-white shadow-lg"
+                    style="width: 140px; height: 140px"
+                >
+                    <span
+                        class="font-bold text-black"
+                        style="margin-bottom: -10px; font-size: 28px"
+                        >{{ formatMonth .Date }}</span
+                    >
+                    <span class="text-6xl font-bold text-black"
+                        >{{ .Date.Format "02" }}</span
+                    >
+                </div>
+            </div>
+        </div>
+        <!-- JavaScript to adjust layout -->
+        <script>
+            function adjustTextSize(textElement) {
+                const maxLength = 16; 
+                const baseFontSize = 32; 
+                const scaleDownFactor = 0.60; 
+
+                let textLength = textElement.innerText.length;
+                let fontSize = baseFontSize;
+
+                if (textLength > maxLength) {
+                    fontSize *= Math.max(
+                        scaleDownFactor,
+                        maxLength / textLength,
+                    );
+                }
+                textElement.style.fontSize = `${fontSize}px`;
+            }
+
+            function adjustLayout() {
+                const teamContainer = document.getElementById('team-container');
+                const teamDivs = Array.from(teamContainer.getElementsByClassName('team-div'));
+                const numTeams = teamDivs.length;
+
+                // Clear existing content
+                teamContainer.innerHTML = '';
+
+                // Remove existing layout classes
+                teamContainer.className = '';
+                teamContainer.style.top = '400px';
+
+                if (numTeams === 1) {
+                    // Center the single team div
+                    teamContainer.classList.add('flex', 'items-center', 'justify-center');
+                    teamContainer.style.paddingTop = '600px';
+
+                    teamDivs[0].style.width = '500px';
+                    teamDivs[0].style.margin = '16px';
+
+                    teamContainer.appendChild(teamDivs[0]);
+
+                } else if (numTeams === 2) {
+                    // Place two teams vertically
+                    teamContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center');
+                    teamContainer.style.paddingTop = '240px';
+
+                    teamDivs.forEach((div) => {
+                        div.style.width = '600px';
+                        div.style.margin = '36px';
+                        teamContainer.appendChild(div);
+                    });
+
+                } else if (numTeams === 3) {
+                    // Arrange three teams vertically
+                    teamContainer.classList.add('flex', 'flex-col', 'items-center', 'justify-center');
+                    teamContainer.style.paddingTop = '220px';
+
+                    teamDivs.forEach((div) => {
+                        div.style.width = '420px';
+                        div.style.margin = '16px';
+                        teamContainer.appendChild(div);
+                    });
+
+                } else if (numTeams === 4) {
+                    // Arrange in a 2x2 grid
+                    teamContainer.classList.add('grid', 'justify-items-center');
+                    teamContainer.style.paddingTop = '440px';
+                    //teamContainer.style.display = 'grid';
+                    teamContainer.style.gridTemplateColumns = 'repeat(2, auto)';
+                    //teamContainer.style.gap = '32px';
+
+                    teamDivs.forEach((div) => {
+                        div.style.width = '400px';
+                        div.style.margin = '36px';
+                        teamContainer.appendChild(div);
+                    });
+
+                } else {
+                    // Default layout for more than 4 teams
+                    teamContainer.classList.add('flex', 'flex-wrap', 'items-center', 'justify-center');
+                    teamDivs.forEach((div) => {
+                        div.style.width = '250px';
+                        div.style.margin = '16px';
+                        teamContainer.appendChild(div);
+                    });
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                document
+                    .querySelectorAll(".performance-name")
+                    .forEach(adjustTextSize);
+
+                adjustLayout();
+            });
+        </script>
+    </body>
+</html>

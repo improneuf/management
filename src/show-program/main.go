@@ -25,6 +25,7 @@ const (
 	POST_TYPE_SIO    = "sio"
 	POST_TYPE_MEETUP = "meetup"
 	POST_TYPE_INSTA  = "insta"
+	POST_TYPE_STORY  = "story"
 )
 
 var POST_TYPES = []string{
@@ -32,6 +33,7 @@ var POST_TYPES = []string{
 	POST_TYPE_INSTA,
 	POST_TYPE_MEETUP,
 	POST_TYPE_SIO,
+	POST_TYPE_STORY,
 }
 
 // GetLocalFileModifiedDate returns the last modified date of the file at the given filePath.
@@ -207,6 +209,10 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		tmplStory, err := template.New("regular-story.tmpl").Funcs(funcMap).ParseFiles("regular-story.tmpl")
+		if err != nil {
+			panic(err)
+		}
 		//show.Teams = deduplicateStrings(show.Teams)
 
 		// Save the show for index generation
@@ -223,6 +229,7 @@ func main() {
 			SaveScreenshot(tmplInsta, show, POST_TYPE_INSTA)
 			SaveScreenshot(tmplSio, show, POST_TYPE_SIO)
 			SaveScreenshot(tmplMeetup, show, POST_TYPE_MEETUP)
+			SaveScreenshot(tmplStory, show, POST_TYPE_STORY)
 
 			// Generate date-specific HTML file with links
 			CreateShowPage(show)
