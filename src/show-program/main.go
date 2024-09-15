@@ -88,6 +88,10 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 		imageWidth = int64(2160)
 		imageHeight = int64(2160)
 	}
+	if tmplType == "story" {
+		imageWidth = int64(2160)
+		imageHeight = int64(3840)
+	}
 
 	var buf []byte
 	if err := chromedp.Run(ctx,
