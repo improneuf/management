@@ -164,7 +164,7 @@ func formatMonth(date time.Time) string {
 
 func GetTeamShowDuration(teamName string) int {
 	switch teamName {
-	case "The sound of Neuf":
+	case "The Sound of Neuf":
 		return 40
 	default:
 		return 20
