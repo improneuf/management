@@ -16,6 +16,7 @@ const (
 	ShowTypeCProject      ShowType = "CProject"
 	Project               ShowType = "Project"
 	ShowTypeOther         ShowType = "Other"
+	ShowTypeTheme         ShowType = "Theme"
 )
 
 func getShowType(teamName string) ShowType {
@@ -33,6 +34,8 @@ func getShowType(teamName string) ShowType {
 		return Project
 	case "JAM":
 		return ShowTypeJam
+	case "THEME":
+		return ShowTypeTheme
 	default:
 		return ShowTypeRegular
 	}
