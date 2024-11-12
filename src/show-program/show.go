@@ -58,7 +58,7 @@ func GetShowFromRow(row []string) Show {
 				teams = append(teams, cellTrimmed)
 				showTypes = append(showTypes, getShowType(cellTrimmed))
 			}
-		case 7:
+		case 8:
 			showLanguagesStr := strings.Split(cellTrimmed, "/")
 			for _, languageStr := range showLanguagesStr {
 				languageStr = strings.TrimSpace(languageStr)
