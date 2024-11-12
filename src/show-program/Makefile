@@ -16,6 +16,7 @@ build:
 
 # Run the project
 run:
+	mkdir -p output/screenshots
 	$(GORUN) $(SOURCES)
 
 # Clean build artifacts
