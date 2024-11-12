@@ -206,6 +206,31 @@ func CreateShowPage(show Show) {
 	showFile.WriteString("</body>\n</html>")
 }
 
+func GetFreeText(show Show) string {
+	var hasEnglish, hasNorwegian bool
+
+	// Check which languages are present in show.Languages
+	for _, language := range show.Languages {
+		switch language {
+		case English:
+			hasEnglish = true
+		case Norwegian:
+			hasNorwegian = true
+		}
+	}
+
+	// Return text based on language presence
+	if hasEnglish && hasNorwegian {
+		return "FREE (students) / GRATIS (studenter)"
+	} else if hasEnglish {
+		return "FREE (students)"
+	} else if hasNorwegian {
+		return "GRATIS (studenter)"
+	}
+
+	return ""
+}
+
 func main() {
 	// bookingXlsxFilePath := GetGoogleSheetsPath(SHOW_SCHEDULE_SHEET_ID)
 
@@ -218,6 +243,7 @@ func main() {
 		"GetTeamPhoto":   GetTeamPhoto,
 		"formatMonth":    formatMonth,
 		"GetShowEndTime": GetShowEndTime,
+		"GetFreeText":    GetFreeText,
 	}
 
 	var shows []Show

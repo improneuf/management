@@ -153,7 +153,7 @@
                 class="price-and-timing-footer absolute bottom-0 left-0 right-0 flex flex-col items-center font-extrabold text-slate-200 opacity-80 mb-10"
             >
                 <p class="text-5xl text-cyan-500">
-                    50 Kr / 70 Kr / 100 Kr
+                    {{ GetFreeText .Languages }} / 70 Kr / 100 Kr
                 </p>
                 <p class="text-5xl text-yellow-500 mt-2">20:00 - {{ GetShowEndTime "20:15" . }}</p>
                 <p class="text-5xl text-rose-500 mt-2">{{ .Venue }}</p>
