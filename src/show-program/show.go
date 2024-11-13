@@ -33,6 +33,10 @@ type ShowPageData struct {
     Types   []ShowTypeData
 }
 
+type IndexPageData struct {
+    Shows []ShowPageData
+}
+
 func GetShowFromRow(row []string) Show {
 	var teams []string
 	var date time.Time

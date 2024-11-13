@@ -131,42 +131,66 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 }
 
 func CreateIndex(shows []Show) {
-	// Create or open the index.html file
-	indexFile, err := os.Create("output/screenshots/index.html")
-	if err != nil {
-		panic(err)
-	}
-	defer indexFile.Close()
+    // Filter shows that have at least one team
+    var validShows []Show
+    for _, show := range shows {
+        if len(show.Teams) == 0 {
+            continue
+        }
+        validShows = append(validShows, show)
+    }
 
-	// Start writing HTML content
-	indexFile.WriteString("<!DOCTYPE html>\n<html>\n<head>\n")
-	indexFile.WriteString("<title>Shows</title>\n")
-	indexFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
-	indexFile.WriteString("</head>\n<body>\n")
-	indexFile.WriteString("<h1>Shows</h1>\n")
-	indexFile.WriteString("<ul>\n")
+    // Prepare data for the template
+    timestamp := time.Now().Unix()
+    var showsData []ShowPageData
+    for _, show := range validShows {
+        dateStr := show.Date.Format("2006-01-02")
 
-	timestamp := time.Now().Unix()
-	today := TruncateToDate(time.Now()) // Get today's date with time set to midnight
+        var types []ShowTypeData
+        for _, tmplType := range POST_TYPES {
+            imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
+            types = append(types, ShowTypeData{
+                Type:          tmplType,
+                ImageFileName: imageFileName,
+            })
+        }
 
-	for _, show := range shows {
-		if len(show.Teams) == 0 {
-			continue
-		}
-		dateStr := show.Date.Format("2006-01-02")
-		showDate := TruncateToDate(show.Date)
+        showData := ShowPageData{
+            DateStr: dateStr,
+            Title:   show.Title,
+            Types:   types,
+        }
 
-		linkFormat := "<li><a href=\"%s.html?%d\">%s - %s</a></li>\n"
-		if !showDate.Before(today) {
-			// If the show's date is today or in the future, make the link bold
-			linkFormat = "<li><strong><a href=\"%s.html?%d\">%s - %s</a></strong></li>\n"
-		}
+        showsData = append(showsData, showData)
+    }
 
-		indexFile.WriteString(fmt.Sprintf(linkFormat, dateStr, timestamp, dateStr, show.Title))
-	}
+    data := IndexPageData{
+        Shows: showsData,
+    }
 
-	indexFile.WriteString("</ul>\n")
-	indexFile.WriteString("</body>\n</html>")
+    // Define the path to the template file
+    templatePath := "index.tmpl"
+
+    // Parse the template from the external file
+    t, err := template.ParseFiles(templatePath)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create or open the index.html file
+    indexFile, err := os.Create("output/screenshots/index.html")
+    if err != nil {
+        panic(err)
+    }
+    defer indexFile.Close()
+
+    // Execute the template, writing the output to the indexFile
+    err = t.Execute(indexFile, data)
+    if err != nil {
+        panic(err)
+    }
+
+    fmt.Println("index.html has been successfully created.")
 }
 
 // Helper function to truncate time to midnight
