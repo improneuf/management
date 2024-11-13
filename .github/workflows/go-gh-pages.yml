@@ -46,6 +46,7 @@ jobs:
           mkdir -p output/screenshots
           echo ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEYFILE_BASE64 }} | base64 -d > impro-neuf-management-99d59b5d3102.json
           go run main.go price.go  showtype.go showlanguage.go show.go drive.go photo.go
+          cp -R icons output/screenshots/icons
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
       - name: Upload artifact

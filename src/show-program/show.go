@@ -22,6 +22,17 @@ type Show struct {
 	Price        Price
 }
 
+type ShowTypeData struct {
+    Type          string
+    ImageFileName string
+}
+
+type ShowPageData struct {
+    DateStr string
+    Title   string
+    Types   []ShowTypeData
+}
+
 func GetShowFromRow(row []string) Show {
 	var teams []string
 	var date time.Time

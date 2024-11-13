@@ -17,6 +17,7 @@ build:
 # Run the project
 run:
 	mkdir -p output/screenshots
+	cp -R icons output/screenshots/icons
 	$(GORUN) $(SOURCES)
 
 # Clean build artifacts

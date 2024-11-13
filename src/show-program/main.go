@@ -175,35 +175,47 @@ func TruncateToDate(t time.Time) time.Time {
 }
 
 func CreateShowPage(show Show) {
-	dateStr := show.Date.Format("2006-01-02")
-	fileName := "output/screenshots/" + dateStr + ".html"
+    dateStr := show.Date.Format("2006-01-02")
+    fileName := "output/screenshots/" + dateStr + ".html"
 
-	// Create or open the date-specific HTML file
-	showFile, err := os.Create(fileName)
-	if err != nil {
-		panic(err)
-	}
-	defer showFile.Close()
+    // Create or open the date-specific HTML file
+    showFile, err := os.Create(fileName)
+    if err != nil {
+        panic(err)
+    }
+    defer showFile.Close()
 
-	// Start writing HTML content
-	showFile.WriteString("<!DOCTYPE html>\n<html>\n<head>\n")
-	showFile.WriteString(fmt.Sprintf("<title>%s - %s</title>\n", dateStr, show.Title))
-	showFile.WriteString("<style>body { font-family: Arial, sans-serif; }</style>\n")
-	showFile.WriteString("</head>\n<body>\n")
-	showFile.WriteString(fmt.Sprintf("<h1>%s - %s</h1>\n", dateStr, show.Title))
-	showFile.WriteString("<a href='index.html'>back</h1>\n")
-	showFile.WriteString("<ul>\n")
+    // Prepare data for the template
+    timestamp := time.Now().Unix()
+    var types []ShowTypeData
+    for _, tmplType := range POST_TYPES {
+        imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
+        types = append(types, ShowTypeData{
+            Type:          tmplType,
+            ImageFileName: imageFileName,
+        })
+    }
 
-	// List of types
+    data := ShowPageData{
+        DateStr: dateStr,
+        Title:   show.Title,
+        Types:   types,
+    }
 
-	timestamp := time.Now().Unix()
-	for _, tmplType := range POST_TYPES {
-		imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
-		showFile.WriteString(fmt.Sprintf("<li><a href=\"%s\">%s</a></li>\n", imageFileName, tmplType))
-	}
+    // Define the path to the template file
+    templatePath := "show-page.tmpl"
 
-	showFile.WriteString("</ul>\n")
-	showFile.WriteString("</body>\n</html>")
+    // Parse the template from the external file
+    t, err := template.ParseFiles(templatePath)
+    if err != nil {
+        panic(err)
+    }
+
+    // Execute the template, writing the output to the showFile
+    err = t.Execute(showFile, data)
+    if err != nil {
+        panic(err)
+    }
 }
 
 func GetFreeText(show Show) string {
