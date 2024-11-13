@@ -133,6 +133,7 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 func CreateIndex(shows []Show) {
     // Filter shows that have at least one team
     var validShows []Show
+    today := TruncateToDate(time.Now())
     for _, show := range shows {
         if len(show.Teams) == 0 {
             continue
@@ -145,6 +146,7 @@ func CreateIndex(shows []Show) {
     var showsData []ShowPageData
     for _, show := range validShows {
         dateStr := show.Date.Format("2006-01-02")
+        showDate := TruncateToDate(show.Date)
 
         var types []ShowTypeData
         for _, tmplType := range POST_TYPES {
@@ -159,6 +161,7 @@ func CreateIndex(shows []Show) {
             DateStr: dateStr,
             Title:   show.Title,
             Types:   types,
+            IsPast:  showDate.Before(today),
         }
 
         showsData = append(showsData, showData)

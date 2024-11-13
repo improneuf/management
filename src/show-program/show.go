@@ -31,6 +31,7 @@ type ShowPageData struct {
     DateStr string
     Title   string
     Types   []ShowTypeData
+    IsPast  bool
 }
 
 type IndexPageData struct {
