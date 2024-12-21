@@ -151,7 +151,7 @@ func ReadShowScheduleFromFile(filePath string, sheetName string) []Show {
 			if r == 27 || r == 28 {
 				continue
 			}
-			if r > 38 {
+			if r > 37 {
 				continue
 			}
 			shows = append(shows, GetShowFromRow(row))
