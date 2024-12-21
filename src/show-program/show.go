@@ -144,13 +144,14 @@ func ReadShowScheduleFromFile(filePath string, sheetName string) []Show {
 		}
 
 		for r, row := range rows {
+		    // Specify which range of rows to skip
 			if r < 10 {
 				continue
 			}
 			if r == 27 || r == 28 {
 				continue
 			}
-			if r > 44 {
+			if r > 38 {
 				continue
 			}
 			shows = append(shows, GetShowFromRow(row))
