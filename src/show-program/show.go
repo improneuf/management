@@ -23,19 +23,19 @@ type Show struct {
 }
 
 type ShowTypeData struct {
-    Type          string
-    ImageFileName string
+	Type          string
+	ImageFileName string
 }
 
 type ShowPageData struct {
-    DateStr string
-    Title   string
-    Types   []ShowTypeData
-    IsPast  bool
+	DateStr string
+	Title   string
+	Types   []ShowTypeData
+	IsPast  bool
 }
 
 type IndexPageData struct {
-    Shows []ShowPageData
+	Shows []ShowPageData
 }
 
 func GetShowFromRow(row []string) Show {
@@ -144,11 +144,8 @@ func ReadShowScheduleFromFile(filePath string, sheetName string) []Show {
 		}
 
 		for r, row := range rows {
-		    // Specify which range of rows to skip
+			// Specify which range of rows to skip
 			if r < 10 {
-				continue
-			}
-			if r == 27 || r == 28 {
 				continue
 			}
 			if r > 37 {
