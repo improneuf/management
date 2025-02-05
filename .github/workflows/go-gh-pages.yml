@@ -49,7 +49,7 @@ jobs:
         run: |
           echo ${{ secrets.GOOGLE_GEMINI_SERVICE_ACCOUNT_KEYFILE_BASE64 }} | base64 -d > geminitest-407623-91eaab2a74e8.json
           cd "${{ github.workspace }}/src/extract-team-images"
-          poetry install
+          poetry install --no-root --no-interaction
           poetry run python main.py
           poetry run python process-images.py "${{ github.workspace }}/src/show-program/team-photos/"
 
