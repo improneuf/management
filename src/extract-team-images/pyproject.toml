@@ -2,8 +2,7 @@
 name = "extract-team-images"
 version = "0.1.0"
 description = ""
-authors = ["Pravin Dahal <pravin.dahal@optimeering.com>"]
-readme = "README.md"
+authors = ["Pravin Dahal <pravindahal@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
