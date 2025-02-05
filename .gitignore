@@ -4,3 +4,6 @@ src/show-program/client_secret_*.com.json
 src/show-program/impro-neuf-management-*.json
 src/html-to-png/screenshot.jpg
 src/show-program/*.xlsx
+src/extract-team-images/team-images.json
+src/extract-team-images/geminitest-*.json
+src/extract-team-images/showprogram.xlsx
