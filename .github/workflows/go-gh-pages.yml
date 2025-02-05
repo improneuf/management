@@ -31,8 +31,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v4
+        with:
+          poetry-version: '2.0.1'
+
+      - name: Download images and save to src/show-program/team-photos
+        continue-on-error: true
+        run: |
+          echo ${{ secrets.GOOGLE_GEMINI_SERVICE_ACCOUNT_KEYFILE_BASE64 }} | base64 -d > geminitest-407623-91eaab2a74e8.json
+          cd "${{ github.workspace }}/src/extract-team-images"
+          poetry install
+          poetry run python main.py
+          poetry run python process-images.py "${{ github.workspace }}/src/show-program/team-photos/"
+
       - name: Setup Go environment
         uses: actions/setup-go@v5.0.2
         with:
@@ -40,15 +60,17 @@ jobs:
           go-version: 1.21.5
           cache-dependency-path: |
             src/show-program/go.sum
+
       - name: Build site
         run: |
-          cd src/show-program
+          cd "${{ github.workspace }}/src/show-program"
           mkdir -p output/screenshots
           echo ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEYFILE_BASE64 }} | base64 -d > impro-neuf-management-99d59b5d3102.json
-          go run main.go price.go  showtype.go showlanguage.go show.go drive.go photo.go
+          go run main.go price.go showtype.go showlanguage.go show.go drive.go photo.go
           cp -R icons output/screenshots/icons
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
