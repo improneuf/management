@@ -40,7 +40,7 @@ def extract_team_image(html: str) -> str:
 
 # Initialize the VertexAI model and extraction agent.
 model = VertexAIModel(
-    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite-preview-02-05',
     project_id="geminitest-407623",
     service_account_file="geminitest-407623-91eaab2a74e8.json"
 )
