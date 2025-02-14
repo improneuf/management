@@ -52,6 +52,7 @@ jobs:
           poetry install --no-root --no-interaction
           poetry run python main.py
           poetry run python process-images.py "${{ github.workspace }}/src/extract-team-images/team-images.json" "${{ github.workspace }}/src/show-program/team-photos/"
+          cat "${{ github.workspace }}/src/extract-team-images/team-images.json"
 
       - name: Setup Go environment
         uses: actions/setup-go@v5.0.2
