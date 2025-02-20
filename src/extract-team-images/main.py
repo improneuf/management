@@ -3,7 +3,8 @@ import asyncio
 import logging
 import json
 import gdown
-import difflib
+import re
+from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 from pydantic import BaseModel
 from pydantic_ai import Agent, RunContext
@@ -151,6 +152,27 @@ def extract_correct_names(xlsx_path: str) -> List[str]:
     return names
 
 
+def canonicalize(name: str) -> str:
+    # Lowercase the name and remove punctuation (keep alphanumeric only)
+    return re.sub(r'\W+', '', name.lower())
+
+
+def strict_fallback_match(external: str, website_names: List[str], threshold: float = 0.95) -> str:
+    best_match = ""
+    best_score = 0.0
+    # Try a direct canonical match first.
+    external_can = canonicalize(external)
+    for wt in website_names:
+        if canonicalize(wt) == external_can:
+            return wt  # Perfect canonical match
+    # If none found, try fuzzy matching using SequenceMatcher.
+    for wt in website_names:
+        score = SequenceMatcher(None, external, wt).ratio()
+        if score > best_score:
+            best_score = score
+            best_match = wt
+    return best_match if best_score >= threshold else ""
+
 # -------------------------------
 # Main Crawling Logic
 # -------------------------------
@@ -184,23 +206,21 @@ async def main():
         # After obtaining the fuzzy mapping:
         name_mapping = await match_team_names_excel_to_website(excel_names, website_names)
 
+        # --- After obtaining your initial fuzzy mapping ---
         import difflib
-
-        # Fallback: For any Excel team with an empty mapping, try a direct case-insensitive match.
         for external in excel_names:
-            if not name_mapping.get(external, "").strip():
-                # Try direct match first.
-                direct_match = next(
-                    (wt for wt in website_names if wt.strip().lower() == external.strip().lower()),
-                    None
-                )
-                if direct_match:
-                    name_mapping[external] = direct_match
-                else:
-                    # If no direct match, use difflib's fuzzy matching.
-                    close = difflib.get_close_matches(external, website_names, n=1, cutoff=0.8)
-                    if close:
-                        name_mapping[external] = close[0]
+            current = name_mapping.get(external, "").strip()
+            # If current mapping is empty or not convincing, try our strict fallback.
+            if not current:
+                match = strict_fallback_match(external, website_names, threshold=0.95)
+                name_mapping[external] = match
+            else:
+                # Also check if the existing match is sufficiently similar.
+                ratio = SequenceMatcher(None, external, current).ratio()
+                if ratio < 0.95:
+                    # Replace it only if a better strict fallback match is available.
+                    match = strict_fallback_match(external, website_names, threshold=0.95)
+                    name_mapping[external] = match
 
         # For each Excel team name, find the corresponding website team and fetch the image.
         team_images: Dict[str, str] = {}
