@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Characters</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .bg-custom-gradient {
+            background: linear-gradient(135deg, #0f4c5c, #1d3557, #457b9d);
+        }
+        .bg-haze {
+            position: absolute;
+            inset: 0;
+            background-image: url('bg_new2.webp');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px) brightness(0.85);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+    <div class="bg-haze"></div>
+    <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+        <!-- Logo positioned at the top-right corner -->
+        <div class="absolute top-5 right-5 z-20">
+            <img src="logo.png" alt="Logo" class="w-24 h-24"/>
+        </div>
+
+        <!-- Main Title -->
+        <div class="flex flex-col items-center text-center mt-16">
+            <h1
+                class="text-6xl md:text-8xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-blue-400 to-cyan-500"
+                style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.139em;"
+            >
+                Characters
+            </h1>
+        </div>
+
+        <!-- Subtitle -->
+        <div class="flex flex-col items-center text-center mt-4">
+            <p class="text-2xl md:text-4xl text-teal-200" style="font-family: 'Fredoka One', sans-serif;">
+                Explore endless possibilities to playfully transform into someone else
+            </p>
+        </div>
+
+        <!-- With Section -->
+        <div class="flex flex-col items-center mt-6">
+            <p class="text-3xl text-green-300 font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+                with
+            </p>
+        </div>
+
+        <!-- Host Names -->
+        <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+            <p class="text-teal-300 text-3xl font-semibold" style="font-family: 'Fredoka One', sans-serif;">Rosa Molina</p>
+            <p class="text-yellow-300 text-3xl font-bold" style="font-family: 'Fredoka One', sans-serif;">and</p>
+            <p class="text-teal-300 text-3xl font-semibold" style="font-family: 'Fredoka One', sans-serif;">Santiago Beltran</p>
+        </div>
+
+        <!-- Host Images -->
+        <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+            <img src="host_rosa.png" alt="Rosa Molina" class="w-64 h-64 rounded-full border-8 border-teal-400 shadow-xl">
+            <img src="host_santiago.png" alt="Santiago Beltran" class="w-64 h-64 rounded-full border-8 border-teal-400 shadow-xl">
+        </div>
+
+        <!-- Workshop Description -->
+        <div class="flex flex-col items-center text-center mt-4">
+            <p class="text-lg md:text-2xl text-cyan-200" style="font-family: 'Montserrat', sans-serif; font-weight: bolder">
+                A free English open improv workshop by Impro Neuf.
+            </p>
+        </div>
+
+        <!-- Event Details -->
+        <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center" style="font-family: 'Montserrat', sans-serif;">
+            <p class="text-xl md:text-3xl text-blue-200">📅 <span class="font-bold text-teal-300">Date:</span> February 19, 2025</p>
+            <p class="text-xl md:text-3xl text-green-300">⏰ <span class="font-bold text-yellow-300">Time:</span> 6:00 PM - 8:00 PM</p>
+            <p class="text-xl md:text-3xl text-cyan-300">📍 <span class="font-bold text-teal-300">Location:</span> Chateau Neuf</p>
+            <p class="text-xl md:text-3xl text-teal-200">🏢 <span class="font-bold text-green-300">Room:</span> Betong</p>
+        </div>
+
+        <!-- Free Attendance Notice -->
+        <div class="mt-6 text-lg text-blue-900 text-center" style="font-family: 'Montserrat', sans-serif;">
+            <p class="text-xl md:text-2xl font-bold text-yellow-300">Sign up now!</p>
+        </div>
+    </div>
+</body>
+</html>

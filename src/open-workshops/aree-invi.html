@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fun, Games and Failure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Warm, vibrant background theme */
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    }
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg9.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(4px) brightness(0.95);
+      z-index: -1;
+    }
+    /* New fancy inline text style */
+    .fancy-inline {
+      display: inline-block;
+      /* Force a gradient from currentColor to currentColor so that background-clip works */
+      background: linear-gradient(currentColor, currentColor);
+      -webkit-background-clip: text;
+      background-clip: text;
+      /* Hide the actual text color so that the background shows through */
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <!-- Logo positioned at the top-right corner -->
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-24 h-24" />
+    </div>
+
+    <!-- Main Title (uses its own gradient and is left unchanged) -->
+    <div class="flex flex-col items-center text-center mt-16">
+      <h1
+        class="text-5xl md:text-7xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-red-500 to-yellow-500"
+        style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.139em;"
+      >
+        Fun, Games and Failure
+      </h1>
+    </div>
+
+    <!-- With Section -->
+    <div class="flex flex-col items-center mt-6">
+      <p class="text-3xl font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+        <span class="fancy-inline text-amber-300">
+          with
+        </span>
+      </p>
+    </div>
+
+    <!-- Host Names -->
+    <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+      <p class="text-3xl font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+        <span class="fancy-inline text-cyan-300">
+          Invi Brenna
+        </span>
+      </p>
+      <p class="text-3xl font-bold" style="font-family: 'Fredoka One', sans-serif;">
+        <span class="fancy-inline text-purple-300">
+          and
+        </span>
+      </p>
+      <p class="text-3xl font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+        <span class="fancy-inline text-cyan-300">
+          Aree Witoelar
+        </span>
+      </p>
+    </div>
+
+    <!-- Host Images (remain unchanged) -->
+    <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+      <img src="host_invi.png" alt="Invi Brenna" class="w-64 h-64 rounded-full border-8 border-cyan-300 shadow-xl" />
+      <img src="host_aree.png" alt="Aree Witoelar" class="w-64 h-64 rounded-full border-8 border-cyan-300 shadow-xl" />
+    </div>
+
+    <!-- Workshop Description -->
+    <div class="flex flex-col items-center text-center mt-4">
+      <p class="text-lg md:text-2xl" style="font-family: 'Montserrat', sans-serif; font-weight: bolder;">
+        <span class="fancy-inline text-lime-300">
+          A free English open improv workshop by Impro Neuf.
+        </span>
+      </p>
+    </div>
+
+    <!-- Event Details -->
+    <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-3xl">
+        <span class="fancy-inline text-blue-300">
+          📅 <span class="font-bold text-blue-400">Date:</span> March 5, 2025
+        </span>
+      </p>
+      <p class="text-xl md:text-3xl">
+        <span class="fancy-inline text-blue-300">
+          ⏰ <span class="font-bold text-blue-400">Time:</span> 6:00 PM - 8:00 PM
+        </span>
+      </p>
+      <p class="text-xl md:text-3xl">
+        <span class="fancy-inline text-blue-300">
+          📍 <span class="font-bold text-blue-400">Location:</span> Chateau Neuf
+        </span>
+      </p>
+      <p class="text-xl md:text-3xl">
+        <span class="fancy-inline text-blue-300">
+          🏢 <span class="font-bold text-blue-400">Room:</span> Betong
+        </span>
+      </p>
+    </div>
+
+    <!-- Free Attendance Notice -->
+    <div class="mt-6 text-lg text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-2xl font-bold">
+        <span class="fancy-inline text-pink-300">
+          Sign up now!
+        </span>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

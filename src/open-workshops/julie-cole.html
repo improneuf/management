@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Power of Silence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Calming gradient for a peaceful atmosphere */
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #2c3e50, #6a89cc);
+    }
+    /* Background blur overlay */
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg_silence.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(3px) brightness(0.9);
+      z-index: -1;
+    }
+    /* Soft, muted text colors */
+    .primary-text {
+      color: #d1ccc0;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .subtitle-text {
+      color: #82ccdd;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    .info-text {
+      color: #60a3bc;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    .names {
+      color: #f8c291;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+    .highlight {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative text-white">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-60 relative p-8">
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-20 h-20" />
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-16">
+      <h1 class="text-5xl md:text-7xl font-bold primary-text" style="font-family: 'Playfair Display', serif;">
+        The Power of Silence
+      </h1>
+    </div>
+
+    <div class="flex flex-col items-center mt-6">
+      <p class="text-2xl info-text" style="font-family: 'Playfair Display', serif;">with</p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center space-x-6 mt-4">
+      <p class="text-2xl primary-text"><span class='names'>Julie Outterside</span></p>
+      <p class="text-2xl info-text">and</p>
+      <p class="text-2xl primary-text"><span class='names'>Cole Grabinsky</span></p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center mt-8 space-x-6">
+      <img src="host_julie.png" alt="Julie Outterside" class="w-56 h-56 rounded-full border-4 border-blue-400 shadow-xl" />
+      <img src="host_cole.png" alt="Cole Grabinsky" class="w-56 h-56 rounded-full border-4 border-blue-400 shadow-xl" />
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-6">
+      <p class="text-lg md:text-xl info-text" style="font-family: 'Montserrat', sans-serif; font-weight: bolder">
+        A free English open workshop by Impro Neuf.
+      </p>
+    </div>
+
+    <div class="mt-10 mb-6 text-lg space-y-4 px-4 text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-2xl primary-text">📅 <span class="highlight">Date:</span> March 26, 2025</p>
+      <p class="text-xl md:text-2xl primary-text">⏰ <span class="highlight">Time:</span> 6:00 PM - 8:00 PM</p>
+      <p class="text-xl md:text-2xl primary-text">📍 <span class="highlight">Location:</span> Chateau Neuf</p>
+      <p class="text-xl md:text-2xl primary-text">🏢 <span class="highlight">Room:</span> Klubbscenen</p>
+    </div>
+
+    <div class="mt-6 text-lg text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-2xl font-bold info-text">Sign up now!</p>
+    </div>
+  </div>
+</body>
+</html>
