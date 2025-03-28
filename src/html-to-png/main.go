@@ -5,16 +5,22 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"strings"
 
 	"github.com/chromedp/chromedp"
 )
 
-
 func main() {
-	// Define the URL of the HTML file
-	fileURL := "file:///Users/pravindahal/impro-neuf-management/src/open-workshops/julie-cole.html"
+	// Check if the filename is provided as a command-line argument
+	if len(os.Args) < 2 {
+		fmt.Println("Usage: go run main.go <html_file_path>")
+		os.Exit(1)
+	}
+
+	// Get the HTML file path from the command-line argument
+	fileURL := os.Args[1]
 
 	// Extract the file name (e.g., "julie-cole.html") and then the base name (e.g., "julie-cole")
 	htmlFilename := path.Base(fileURL)
@@ -66,4 +72,3 @@ func main() {
 	}
 	fmt.Println("Saved screenshot as", meetupFileName)
 }
-
