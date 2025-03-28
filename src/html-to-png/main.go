@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/chromedp/chromedp"
 )
@@ -37,12 +38,23 @@ func main() {
 	err := chromedp.Run(ctx,
 		chromedp.EmulateViewport(1920, 1005),
 		chromedp.Navigate(fileURL),
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			// Set the zoom level by scaling the CSS
-			return chromedp.Evaluate(`document.body.style.zoom = "1"`, nil).Do(ctx)
-		}),
+		chromedp.WaitReady("body", chromedp.ByQuery),
+		// Dynamically scale the body so the entire scroll height fits into the viewport height
+		chromedp.Evaluate(`(function() {
+            var contentHeight = document.documentElement.scrollHeight;
+            var viewportHeight = window.innerHeight;
+            var scale = viewportHeight / contentHeight;
+            document.body.style.transform = "scale(" + scale + ")";
+            document.body.style.transformOrigin = "top left";
+            // Optionally, adjust the body's width to maintain the layout
+            document.body.style.width = (100 / scale) + "%";
+            return scale;
+        })()`, nil),
+		// Optionally add a slight delay to ensure the style is applied
+		chromedp.Sleep(200*time.Millisecond),
 		chromedp.CaptureScreenshot(&bufFB),
 	)
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,10 +69,20 @@ func main() {
 	err = chromedp.Run(ctx,
 		chromedp.EmulateViewport(1920, 1080),
 		chromedp.Navigate(fileURL),
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			// Set the zoom level by scaling the CSS
-			return chromedp.Evaluate(`document.body.style.zoom = "1"`, nil).Do(ctx)
-		}),
+		chromedp.WaitReady("body", chromedp.ByQuery),
+		// Dynamically scale the body so the entire scroll height fits into the viewport height
+		chromedp.Evaluate(`(function() {
+            var contentHeight = document.documentElement.scrollHeight;
+            var viewportHeight = window.innerHeight;
+            var scale = viewportHeight / contentHeight;
+            document.body.style.transform = "scale(" + scale + ")";
+            document.body.style.transformOrigin = "top left";
+            // Optionally, adjust the body's width to maintain the layout
+            document.body.style.width = (100 / scale) + "%";
+            return scale;
+        })()`, nil),
+		// Optionally add a slight delay to ensure the style is applied
+		chromedp.Sleep(200*time.Millisecond),
 		chromedp.CaptureScreenshot(&bufMeetup),
 	)
 	if err != nil {
