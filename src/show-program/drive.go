@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"golang.org/x/oauth2/google"
@@ -35,30 +36,37 @@ func GetGoogleDriveFileModifiedTime(service *drive.Service, fileID string) (time
 func DownloadFileFromGoogleDrive(service *drive.Service, file_id string) (string, error) {
 	fmt.Println("Downloading file with id " + file_id + " from Google Drive...")
 
-	resp, err := service.Files.Get(file_id).Download()
+	// For Google Sheets files, we need to use Export instead of Download
+	resp, err := service.Files.Export(file_id, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").Download()
 	if err != nil {
-		return "", fmt.Errorf("failed to download file: %v", err)
+		return "", fmt.Errorf("failed to export file: %v", err)
 	}
 	defer resp.Body.Close()
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read downloaded content: %v", err)
+		return "", fmt.Errorf("failed to read exported content: %v", err)
 	}
 
 	tmpFile, err := os.CreateTemp("", "")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file: %v", err)
 	}
+	defer tmpFile.Close()
 
 	fmt.Println("Created a temporary file: " + tmpFile.Name())
 
-	err = os.WriteFile(tmpFile.Name(), data, 0644)
+	_, err = tmpFile.Write(data)
 	if err != nil {
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 
-	fmt.Println("Wrote downloaded content to the temporary file: " + tmpFile.Name() + ".")
+	// Close the file before returning
+	if err := tmpFile.Close(); err != nil {
+		return "", fmt.Errorf("failed to close temp file: %v", err)
+	}
+
+	fmt.Println("Wrote exported content to the temporary file: " + tmpFile.Name() + ".")
 
 	return tmpFile.Name(), nil
 }
@@ -66,6 +74,12 @@ func DownloadFileFromGoogleDrive(service *drive.Service, file_id string) (string
 func GetGoogleSheetsPath(sheetId string) string {
 	xlsxFilePath := sheetId + ".xlsx"
 	ctx := context.Background()
+
+	// Get the absolute path for the xlsx file
+	absPath, err := filepath.Abs(xlsxFilePath)
+	if err != nil {
+		log.Fatalf("Unable to get absolute path: %v", err)
+	}
 
 	b, err := os.ReadFile(SERVICE_ACCOUNT_KEY_FILE)
 	if err != nil {
@@ -84,13 +98,13 @@ func GetGoogleSheetsPath(sheetId string) string {
 	}
 
 	// if the file already exists
-	_, err = os.Stat(xlsxFilePath)
+	_, err = os.Stat(absPath)
 	fileExistsLocally := !os.IsNotExist(err)
 	localFileIsUpToDate := false
 
 	// if the file exists locally, check if it's up to date
 	if fileExistsLocally {
-		localFileModifiedTime, err := GetLocalFileModifiedTime(xlsxFilePath)
+		localFileModifiedTime, err := GetLocalFileModifiedTime(absPath)
 		if err != nil {
 			log.Fatalf("Unable to get local file modified date: %v", err)
 		}
@@ -110,15 +124,29 @@ func GetGoogleSheetsPath(sheetId string) string {
 		fmt.Println("File does not exist or is out of date, downloading...")
 
 		downloadedFileTemp, err := DownloadFileFromGoogleDrive(srv, SHOW_PROGRAM_SHEET_ID)
-
 		if err != nil {
 			log.Fatalf("Unable to download file: %v", err)
 		}
 
 		fmt.Println("Downloaded file to: " + downloadedFileTemp)
 
+		// Ensure the target directory exists
+		targetDir := filepath.Dir(absPath)
+		if err := os.MkdirAll(targetDir, 0755); err != nil {
+			log.Fatalf("Unable to create target directory: %v", err)
+		}
+
+		// Try to remove the target file if it exists
+		if fileExistsLocally {
+			if err := os.Remove(absPath); err != nil {
+				log.Fatalf("Unable to remove existing file: %v", err)
+			}
+		}
+
 		// move tempfile to the correct location
-		os.Rename(downloadedFileTemp, xlsxFilePath)
+		if err := os.Rename(downloadedFileTemp, absPath); err != nil {
+			log.Fatalf("Unable to move downloaded file to target location: %v", err)
+		}
 	}
-	return xlsxFilePath
+	return absPath
 }
