@@ -14,10 +14,8 @@ import (
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
-	SHOW_PROGRAM_SHEET_ID    string = "1BYucz1R4IoH5whYe4goRbk_kO8LosrZ2" // Live Sheet
-	SHOW_PROGRAM_SHEET_NAME  string = "ShowProgram"
-	SHOW_SCHEDULE_SHEET_ID   string = "15cDopxkZDbFwIcIU5tuqAUCM4U0GXf7O"
-	SHOW_SCHEDULE_SHEET_NAME string = "Yesplan"
+	SHOW_PROGRAM_SHEET_ID    string = "1_KI5blAlQDXaVbqgMNFngxipJx1r6ZZrfGkNtCEEduc" // Live Sheet
+	SHOW_PROGRAM_SHEET_NAME  string = "Showplan Spring 25"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 
 	POST_TYPE_FB     = "fb"
@@ -131,69 +129,69 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 }
 
 func CreateIndex(shows []Show) {
-    // Filter shows that have at least one team
-    var validShows []Show
-    today := TruncateToDate(time.Now())
-    for _, show := range shows {
-        if len(show.Teams) == 0 {
-            continue
-        }
-        validShows = append(validShows, show)
-    }
+	// Filter shows that have at least one team
+	var validShows []Show
+	today := TruncateToDate(time.Now())
+	for _, show := range shows {
+		if len(show.Teams) == 0 {
+			continue
+		}
+		validShows = append(validShows, show)
+	}
 
-    // Prepare data for the template
-    timestamp := time.Now().Unix()
-    var showsData []ShowPageData
-    for _, show := range validShows {
-        dateStr := show.Date.Format("2006-01-02")
-        showDate := TruncateToDate(show.Date)
+	// Prepare data for the template
+	timestamp := time.Now().Unix()
+	var showsData []ShowPageData
+	for _, show := range validShows {
+		dateStr := show.Date.Format("2006-01-02")
+		showDate := TruncateToDate(show.Date)
 
-        var types []ShowTypeData
-        for _, tmplType := range POST_TYPES {
-            imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
-            types = append(types, ShowTypeData{
-                Type:          tmplType,
-                ImageFileName: imageFileName,
-            })
-        }
+		var types []ShowTypeData
+		for _, tmplType := range POST_TYPES {
+			imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
+			types = append(types, ShowTypeData{
+				Type:          tmplType,
+				ImageFileName: imageFileName,
+			})
+		}
 
-        showData := ShowPageData{
-            DateStr: dateStr,
-            Title:   show.Title,
-            Types:   types,
-            IsPast:  showDate.Before(today),
-        }
+		showData := ShowPageData{
+			DateStr: dateStr,
+			Title:   show.Title,
+			Types:   types,
+			IsPast:  showDate.Before(today),
+		}
 
-        showsData = append(showsData, showData)
-    }
+		showsData = append(showsData, showData)
+	}
 
-    data := IndexPageData{
-        Shows: showsData,
-    }
+	data := IndexPageData{
+		Shows: showsData,
+	}
 
-    // Define the path to the template file
-    templatePath := "index.tmpl"
+	// Define the path to the template file
+	templatePath := "index.tmpl"
 
-    // Parse the template from the external file
-    t, err := template.ParseFiles(templatePath)
-    if err != nil {
-        panic(err)
-    }
+	// Parse the template from the external file
+	t, err := template.ParseFiles(templatePath)
+	if err != nil {
+		panic(err)
+	}
 
-    // Create or open the index.html file
-    indexFile, err := os.Create("output/screenshots/index.html")
-    if err != nil {
-        panic(err)
-    }
-    defer indexFile.Close()
+	// Create or open the index.html file
+	indexFile, err := os.Create("output/screenshots/index.html")
+	if err != nil {
+		panic(err)
+	}
+	defer indexFile.Close()
 
-    // Execute the template, writing the output to the indexFile
-    err = t.Execute(indexFile, data)
-    if err != nil {
-        panic(err)
-    }
+	// Execute the template, writing the output to the indexFile
+	err = t.Execute(indexFile, data)
+	if err != nil {
+		panic(err)
+	}
 
-    fmt.Println("index.html has been successfully created.")
+	fmt.Println("index.html has been successfully created.")
 }
 
 // Helper function to truncate time to midnight
@@ -202,47 +200,47 @@ func TruncateToDate(t time.Time) time.Time {
 }
 
 func CreateShowPage(show Show) {
-    dateStr := show.Date.Format("2006-01-02")
-    fileName := "output/screenshots/" + dateStr + ".html"
+	dateStr := show.Date.Format("2006-01-02")
+	fileName := "output/screenshots/" + dateStr + ".html"
 
-    // Create or open the date-specific HTML file
-    showFile, err := os.Create(fileName)
-    if err != nil {
-        panic(err)
-    }
-    defer showFile.Close()
+	// Create or open the date-specific HTML file
+	showFile, err := os.Create(fileName)
+	if err != nil {
+		panic(err)
+	}
+	defer showFile.Close()
 
-    // Prepare data for the template
-    timestamp := time.Now().Unix()
-    var types []ShowTypeData
-    for _, tmplType := range POST_TYPES {
-        imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
-        types = append(types, ShowTypeData{
-            Type:          tmplType,
-            ImageFileName: imageFileName,
-        })
-    }
+	// Prepare data for the template
+	timestamp := time.Now().Unix()
+	var types []ShowTypeData
+	for _, tmplType := range POST_TYPES {
+		imageFileName := fmt.Sprintf("%s - %s - %s.jpg?%d", dateStr, show.Title, tmplType, timestamp)
+		types = append(types, ShowTypeData{
+			Type:          tmplType,
+			ImageFileName: imageFileName,
+		})
+	}
 
-    data := ShowPageData{
-        DateStr: dateStr,
-        Title:   show.Title,
-        Types:   types,
-    }
+	data := ShowPageData{
+		DateStr: dateStr,
+		Title:   show.Title,
+		Types:   types,
+	}
 
-    // Define the path to the template file
-    templatePath := "show-page.tmpl"
+	// Define the path to the template file
+	templatePath := "show-page.tmpl"
 
-    // Parse the template from the external file
-    t, err := template.ParseFiles(templatePath)
-    if err != nil {
-        panic(err)
-    }
+	// Parse the template from the external file
+	t, err := template.ParseFiles(templatePath)
+	if err != nil {
+		panic(err)
+	}
 
-    // Execute the template, writing the output to the showFile
-    err = t.Execute(showFile, data)
-    if err != nil {
-        panic(err)
-    }
+	// Execute the template, writing the output to the showFile
+	err = t.Execute(showFile, data)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func GetFreeText(show Show) string {
@@ -271,12 +269,14 @@ func GetFreeText(show Show) string {
 }
 
 func main() {
-	// bookingXlsxFilePath := GetGoogleSheetsPath(SHOW_SCHEDULE_SHEET_ID)
+	// Create output directories if they don't exist
+	if err := os.MkdirAll("output/screenshots", 0755); err != nil {
+		log.Fatalf("Unable to create output directories: %v", err)
+	}
 
-	// bookings := ReadBookingsFromFile(bookingXlsxFilePath, SHOW_SCHEDULE_SHEET_NAME)
-
-	showProgramXlsxFilePath := GetGoogleSheetsPath(SHOW_PROGRAM_SHEET_ID)
-	showSchedule := ReadShowScheduleFromFile(showProgramXlsxFilePath, SHOW_PROGRAM_SHEET_NAME)
+	// Get the path to the Excel file
+	xlsxFilePath := GetGoogleSheetsPath(SHOW_PROGRAM_SHEET_ID)
+	showSchedule := ReadShowScheduleFromFile(xlsxFilePath, SHOW_PROGRAM_SHEET_NAME)
 
 	funcMap := template.FuncMap{
 		"GetTeamPhoto":   GetTeamPhoto,
