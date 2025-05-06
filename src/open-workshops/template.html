@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ .PageTitle }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* A new, distinct gradient with cooler and warm notes */
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #2B5876, #4E4376, #F3E7E9);
+    }
+    /* Subtle blur overlay with a desert dunes background */
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('{{ .BackgroundHazeURL }}');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px) brightness(0.85);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <!-- Logo at the top-right corner -->
+    <div class="absolute top-5 right-5 z-20">
+      <img src="{{ .LogoPath }}" alt="Logo" class="w-24 h-24"/>
+    </div>
+
+    <!-- Title Container (wrapped in a group for hover) -->
+    <div id="title-container" class="group flex flex-col items-center text-center mt-16">
+      <!-- Main Title (editable) -->
+      <h1
+        contenteditable="true"
+        data-field="MainTitle"
+        hx-post="/update"
+        hx-trigger="blur"
+        hx-target="#title-container"
+        class="text-5xl md:text-7xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-green-200 via-pink-300 to-yellow-100"
+        style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.1em;"
+      >
+        {{ .MainTitle }}
+      </h1>
+      <!-- Subtitle Container loaded from the backend -->
+      <div id="subtitle-container" hx-get="/subtitle" hx-trigger="load, mouseenter">
+        <!-- Content rendered by the /subtitle endpoint -->
+      </div>
+    </div>
+
+    <!-- With Section -->
+    <div class="flex flex-col items-center mt-6">
+      <p class="text-3xl text-indigo-200 font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+        with
+      </p>
+    </div>
+
+    <!-- Host Names -->
+    <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+      <p
+        contenteditable="true"
+        data-field="HostName1"
+        hx-post="/update"
+        hx-trigger="blur"
+        hx-target="#title-container"
+        class="text-3xl font-semibold text-fuchsia-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        {{ .HostName1 }}
+      </p>
+      {{ if .HostName2 }}
+      <p
+        contenteditable="true"
+        data-field="HostName2"
+        hx-post="/update"
+        hx-trigger="blur"
+        hx-target="#title-container"
+        class="text-3xl font-bold text-blue-100"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        and
+      </p>
+      <p
+        contenteditable="true"
+        data-field="HostName2"
+        hx-post="/update"
+        hx-trigger="blur"
+        hx-target="#title-container"
+        class="text-3xl font-semibold text-fuchsia-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        {{ .HostName2 }}
+      </p>
+      {{ end }}
+    </div>
+
+    <!-- Host Images -->
+    <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+      <img
+        src="{{ .HostImage1 }}"
+        alt="{{ .HostName1 }}"
+        class="w-64 h-64 rounded-full border-8 border-purple-300 shadow-xl"
+      />
+      {{ if .HostImage2 }}
+      <img
+        src="{{ .HostImage2 }}"
+        alt="{{ .HostName2 }}"
+        class="w-64 h-64 rounded-full border-8 border-purple-300 shadow-xl"
+      />
+      {{ end }}
+    </div>
+
+    <!-- Workshop Description -->
+    <div class="flex flex-col items-center text-center mt-4">
+      <p
+        contenteditable="true"
+        data-field="WorkshopDescription"
+        hx-post="/update"
+        hx-trigger="blur"
+        hx-target="#title-container"
+        class="text-lg md:text-2xl text-pink-100"
+        style="font-family: 'Montserrat', sans-serif; font-weight: bolder;"
+      >
+        {{ .WorkshopDescription }}
+      </p>
+    </div>
+
+    <!-- Event Details -->
+    <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p contenteditable="true" data-field="EventDate" hx-post="/update" hx-trigger="blur" hx-target="#title-container" class="text-xl md:text-3xl text-indigo-200">
+        📅 <span class="font-bold text-yellow-300">Date:</span> {{ .EventDate }}
+      </p>
+      <p contenteditable="true" data-field="EventTime" hx-post="/update" hx-trigger="blur" hx-target="#title-container" class="text-xl md:text-3xl text-purple-200">
+        ⏰ <span class="font-bold text-lime-200">Time:</span> {{ .EventTime }}
+      </p>
+      <p contenteditable="true" data-field="Location" hx-post="/update" hx-trigger="blur" hx-target="#title-container" class="text-xl md:text-3xl text-teal-200">
+        📍 <span class="font-bold text-yellow-300">Location:</span> {{ .Location }}
+      </p>
+      <p contenteditable="true" data-field="Room" hx-post="/update" hx-trigger="blur" hx-target="#title-container" class="text-xl md:text-3xl text-emerald-200">
+        🏢 <span class="font-bold text-pink-100">Room:</span> {{ .Room }}
+      </p>
+    </div>
+
+    <!-- Sign-up Prompt -->
+    <div class="mt-6 text-lg text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p contenteditable="true" data-field="SignUpPrompt" hx-post="/update" hx-trigger="blur" hx-target="#title-container" class="text-xl md:text-2xl font-bold text-yellow-300">
+        {{ .SignUpPrompt }}
+      </p>
+    </div>
+  </div>
+</body>
+</html>

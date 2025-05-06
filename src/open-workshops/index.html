@@ -1,67 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>How to Make Invisible Things Real</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Playfair+Display:wght@700&family=Roboto+Slab:wght@500&family=Great+Vibes&family=Oswald:wght@300;600&family=Montserrat:wght@400;700&family=Raleway:wght@800&family=Caveat:wght@700&display=swap" rel="stylesheet">
-  <style>
-    .bg-custom-gradient {
-      background: linear-gradient(135deg, #3c1361, #6e44ff, #e0b1cb);
-    }
-    .bg-haze {
-      position: absolute;
-      inset: 0;
-      background-image: url('bg4.png');
-      background-size: cover;
-      background-position: center;
-      filter: blur(5px) brightness(0.8);
-      z-index: -1;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Event Image Generator</title>
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-custom-gradient min-h-screen relative">
-  <div class="bg-haze"></div>
-  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
-    <!-- Logo positioned at the top-right corner -->
-    <div class="absolute top-5 right-5 z-20">
-      <img src="logo.png" alt="Logo" class="w-24 h-24"/>
-    </div>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-xl mx-auto bg-white p-6 shadow rounded">
+    <h1 class="text-2xl font-bold mb-4">Event Image Generator</h1>
+    <form id="generateForm" hx-post="/generate" hx-target="#result" hx-swap="innerHTML" enctype="multipart/form-data" method="POST">
 
-    <!-- Host Image -->
-    <div class="flex flex-col items-center mt-16">
-      <img src="host_kristine.png" alt="Host Image" class="w-80 h-80 rounded-full border-8 border-pink-300 shadow-xl mb-8"/>
-    </div>
+      <!-- Event Title -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Event Title</label>
+        <input type="text" name="event_title" required class="w-full border p-2 rounded">
+      </div>
 
-    <!-- Main Content -->
-    <div class="flex flex-col items-center space-y-6 text-center px-4">
-      <h1
-        class="text-6xl md:text-8xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
-        style="font-family: 'Lobster', cursive; padding-bottom: 0.139em;"
-      >
-        How to Make Invisible Things Real
-      </h1>
-      <p class="text-2xl md:text-4xl text-yellow-300" style="font-family: 'Caveat', cursive;">
-        with <span class="text-pink-500 font-bold">Kristine Sterud</span>
-      </p>
-      <p class="text-lg md:text-2xl text-cyan-200" style="font-family: 'Raleway', sans-serif;">
-        A free English open improv workshop by Impro Neuf.
-      </p>
-    </div>
+      <!-- Event Subtitle -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Event Subtitle (optional)</label>
+        <input type="text" name="event_subtitle" class="w-full border p-2 rounded">
+      </div>
 
-    <!-- Event Details -->
-    <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center" style="font-family: 'Montserrat', sans-serif;">
-      <p class="text-xl md:text-3xl text-orange-200">📅 <span class="font-bold text-purple-300">Date:</span> February 5, 2025</p>
-      <p class="text-xl md:text-3xl text-green-200">⏰ <span class="font-bold text-blue-300">Time:</span> 6:00 PM - 8:00 PM</p>
-      <p class="text-xl md:text-3xl text-teal-200">📍 <span class="font-bold text-yellow-300">Location:</span> Chateau Neuf</p>
-      <p class="text-xl md:text-3xl text-red-200">🏢 <span class="font-bold text-indigo-300">Room:</span> Betong</p>
-    </div>
+      <!-- Background Image -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Background Image</label>
+        <input type="file" name="background_image" accept="image/*" required class="w-full">
+      </div>
 
-    <!-- Free Attendance Notice -->
-    <div class="highlight-box mt-6 text-lg text-purple-900 text-center" style="font-family: 'Montserrat', sans-serif;">
-      <p class="text-xl md:text-2xl font-bold text-yellow-300">Sign up now!</p>
-    </div>
+      <!-- Hosts selection -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Select number of hosts</label>
+        <select name="host_count" id="host_count" class="w-full border p-2 rounded" hx-get="/host-inputs" hx-target="#hostInputs" hx-trigger="change">
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+
+      <!-- Host images, dynamically loaded -->
+      <div id="hostInputs" class="mb-4">
+        <!-- Default for 1 host -->
+        <label class="block text-gray-700">Host Image</label>
+        <input type="file" name="host_image_1" accept="image/*" required class="w-full">
+      </div>
+
+      <!-- Date -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Date</label>
+        <input type="date" name="event_date" required class="w-full border p-2 rounded">
+      </div>
+
+      <!-- Location -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Location</label>
+        <input type="text" name="location" value="Chateau Neuf" required class="w-full border p-2 rounded">
+      </div>
+
+      <!-- Room -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Room</label>
+        <select name="room" class="w-full border p-2 rounded" required>
+          <option value="Lillesalen">Lillesalen</option>
+          <option value="Biblioteket">Biblioteket</option>
+          <option value="Jan P. Syses sal">Jan P. Syses sal</option>
+          <option value="Betong">Betong</option>
+          <option value="Klubbscenen">Klubbscenen</option>
+          <option value="Teaterscenen">Teaterscenen</option>
+          <option value="Bokcaféen">Bokcaféen</option>
+          <option value="Galleriet">Galleriet</option>
+        </select>
+      </div>
+
+      <button type="submit" class="bg-blue-500 text-white p-2 rounded">Generate Images</button>
+    </form>
+    <div id="result" class="mt-4"></div>
   </div>
 </body>
 </html>

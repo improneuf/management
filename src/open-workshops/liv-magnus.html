@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ <title>That's Oddly Specific</title>
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Cabin:wght@400;700&display=swap" rel="stylesheet"/>
+ <style>
+  /* Increase the base font size */
+  html {
+   font-size: 150%;
+  }
+  body {
+   font-family: 'Cabin', sans-serif;
+   overflow-y: auto; /* allow scrolling if needed */
+  }
+  .title-font {
+   font-family: 'Chewy', cursive;
+  }
+  .bg-hazy-orange {
+   background: radial-gradient(circle at center, #fb8c00, #5d1a00);
+  }
+  /* Removed the responsive-padding media query as we are setting explicit padding */
+ </style>
+</head>
+<body class="bg-hazy-orange text-white">
+ <!-- The container now uses flexbox to center content vertically and horizontally.
+      Using min-h-screen ensures it fills the available viewport height.
+      Increased pt (padding-top) significantly, removed responsive-padding class -->
+ <div class="flex flex-col items-center justify-center w-full min-h-screen px-6 pt-24 pb-12">re
+
+  <!-- Logo -->
+  <div class="absolute top-6 right-6">
+   <img src="logo.png" alt="Logo" class="w-16 md:w-20"/>
+  </div>
+
+  <!-- Title -->
+  <h1 class="text-5xl md:text-6xl title-font text-white drop-shadow-md text-center">
+   That’s <span class="text-yellow-300">Oddly Specific</span>
+  </h1>
+
+  <h2 class="text-xl md:text-2xl mt-4 text-yellow-200 font-bold text-center">
+   Elevate your creativity with clarity and specificity
+  </h2>
+
+  <!-- With -->
+  <p class="mt-6 text-lg md:text-xl text-orange-200 font-semibold">with</p>
+
+  <!-- Names -->
+  <div class="flex flex-row items-center justify-center mt-2 space-x-4 text-yellow-100 text-2xl md:text-3xl title-font">
+   <span class="text-yellow-200">Liv Grøthe</span>
+   <span class="text-white">&</span>
+   <span class="text-yellow-200">Magnus Seines</span>
+  </div>
+
+  <!-- Images -->
+  <div class="flex flex-row items-center justify-center mt-8 space-x-6">
+   <img src="host_liv2.png" alt="Liv Grøthe" class="w-40 h-40 rounded-full border-4 border-yellow-300 shadow-lg"/>
+   <img src="host_magnus.png" alt="Magnus Seines" class="w-40 h-40 rounded-full border-4 border-yellow-300 shadow-lg"/>
+  </div>
+
+  <!-- Host by -->
+  <p class="mt-6 text-lg md:text-xl text-yellow-100 font-bold">
+   A free English open workshop by Impro Neuf.
+  </p>
+
+  <!-- Event Info -->
+  <div class="mt-10 text-center text-lg md:text-xl space-y-3">
+   <p>📅 <span class="font-bold text-yellow-300">Date:</span> Wednesday, June 4, 2025</p>
+   <p>⏰ <span class="font-bold text-yellow-300">Time:</span> 6:00 PM – 8:00 PM</p>
+   <p>📍 <span class="font-bold text-yellow-300">Location:</span> Chateau Neuf</p>
+   <p>🏢 <span class="font-bold text-yellow-300">Room:</span> Betong</p>
+  </div>
+
+  <!-- Signup -->
+  <p class="mt-10 text-2xl md:text-3xl text-yellow-300 font-bold title-font">
+   Sign up now!
+  </p>
+ </div>
+</body>
+</html>
