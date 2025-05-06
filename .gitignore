@@ -7,3 +7,4 @@ src/show-program/*.xlsx
 src/extract-team-images/team-images.json
 src/extract-team-images/geminitest-*.json
 src/extract-team-images/showprogram.xlsx
+src/html-to-png/*.jpg

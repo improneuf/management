@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Winds of Play: Embracing the Unexpected</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* A vibrant and dynamic color theme with warm and cool tones */
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #FF5F6D, #FFC371);
+    }
+    /* Subtle blur overlay with a windy desert background */
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg_wind.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px) brightness(0.85);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <!-- Logo at the top-right corner -->
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-24 h-24"/>
+    </div>
+
+    <!-- Main Title -->
+    <div class="flex flex-col items-center text-center mt-16">
+      <h1
+        class="text-5xl md:text-7xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-red-400 to-yellow-300"
+        style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.1em;"
+      >
+        Making Bold Choices
+      </h1>
+      <h2
+        class="text-2xl md:text-3xl font-bold tracking-widest text-yellow-200 mt-2"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Fearless Improvisation
+      </h2>
+    </div>
+
+    <!-- With Section -->
+    <div class="flex flex-col items-center mt-6">
+      <p
+        class="text-3xl text-red-200 font-semibold"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        with
+      </p>
+    </div>
+
+    <!-- Host Names -->
+    <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+      <p
+        class="text-3xl font-semibold text-yellow-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Sondre Jensen
+      </p>
+      <p
+        class="text-3xl font-bold text-red-100"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        and
+      </p>
+      <p
+        class="text-3xl font-semibold text-yellow-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Eva Coder Steffensen
+      </p>
+    </div>
+
+    <!-- Host Images -->
+    <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+      <img
+        src="host_sondre.png"
+        alt="Sondre Jensen"
+        class="w-64 h-64 rounded-full border-8 border-red-300 shadow-xl"
+      />
+      <img
+        src="host_eva.png"
+        alt="Eva Coder Steffensen"
+        class="w-64 h-64 rounded-full border-8 border-red-300 shadow-xl"
+      />
+    </div>
+
+    <!-- Workshop Description -->
+    <div class="flex flex-col items-center text-center mt-4">
+      <p
+        class="text-lg md:text-2xl text-yellow-100"
+        style="font-family: 'Montserrat', sans-serif; font-weight: bolder;"
+      >
+        A free English open workshop by Impro Neuf.
+      </p>
+    </div>
+
+    <!-- Event Details -->
+    <div
+      class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center"
+      style="font-family: 'Montserrat', sans-serif;"
+    >
+      <p class="text-xl md:text-3xl text-red-200">
+        📅 <span class="font-bold text-yellow-300">Date:</span> Wednesday, April 30, 2025
+      </p>
+      <p class="text-xl md:text-3xl text-orange-200">
+        ⏰ <span class="font-bold text-yellow-200">Time:</span> 6:00 PM - 8:00 PM
+      </p>
+      <p class="text-xl md:text-3xl text-yellow-300">
+        📍 <span class="font-bold text-red-300">Location:</span> Chateau Neuf
+      </p>
+      <p class="text-xl md:text-3xl text-orange-200">
+        🏢 <span class="font-bold text-yellow-100">Room:</span> Betong
+      </p>
+    </div>
+
+    <!-- Sign-up Prompt -->
+    <div
+      class="mt-6 text-lg text-center"
+      style="font-family: 'Montserrat', sans-serif;"
+    >
+      <p class="text-xl md:text-2xl font-bold text-yellow-300">Sign up now!</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #1a2344, #9c326b, #f4b543);
+    }
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg-bokeh.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(1px) brightness(1.1);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-24 h-24"/>
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-16">
+      <h1
+        class="text-5xl md:text-7xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-500 to-purple-400"
+        style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.1em;"
+      >
+        Status
+      </h1>
+      <h2
+        class="text-2xl md:text-3xl font-bold tracking-widest text-purple-300 mt-2"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Playing with power and hierarchy
+      </h2>
+    </div>
+
+    <div class="flex flex-col items-center mt-6">
+      <p class="text-3xl text-cyan-300 font-semibold" style="font-family: 'Fredoka One', sans-serif;">
+        with
+      </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+      <p class="text-3xl font-semibold text-blue-300" style="font-family: 'Fredoka One', sans-serif;">
+        Julie Outterside
+      </p>
+      <p class="text-3xl font-bold text-amber-300" style="font-family: 'Fredoka One', sans-serif;">
+        and
+      </p>
+      <p class="text-3xl font-semibold text-blue-300" style="font-family: 'Fredoka One', sans-serif;">
+        Rémi Rossi
+      </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+      <img
+        src="host_julie.png"
+        alt="Julie Outterside"
+        class="w-64 h-64 rounded-full border-8 border-cyan-400 shadow-xl"
+      />
+      <img
+        src="host_remi2.png"
+        alt="Rémi Rossi"
+        class="w-64 h-64 rounded-full border-8 border-cyan-400 shadow-xl"
+      />
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-4">
+      <p class="text-lg md:text-2xl text-amber-200" style="font-family: 'Montserrat', sans-serif; font-weight: bolder;">
+        A free English open workshop by Impro Neuf.
+      </p>
+    </div>
+
+    <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-3xl text-cyan-300">
+        📅 <span class="font-bold text-amber-300">Date:</span> Wednesday, April 30, 2025
+      </p>
+      <p class="text-xl md:text-3xl text-purple-300">
+        📍 <span class="font-bold text-orange-400">Location:</span> Chateau Neuf
+      </p>
+      <p class="text-xl md:text-3xl text-blue-300">
+        🏢 <span class="font-bold text-amber-200">Room:</span> Klubbscenen
+      </p>
+    </div>
+
+    <div class="mt-6 text-lg text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-2xl font-bold text-pink-400">Sign up now!</p>
+    </div>
+  </div>
+</body>
+</html>
