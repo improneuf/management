@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Make Invisible Things Real</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Playfair+Display:wght@700&family=Roboto+Slab:wght@500&family=Great+Vibes&family=Oswald:wght@300;600&family=Montserrat:wght@400;700&family=Raleway:wght@800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #3c1361, #6e44ff, #e0b1cb);
+    }
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg4.png');
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px) brightness(0.8);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <!-- Logo positioned at the top-right corner -->
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-24 h-24"/>
+    </div>
+
+    <!-- Host Image -->
+    <div class="flex flex-col items-center mt-16">
+      <img src="host_kristine.png" alt="Host Image" class="w-80 h-80 rounded-full border-8 border-pink-300 shadow-xl mb-8"/>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex flex-col items-center space-y-6 text-center px-4">
+      <h1
+        class="text-6xl md:text-8xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
+        style="font-family: 'Lobster', cursive; padding-bottom: 0.139em;"
+      >
+        How to Make Invisible Things Real
+      </h1>
+      <p class="text-2xl md:text-4xl text-yellow-300" style="font-family: 'Caveat', cursive;">
+        with <span class="text-pink-500 font-bold">Kristine Sterud</span>
+      </p>
+      <p class="text-lg md:text-2xl text-cyan-200" style="font-family: 'Raleway', sans-serif;">
+        A free English open improv workshop by Impro Neuf.
+      </p>
+    </div>
+
+    <!-- Event Details -->
+    <div class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-3xl text-orange-200">📅 <span class="font-bold text-purple-300">Date:</span> February 5, 2025</p>
+      <p class="text-xl md:text-3xl text-green-200">⏰ <span class="font-bold text-blue-300">Time:</span> 6:00 PM - 8:00 PM</p>
+      <p class="text-xl md:text-3xl text-teal-200">📍 <span class="font-bold text-yellow-300">Location:</span> Chateau Neuf</p>
+      <p class="text-xl md:text-3xl text-red-200">🏢 <span class="font-bold text-indigo-300">Room:</span> Betong</p>
+    </div>
+
+    <!-- Free Attendance Notice -->
+    <div class="highlight-box mt-6 text-lg text-purple-900 text-center" style="font-family: 'Montserrat', sans-serif;">
+      <p class="text-xl md:text-2xl font-bold text-yellow-300">Sign up now!</p>
+    </div>
+  </div>
+</body>
+</html>

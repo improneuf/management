@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover Your Inner Child: Short Form Games for Fun & Silliness with Naya & Mike</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Fresh gradient with cooler and brighter tones */
+    .bg-custom-gradient {
+      background: linear-gradient(135deg, #0D324D, #7F5A83, #fffbd5);
+    }
+    /* Subtle blur overlay with a snowy background */
+    .bg-haze {
+      position: absolute;
+      inset: 0;
+      background-image: url('bg_snow.webp');
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px) brightness(0.85);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="bg-custom-gradient min-h-screen relative">
+  <div class="bg-haze"></div>
+  <div class="flex flex-col items-center justify-start w-full min-h-screen bg-black bg-opacity-70 relative p-8">
+    <!-- Logo at the top-right corner -->
+    <div class="absolute top-5 right-5 z-20">
+      <img src="logo.png" alt="Logo" class="w-24 h-24"/>
+    </div>
+
+    <!-- Main Title -->
+    <div class="flex flex-col items-center text-center mt-16">
+      <h1
+        class="text-5xl md:text-7xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-green-200 to-yellow-100"
+        style="font-family: 'Fredoka One', sans-serif; padding-bottom: 0.1em;"
+      >
+        Discover Your Inner Child
+      </h1>
+      <h2
+        class="text-2xl md:text-3xl font-bold tracking-widest text-lime-300 mt-2"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Short Form Games for Fun & Silliness
+      </h2>
+    </div>
+
+    <!-- With Section -->
+    <div class="flex flex-col items-center mt-6">
+      <p
+        class="text-3xl text-blue-200 font-semibold"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        with
+      </p>
+    </div>
+
+    <!-- Host Names -->
+    <div class="flex flex-row items-center justify-center space-x-8 mt-4">
+      <p
+        class="text-3xl font-semibold text-fuchsia-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Naya Kouzilou
+      </p>
+      <p
+        class="text-3xl font-bold text-blue-100"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        and
+      </p>
+      <p
+        class="text-3xl font-semibold text-fuchsia-200"
+        style="font-family: 'Fredoka One', sans-serif;"
+      >
+        Miklos Artjoy
+      </p>
+    </div>
+
+    <!-- Host Images -->
+    <div class="flex flex-row items-center justify-center mt-8 space-x-8">
+      <img
+        src="host_naya.png"
+        alt="Miklos Artjoy"
+        class="w-64 h-64 rounded-full border-8 border-lime-300 shadow-xl"
+      />
+      <img
+        src="host_miklos.png"
+        alt="Naya PKouzi"
+        class="w-64 h-64 rounded-full border-8 border-lime-300 shadow-xl"
+      />
+    </div>
+
+    <!-- Workshop Description -->
+    <div class="flex flex-col items-center text-center mt-4">
+      <p
+        class="text-lg md:text-2xl text-pink-100"
+        style="font-family: 'Montserrat', sans-serif; font-weight: bolder;"
+      >
+        A free English open workshop by Impro Neuf.
+      </p>
+    </div>
+
+    <!-- Event Details -->
+    <div
+      class="mt-12 mb-8 text-lg space-y-4 px-4 text-white text-center"
+      style="font-family: 'Montserrat', sans-serif;"
+    >
+      <p class="text-xl md:text-3xl text-indigo-200">
+        📅 <span class="font-bold text-yellow-300">Date:</span> Wednesday, April 2, 2025
+      </p>
+      <p class="text-xl md:text-3xl text-purple-200">
+        ⏰ <span class="font-bold text-lime-200">Time:</span> 6:00 PM - 8:00 PM
+      </p>
+      <p class="text-xl md:text-3xl text-teal-200">
+        📍 <span class="font-bold text-yellow-300">Location:</span> Chateau Neuf
+      </p>
+      <p class="text-xl md:text-3xl text-emerald-200">
+        🏢 <span class="font-bold text-pink-100">Room:</span> Betong
+      </p>
+    </div>
+
+    <!-- Sign-up Prompt -->
+    <div
+      class="mt-6 text-lg text-center"
+      style="font-family: 'Montserrat', sans-serif;"
+    >
+      <p class="text-xl md:text-2xl font-bold text-yellow-300">Sign up now!</p>
+    </div>
+  </div>
+</body>
+</html>
