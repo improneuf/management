@@ -3,98 +3,66 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yes, and... : An Improv Workshop</title>
+  <title>Ground your Yes</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cabin:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Cabin:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    /* Intermediate gradient background */
-    .bg-custom-intermediate-gradient {
-      background: linear-gradient(135deg, #10B981, #3B82F6, #6D28D9); /* Teal -> Blue -> Purple */
+    .bg-orange-match {
+      background: linear-gradient(135deg, #f25c25, #f2632a, #f46a2e); /* closer match to original image */
     }
-    /* Keep body font size standard unless specifically needed */
     body {
-      font-family: 'Cabin', sans-serif; /* Default body font */
+      font-family: 'Cabin', sans-serif;
     }
     .title-font {
-      font-family: 'Fredoka One', sans-serif; /* Distinct font for titles/names */
+      font-family: 'Fredoka One', cursive;
     }
   </style>
 </head>
-<body class="bg-custom-intermediate-gradient min-h-screen relative">
-  <!-- Dark overlay for contrast -->
-  <div class="flex flex-col items-center justify-center w-full min-h-screen bg-gray-900 bg-opacity-70 relative p-8 text-center">
+<body class="bg-orange-match min-h-screen text-center relative text-white">
 
-    <!-- Logo (Intermediate Size) -->
-    <div class="absolute top-5 right-5 z-20">
-      <img src="logo.png" alt="Logo" class="w-20 h-20"/>
-    </div>
+  <!-- Impro Neuf logo -->
+  <div class="absolute top-5 right-5">
+    <img src="logo.png" alt="Impro Neuf Logo" class="w-16 h-16"/>
+  </div>
+
+  <div class="flex flex-col items-center justify-center min-h-screen px-4 py-12">
 
     <!-- Title -->
-    <h1
-      class="text-5xl md:text-7xl font-bold tracking-widest text-yellow-300 title-font mt-16 md:mt-0"
-      style="padding-bottom: 0.1em;"
-    >
-      Yes, and...
+    <h1 class="text-5xl md:text-6xl font-bold title-font text-white mb-2">
+      Ground your Yes
     </h1>
+
     <!-- Subtitle -->
-    <h2
-      class="text-xl md:text-2xl font-bold text-blue-200 mt-2"
-    >
-      An improv workshop about building scenes together
-    </h2>
+    <p class="text-xl md:text-2xl font-semibold mb-6">
+      Improvising with Presence and Playful Intention
+    </p>
 
-    <!-- "with" -->
-    <div class="mt-6">
-      <p class="text-2xl text-teal-200 font-semibold title-font">
-        with
-      </p>
-    </div>
+    <!-- with -->
+    <p class="text-2xl font-medium mb-1">with</p>
 
-    <!-- Host Name (Single Host) -->
-    <div class="mt-2">
-      <p class="text-3xl font-semibold text-yellow-200 title-font">
-        Kevin Gow
-      </p>
-    </div>
+    <!-- Name -->
+    <p class="text-3xl title-font text-white mb-4">Kevin Gow</p>
 
-    <!-- Host Image (Single Host, Intermediate Size/Border) -->
-    <div class="mt-6">
-      <!-- Use a placeholder or actual image path -->
-      <img src="host_kevin.png" alt="Kevin Gow" class="w-48 h-48 rounded-full border-6 border-teal-300 shadow-lg mx-auto"/>
-    </div>
+    <!-- Host Image -->
+    <img src="host_kevin.png" alt="Kevin Gow" class="w-40 h-40 rounded-full border-4 border-white shadow-md mb-6"/>
 
-    <!-- Free Workshop Text -->
-    <div class="mt-6 text-center">
-      <p class="text-lg md:text-xl text-green-200 font-bold">
-        A free English open workshop by Impro Neuf.
-      </p>
-    </div>
+    <!-- Free workshop note -->
+    <p class="text-lg md:text-xl mb-6">
+      A free English open workshop by Impro Neuf.
+    </p>
 
-    <!-- Event Info (Simplified Color Scheme) -->
-    <div class="mt-10 text-lg md:text-xl space-y-3 text-white">
-      <p>
-        📅 <span class="font-bold text-purple-300">Date:</span> Wednesday, May 21, 2025
-      </p>
-      <p>
-        ⏰ <span class="font-bold text-purple-300">Time:</span> 6:00 PM - 8:00 PM
-      </p>
-      <p>
-        📍 <span class="font-bold text-purple-300">Location:</span> Chateau Neuf
-      </p>
-      <p>
-        🏢 <span class="font-bold text-purple-300">Room:</span> Teaterscenen
-      </p>
+    <!-- Event info -->
+    <div class="space-y-3 text-lg md:text-xl">
+      <p>📅 <span class="font-bold">Date:</span> Wednesday, May 21, 2025</p>
+      <p>⏰ <span class="font-bold">Time:</span> 6:00 PM – 8:00 PM</p>
+      <p>📍 <span class="font-bold">Location:</span> Chateau Neuf</p>
+      <p>🏢 <span class="font-bold">Room:</span> Betong</p>
     </div>
 
     <!-- Signup -->
-    <div class="mt-8">
-      <p class="text-2xl md:text-3xl font-bold text-yellow-300 title-font">
-        Sign up now!
-      </p>
-    </div>
+    <p class="mt-8 text-2xl md:text-3xl font-bold title-font text-white">
+      Sign up now!
+    </p>
 
   </div>
 </body>
