@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -24,10 +24,17 @@ func main() {
 	fileURL := os.Args[1]
 
 	// Extract the file name (e.g., "julie-cole.html") and then the base name (e.g., "julie-cole")
-	htmlFilename := path.Base(fileURL)
-	base := strings.TrimSuffix(htmlFilename, path.Ext(htmlFilename))
-	fbFileName := fmt.Sprintf("%s-fb.jpg", base)
-	meetupFileName := fmt.Sprintf("%s-meetup.jpg", base)
+	htmlFilename := filepath.Base(fileURL)
+	base := strings.TrimSuffix(htmlFilename, filepath.Ext(htmlFilename))
+
+	// Check if OUTPUT_DIR environment variable is set
+	outputDir := "."
+	if envOutputDir := os.Getenv("OUTPUT_DIR"); envOutputDir != "" {
+		outputDir = envOutputDir
+	}
+
+	fbFileName := filepath.Join(outputDir, fmt.Sprintf("%s-fb.jpg", base))
+	meetupFileName := filepath.Join(outputDir, fmt.Sprintf("%s-meetup.jpg", base))
 
 	// Create a chromedp context
 	ctx, cancel := chromedp.NewContext(context.Background())
