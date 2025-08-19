@@ -46,9 +46,9 @@ func GenerateAllWorkshops() {
 	// Define all the workshop configurations
 	workshops := []WorkshopConfig{
 		{
-			PageTitle:      "Building the Basics of a scene",
+			PageTitle:      "Building the Basics of a Scene",
 			BackgroundHaze: "bg_dunes.webp",
-			MainTitle:      "Building the Basics of a scene",
+			MainTitle:      "Building the Basics of a Scene",
 			Subtitle:       "Improv Theatre",
 			HostName1:      "Barathy Pirabahar",
 			HostName2:      "Cole Grabinsky",
