@@ -51,6 +51,11 @@ func GetShowFromRow(row []string) Show {
 		return Show{}
 	}
 
+	// Skip rows that have empty team1 (index 5)
+	if len(row) <= 5 || strings.TrimSpace(row[5]) == "" {
+		return Show{}
+	}
+
 	fmt.Printf("Processing row: %v\n", row)
 
 	// Parse date (format: MM-DD-YY)
@@ -82,7 +87,7 @@ func GetShowFromRow(row []string) Show {
 	}
 
 	// Get teams (Team 1, Team 2, Team 3)
-	for i := 6; i <= 8; i++ {
+	for i := 5; i <= 7; i++ {
 		if i < len(row) {
 			team := strings.TrimSpace(row[i])
 			if team != "" {

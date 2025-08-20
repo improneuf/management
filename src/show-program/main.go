@@ -14,8 +14,8 @@ import (
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
-	SHOW_PROGRAM_SHEET_ID    string = "1_KI5blAlQDXaVbqgMNFngxipJx1r6ZZrfGkNtCEEduc" // Live Sheet
-	SHOW_PROGRAM_SHEET_NAME  string = "Showplan Spring 25"
+	SHOW_PROGRAM_SHEET_ID    string = "1nYxraiz2lu4YXmxFsSmhxpBNLy5yuz1tE3nybKznFgA" // Live Sheet
+	SHOW_PROGRAM_SHEET_NAME  string = "Sheet1"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 
 	POST_TYPE_FB     = "fb"
