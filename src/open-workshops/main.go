@@ -34,9 +34,9 @@ type WorkshopConfig struct {
 	MainTitle      string
 	Subtitle       string
 	HostName1      string
-	HostName2      string
+	HostName2      string // Empty string means no second host
 	HostImage1     string
-	HostImage2     string
+	HostImage2     string // Empty string means no second host image
 	EventDate      string
 	Room           string
 }
@@ -57,7 +57,42 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, August 20, 2025",
 			Room:           "Betong",
 		},
-		// Add more workshop configurations here as needed
+		{
+			PageTitle:      "The FUN in Fundamentals: Start with Agreement",
+			BackgroundHaze: "bg_fire.webp",
+			MainTitle:      "The FUN in Fundamentals: Start with Agreement",
+			Subtitle:       "Start with Agreement",
+			HostName1:      "Kevin Gow",
+			HostName2:      "",
+			HostImage1:     "host_kevin.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, August 27, 2025",
+			Room:           "Betong",
+		},
+		{
+			PageTitle:      "Celebrating Our Mistakes",
+			BackgroundHaze: "bg_snow.webp",
+			MainTitle:      "Celebrating Our Mistakes",
+			Subtitle:       "Celebrating Our Mistakes",
+			HostName1:      "Liv Grøthe",
+			HostName2:      "Nikki Michelle Soo",
+			HostImage1:     "host_liv.png",
+			HostImage2:     "host_nikki.png",
+			EventDate:      "Wednesday, September 3, 2025",
+			Room:           "Betong",
+		},
+		{
+			PageTitle:      "The ABC of Improv - Yes And",
+			BackgroundHaze: "bg_tides.webp",
+			MainTitle:      "The ABC of Improv - Yes And",
+			Subtitle:       "The ABC of Improv - Yes And",
+			HostName1:      "Auritro Paldas",
+			HostName2:      "Naya Kouzilou",
+			HostImage1:     "host_auritro.png",
+			HostImage2:     "host_naya2.png",
+			EventDate:      "Wednesday, September 10, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
