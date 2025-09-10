@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -39,6 +40,31 @@ type WorkshopConfig struct {
 	HostImage2     string // Empty string means no second host image
 	EventDate      string
 	Room           string
+}
+
+// sanitizeFilename creates a Windows-safe filename by removing or replacing invalid characters
+func sanitizeFilename(title string) string {
+	// Replace spaces with hyphens
+	safeTitle := strings.ReplaceAll(title, " ", "-")
+
+	// Remove or replace invalid characters for Windows filenames
+	// Invalid characters: < > : " | ? * \ /
+	// Also remove other potentially problematic characters
+	invalidChars := regexp.MustCompile(`[<>:"|?*\\/!@#$%^&()+={}[\]~` + "`" + `;,]`)
+	safeTitle = invalidChars.ReplaceAllString(safeTitle, "")
+
+	// Remove multiple consecutive hyphens
+	safeTitle = regexp.MustCompile(`-+`).ReplaceAllString(safeTitle, "-")
+
+	// Remove leading/trailing hyphens
+	safeTitle = strings.Trim(safeTitle, "-")
+
+	// Ensure the filename is not empty
+	if safeTitle == "" {
+		safeTitle = "workshop"
+	}
+
+	return safeTitle
 }
 
 // GenerateAllWorkshops creates HTML files for all workshop combinations
@@ -93,6 +119,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, September 10, 2025",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Connecting the Dots",
+			BackgroundHaze: "bg_wind.webp",
+			MainTitle:      "Connecting the dots",
+			Subtitle:       "Connecting the dots",
+			HostName1:      "Hanna Saastamoinen",
+			HostName2:      "Magnus Seines",
+			HostImage1:     "host_hanna.png",
+			HostImage2:     "host_magnus.png",
+			EventDate:      "Wednesday, September 17, 2025",
+			Room:           "Betong",
+		},
+		{
+			PageTitle:      "Who Do You Think You Are?!",
+			BackgroundHaze: "bg_bokeh.webp",
+			MainTitle:      "Who Do You Think You Are?!",
+			Subtitle:       "Who Do You Think You Are?!",
+			HostName1:      "India Anderson",
+			HostName2:      "Peter Müller",
+			HostImage1:     "host_india.png",
+			HostImage2:     "host_peter.png",
+			EventDate:      "Wednesday, September 24, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
@@ -109,9 +159,7 @@ func GenerateAllWorkshops() {
 	// Generate HTML for each workshop
 	for i, workshop := range workshops {
 		// Create filename-safe version of the title
-		safeTitle := strings.ReplaceAll(workshop.MainTitle, " ", "-")
-		safeTitle = strings.ReplaceAll(safeTitle, ":", "")
-		safeTitle = strings.ReplaceAll(safeTitle, "***", "star")
+		safeTitle := sanitizeFilename(workshop.MainTitle)
 
 		filename := fmt.Sprintf("workshop-%d-%s.html", i+1, safeTitle)
 
