@@ -143,6 +143,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, September 24, 2025",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "The core of FUN",
+			BackgroundHaze: "bg6.webp",
+			MainTitle:      "The core of FUN",
+			Subtitle:       "The core of FUN",
+			HostName1:      "Carlos Moreno",
+			HostName2:      "",
+			HostImage1:     "host_carlos.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, October 1, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
