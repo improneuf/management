@@ -155,6 +155,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, October 1, 2025",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Playing with Emotions",
+			BackgroundHaze: "bg8.webp",
+			MainTitle:      "Playing with Emotions",
+			Subtitle:       "Playing with Emotions",
+			HostName1:      "Natalia Wydra",
+			HostName2:      "",
+			HostImage1:     "host_natalia.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, October 8, 2025",
+			Room:           "Betong",
+		},
+		{
+			PageTitle:      "Improvising things out of thin air",
+			BackgroundHaze: "bg9.webp",
+			MainTitle:      "Improvising things out of thin air",
+			Subtitle:       "Improvising things out of thin air",
+			HostName1:      "Mari Olimstad",
+			HostName2:      "Liv Grøthe",
+			HostImage1:     "host_mari.png",
+			HostImage2:     "host_liv3.png",
+			EventDate:      "Wednesday, November 5, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
