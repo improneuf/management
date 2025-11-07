@@ -179,6 +179,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, November 5, 2025",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Let your body speak",
+			BackgroundHaze: "bg10.webp",
+			MainTitle:      "Let your body speak",
+			Subtitle:       "Let your body speak",
+			HostName1:      "Mike Altorjay",
+			HostName2:      "Naya Kouzilou",
+			HostImage1:     "host_miklos.png",
+			HostImage2:     "host_naya.png",
+			EventDate:      "Wednesday, November 12, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
@@ -220,7 +232,7 @@ func GenerateAllWorkshops() {
 			HostImage2:          workshop.HostImage2,
 			WorkshopDescription: "A free English open workshop by Impro Neuf.",
 			EventDate:           workshop.EventDate,
-			EventTime:           "6:00 PM - 8:00 PM",
+			EventTime:           "6:00 PM - 7:30 PM",
 			Location:            "Chateau Neuf",
 			Room:                workshop.Room,
 			SignUpPrompt:        "Sign up now!",
