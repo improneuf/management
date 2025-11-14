@@ -191,6 +191,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, November 12, 2025",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Playing with status",
+			BackgroundHaze: "bg11.webp",
+			MainTitle:      "Playing with status",
+			Subtitle:       "Playing with status",
+			HostName1:      "Anjitha S.G.",
+			HostName2:      "Siddanth Nayak",
+			HostImage1:     "host_anjitha.png",
+			HostImage2:     "host_sid.png",
+			EventDate:      "Wednesday, November 19, 2025",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
