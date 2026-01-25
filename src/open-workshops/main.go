@@ -83,6 +83,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, January 14, 2026",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "When characters meet",
+			BackgroundHaze: "bg6.webp",
+			MainTitle:      "When characters meet",
+			Subtitle:       "When characters meet",
+			HostName1:      "Kevin Gow",
+			HostName2:      "",
+			HostImage1:     "host_kevin.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, January 21, 2026",
+			Room:           "Klubbscenen",
+		},
+		{
+			PageTitle:      "Let the Body Lead",
+			BackgroundHaze: "bg8.webp",
+			MainTitle:      "Let the Body Lead",
+			Subtitle:       "Let the Body Lead",
+			HostName1:      "Cole Grabinsky",
+			HostName2:      "Anjitha S.g.",
+			HostImage1:     "host_cole.png",
+			HostImage2:     "host_anjitha.png",
+			EventDate:      "Wednesday, January 28, 2026",
+			Room:           "Klubbscenen",
+		},
 	}
 
 	// Create output directory
