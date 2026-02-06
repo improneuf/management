@@ -107,6 +107,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, January 28, 2026",
 			Room:           "Klubbscenen",
 		},
+		{
+			PageTitle:      "Freedom to fail",
+			BackgroundHaze: "bg9.webp",
+			MainTitle:      "Freedom to fail",
+			Subtitle:       "Freedom to fail",
+			HostName1:      "Natalia Wydra",
+			HostName2:      "",
+			HostImage1:     "host_natalia.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, February 4, 2026",
+			Room:           "Klubbscenen",
+		},
+		{
+			PageTitle:      "Making Bold Choices",
+			BackgroundHaze: "bg10.webp",
+			MainTitle:      "Making Bold Choices",
+			Subtitle:       "Making Bold Choices",
+			HostName1:      "Carlos Moreno",
+			HostName2:      "Ruidi Collins",
+			HostImage1:     "host_carlos.png",
+			HostImage2:     "host_ruidi.png",
+			EventDate:      "Wednesday, February 11, 2026",
+			Room:           "Klubbscenen",
+		},
 	}
 
 	// Create output directory

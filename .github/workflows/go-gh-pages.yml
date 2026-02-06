@@ -71,7 +71,23 @@ jobs:
           cp -R icons output/screenshots/icons
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
-
+      - name: Build banners.json manifest
+        run: |
+          python - <<'PY'
+          import json, os, glob, urllib.parse
+          base = "https://improneuf.github.io/management/"
+          files = sorted(glob.glob("./_site/*-fb.jpg"))
+          out = []
+          for path in files:
+            name = os.path.basename(path)
+            out.append({
+              "filename": name,
+              "url": base + urllib.parse.quote(name),
+            })
+          with open("./_site/banners.json", "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, indent=2)
+          print("banners.json entries:", len(out))
+          PY
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
