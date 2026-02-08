@@ -30,6 +30,7 @@ type ShowTypeData struct {
 type ShowPageData struct {
 	DateStr string
 	Title   string
+	Teams   string
 	Types   []ShowTypeData
 	IsPast  bool
 }

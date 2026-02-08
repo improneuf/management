@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/chromedp/chromedp"
@@ -158,6 +159,7 @@ func CreateIndex(shows []Show) {
 		showData := ShowPageData{
 			DateStr: dateStr,
 			Title:   show.Title,
+			Teams:   strings.Join(show.Teams, ", "),
 			Types:   types,
 			IsPast:  showDate.Before(today),
 		}
@@ -224,6 +226,7 @@ func CreateShowPage(show Show) {
 	data := ShowPageData{
 		DateStr: dateStr,
 		Title:   show.Title,
+		Teams:   strings.Join(show.Teams, ", "),
 		Types:   types,
 	}
 
