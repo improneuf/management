@@ -1,6 +1,6 @@
 module main
 
-go 1.21.6
+go 1.25.7
 
 require (
 	github.com/chromedp/chromedp v0.9.5
