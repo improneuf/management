@@ -243,6 +243,44 @@ func CreateShowPage(show Show) {
 	}
 }
 
+// getShowColorIndex returns a color index (0-6) based on the ISO week number,
+// rotating through 7 options: 6 colors + 1 original/no-color.
+func getShowColorIndex(date time.Time) int {
+	_, week := date.ISOWeek()
+	return week % 7
+}
+
+// GetBgColor returns a full CSS color value for the background overlay,
+// rotating weekly through 6 colors + transparent (original).
+// Returns template.CSS so html/template doesn't sanitize rgba() values.
+func GetBgColor(date time.Time) template.CSS {
+	colors := []template.CSS{
+		"rgba(220, 38, 38, 0.18)",  // red
+		"rgba(22, 163, 74, 0.18)",  // green
+		"rgba(37, 99, 235, 0.18)",  // blue
+		"rgba(234, 179, 8, 0.18)",  // yellow
+		"rgba(249, 115, 22, 0.18)", // orange
+		"rgba(147, 51, 234, 0.18)", // purple
+		"transparent",              // original (no tint)
+	}
+	return colors[getShowColorIndex(date)]
+}
+
+// GetTitleColor returns a hex color string for the show title text,
+// matching the weekly color rotation. The 7th option uses the original red.
+func GetTitleColor(date time.Time) string {
+	colors := []string{
+		"#DC2626", // red
+		"#16A34A", // green
+		"#2563EB", // blue
+		"#EAB308", // yellow
+		"#F97316", // orange
+		"#9333EA", // purple
+		"#DC2626", // original red
+	}
+	return colors[getShowColorIndex(date)]
+}
+
 func GetFreeText(show Show) string {
 	var hasEnglish, hasNorwegian bool
 
@@ -268,6 +306,20 @@ func GetFreeText(show Show) string {
 	return ""
 }
 
+// GetTagline returns a rotating tagline based on the ISO week number of the show date.
+func GetTagline(date time.Time) string {
+	taglines := []string{
+		"Unscripted, unhinged improv comedy theatre.",
+		"Never to be seen again...  improv performances by:",
+		"LIVE (theatre), LAUGH (...or cry), LOVE (improv comedy)",
+		"A night of laughter, or tears, we don't know - it's all improvised!",
+		"Improv comedy to make your grandma proud",
+		"Meticulously scheduled performances of improvised chaos!",
+	}
+	_, week := date.ISOWeek()
+	return taglines[week%len(taglines)]
+}
+
 func main() {
 	// Create output directories if they don't exist
 	if err := os.MkdirAll("output/screenshots", 0755); err != nil {
@@ -283,6 +335,9 @@ func main() {
 		"formatMonth":    formatMonth,
 		"GetShowEndTime": GetShowEndTime,
 		"GetFreeText":    GetFreeText,
+		"GetBgColor":     GetBgColor,
+		"GetTitleColor":  GetTitleColor,
+		"GetTagline":     GetTagline,
 	}
 
 	var shows []Show

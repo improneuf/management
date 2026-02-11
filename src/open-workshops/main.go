@@ -73,7 +73,7 @@ func GenerateAllWorkshops() {
 	workshops := []WorkshopConfig{
 		{
 			PageTitle:      "An improduction to freedom and fun!",
-			BackgroundHaze: "bg_dunes.webp",
+			BackgroundHaze: "banner-bg-1.png",
 			MainTitle:      "An improduction to freedom and fun!",
 			Subtitle:       "An improduction to freedom and fun!",
 			HostName1:      "Peter Müller",
@@ -85,7 +85,7 @@ func GenerateAllWorkshops() {
 		},
 		{
 			PageTitle:      "When characters meet",
-			BackgroundHaze: "bg6.webp",
+			BackgroundHaze: "banner-bg-2.png",
 			MainTitle:      "When characters meet",
 			Subtitle:       "When characters meet",
 			HostName1:      "Kevin Gow",
@@ -97,7 +97,7 @@ func GenerateAllWorkshops() {
 		},
 		{
 			PageTitle:      "Let the Body Lead",
-			BackgroundHaze: "bg8.webp",
+			BackgroundHaze: "banner-bg-3.png",
 			MainTitle:      "Let the Body Lead",
 			Subtitle:       "Let the Body Lead",
 			HostName1:      "Cole Grabinsky",
@@ -109,7 +109,7 @@ func GenerateAllWorkshops() {
 		},
 		{
 			PageTitle:      "Freedom to fail",
-			BackgroundHaze: "bg9.webp",
+			BackgroundHaze: "banner-bg-4.png",
 			MainTitle:      "Freedom to fail",
 			Subtitle:       "Freedom to fail",
 			HostName1:      "Natalia Wydra",
@@ -121,7 +121,7 @@ func GenerateAllWorkshops() {
 		},
 		{
 			PageTitle:      "Making Bold Choices",
-			BackgroundHaze: "bg10.webp",
+			BackgroundHaze: "banner-bg-5.png",
 			MainTitle:      "Making Bold Choices",
 			Subtitle:       "Making Bold Choices",
 			HostName1:      "Carlos Moreno",
@@ -129,7 +129,7 @@ func GenerateAllWorkshops() {
 			HostImage1:     "host_carlos.png",
 			HostImage2:     "host_ruidi.png",
 			EventDate:      "Wednesday, February 11, 2026",
-			Room:           "Klubbscenen",
+			Room:           "Betong",
 		},
 	}
 
@@ -161,21 +161,20 @@ func GenerateAllWorkshops() {
 
 		// Prepare the data for the template
 		data := PageData{
-			PageTitle:           workshop.PageTitle,
-			BackgroundHazeURL:   workshop.BackgroundHaze,
-			LogoPath:            "logo.png",
-			MainTitle:           workshop.MainTitle,
-			Subtitle:            workshop.Subtitle,
-			HostName1:           workshop.HostName1,
-			HostName2:           workshop.HostName2,
-			HostImage1:          workshop.HostImage1,
-			HostImage2:          workshop.HostImage2,
-			WorkshopDescription: "A free English open workshop by Impro Neuf.",
-			EventDate:           workshop.EventDate,
-			EventTime:           "6:00 PM - 8:00 PM",
-			Location:            "Chateau Neuf",
-			Room:                workshop.Room,
-			SignUpPrompt:        "Sign up now!",
+			PageTitle:         workshop.PageTitle,
+			BackgroundHazeURL: workshop.BackgroundHaze,
+			LogoPath:          "logo.png",
+			MainTitle:         workshop.MainTitle,
+			Subtitle:          workshop.Subtitle,
+			HostName1:         workshop.HostName1,
+			HostName2:         workshop.HostName2,
+			HostImage1:        workshop.HostImage1,
+			HostImage2:        workshop.HostImage2,
+			EventDate:         workshop.EventDate,
+			EventTime:         "6:00 PM - 8:00 PM",
+			Location:          "Chateau Neuf",
+			Room:              workshop.Room,
+			SignUpPrompt:      "Sign up now!",
 		}
 
 		// Execute the template

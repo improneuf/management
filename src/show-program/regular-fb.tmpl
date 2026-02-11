@@ -94,6 +94,9 @@
         <div
             class="banner-background relative h-[1004px] w-[1920px] overflow-hidden"
         >
+            <!-- Color overlay -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: {{ GetBgColor .Date }}; pointer-events: none;"></div>
+
             <!-- Logo -->
             <div class="absolute right-0 top-0 p-4 opacity-60">
                 <img
@@ -129,7 +132,8 @@
                 style="padding-top: 220px"
             >
                 <h1
-                    class="title text-[100px] font-bold uppercase tracking-widest text-red-600 subpixel-antialiased"
+                    class="title text-[100px] font-bold uppercase tracking-widest subpixel-antialiased"
+                    style="color: {{ GetTitleColor .Date }}"
                 >
                     {{ .Title }}
                 </h1>

@@ -58,7 +58,7 @@ func getShowTitleAndSubtitle(showType ShowType, dt time.Time) (string, string) {
 	case ShowTypeRegular:
 		switch dt.Weekday() {
 		case time.Wednesday:
-			return "Impro Neuf Wednesday Show", "Laugh, cry, and everything in between"
+			return "Impro Neuf Wednesday Show", GetTagline(dt)
 		case time.Tuesday:
 			return "Impro Neuf Tirsdagsshow", ""
 		}

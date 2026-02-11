@@ -21,7 +21,7 @@
       background-image: url('{{ .BackgroundHazeURL }}');
       background-size: cover;
       background-position: center;
-      filter: blur(6px) brightness(0.85);
+      filter: blur(2px) brightness(0.95);
       z-index: -1;
     }
   </style>
@@ -35,7 +35,12 @@
     </div>
 
     <!-- Title Container (wrapped in a group for hover) -->
-    <div id="title-container" class="group flex flex-col items-center text-center mt-16">
+    <div id="title-container" class="group flex flex-col items-center text-center mt-10">
+      <!-- Category Label -->
+      <p class="text-5xl md:text-5xl tracking-wide text-white mb-2" style="font-family: 'Fredoka One', sans-serif;">
+        Free, Open Improv Workshop! [English]
+      </p>
+      <div class="mb-4"></div>
       <!-- Main Title (editable) -->
       <h1
         contenteditable="true"
