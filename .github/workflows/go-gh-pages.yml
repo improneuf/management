@@ -30,13 +30,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Setup Go environment
-        uses: actions/setup-go@v5.0.2
+        uses: actions/setup-go@v6
         with:
           # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
           go-version-file: src/show-program/go.mod
@@ -54,7 +54,7 @@ jobs:
           mv ./src/show-program/output/screenshots ./_site
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
 
   # Deployment job
   deploy:
