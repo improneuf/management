@@ -35,7 +35,21 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Calculate Hash
+        id: hash
+        run: |
+          cd "${{ github.workspace }}/src/show-program"
+          echo "HASH=$(sum go.mod go.sum Makefile *.tmpl *.go | sum | awk '{ print $1 }')" >> $GITHUB_OUTPUT
+
+      - name: Restore Cached Binary
+        id: cache-binary
+        uses: actions/cache@v4
+        with:
+          path: src/show-program/show-program
+          key: binary-${{ runner.os }}-${{ steps.hash.outputs.HASH }}
+
       - name: Setup Go environment
+        if: steps.cache-binary.outputs.cache-hit != 'true'
         uses: actions/setup-go@v6
         with:
           # The Go version to download (if necessary) and use. Supports semver spec and ranges. Be sure to enclose this option in single quotation marks.
@@ -43,12 +57,19 @@ jobs:
           cache-dependency-path: |
             src/show-program/go.sum
 
-      - name: Build site
+      - name: Build binary
+        if: steps.cache-binary.outputs.cache-hit != 'true'
+        run: |
+          cd "${{ github.workspace }}/src/show-program"
+          go build -o show-program .
+
+      - name: Generate Site
         run: |
           cd "${{ github.workspace }}/src/show-program"
           mkdir -p output/screenshots
           echo ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEYFILE_BASE64 }} | base64 -d > impro-neuf-management-99d59b5d3102.json
-          go run main.go price.go showtype.go showlanguage.go show.go drive.go photo.go
+          chmod +x show-program
+          ./show-program
           cp -R icons output/screenshots/icons
           cd ../..
           mv ./src/show-program/output/screenshots ./_site
