@@ -63,6 +63,9 @@ jobs:
           cd "${{ github.workspace }}/src/show-program"
           go build -o show-program .
 
+      - name: Disable AppArmor for Chrome
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+
       - name: Generate Site
         run: |
           cd "${{ github.workspace }}/src/show-program"
