@@ -37,9 +37,14 @@ var POST_TYPES = []string{
 }
 
 type Banner struct {
-	Filename string   `json:"filename"`
-	URL      string   `json:"url"`
-	Teams    []string `json:"teams"`
+	Filename  string            `json:"filename"`
+	URL       string            `json:"url"`
+	Teams     []string          `json:"teams"`
+	Title     string            `json:"title"`
+	ShowStart string            `json:"showStart"`
+	IsPast    bool              `json:"isPast"`
+	Types     []string          `json:"types"`
+	Images    map[string]string `json:"images"`
 }
 
 // GetLocalFileModifiedDate returns the last modified date of the file at the given filePath.
@@ -258,6 +263,7 @@ func CreateBannersManifest(shows []Show) {
 	const base = "https://improneuf.github.io/management/"
 	var banners []Banner
 
+	today := TruncateToDate(time.Now())
 	for _, show := range shows {
 		if len(show.Teams) == 0 {
 			continue
@@ -266,10 +272,26 @@ func CreateBannersManifest(shows []Show) {
 		dateStr := show.Date.Format("2006-01-02")
 		filename := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, POST_TYPE_FB)
 
+		var types []string
+		for _, t := range show.Types {
+			types = append(types, string(t))
+		}
+
+		images := make(map[string]string)
+		for _, postType := range POST_TYPES {
+			imgFilename := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, postType)
+			images[postType] = base + url.PathEscape(imgFilename)
+		}
+
 		banners = append(banners, Banner{
-			Filename: filename,
-			URL:      base + url.PathEscape(filename),
-			Teams:    show.Teams,
+			Filename:  filename,
+			URL:       base + url.PathEscape(filename),
+			Teams:     show.Teams,
+			Title:     show.Title,
+			ShowStart: "20:00", // Default show start time
+			IsPast:    TruncateToDate(show.Date).Before(today),
+			Types:     types,
+			Images:    images,
 		})
 	}
 
