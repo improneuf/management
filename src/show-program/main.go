@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/chromedp/chromedp"
+	"golang.org/x/sync/errgroup"
 )
 
 const (
@@ -447,33 +448,20 @@ func main() {
 	}
 
 	// Process jobs with worker pool
-	maxWorkers := 4
-	jobsChan := make(chan Job, maxWorkers)
-	doneCh := make(chan struct{})
+	var g errgroup.Group
+	maxWorkers := 5
+	g.SetLimit(maxWorkers)
 
-	// Start workers
-	for range maxWorkers {
-		go func() {
-			for {
-				job, ok := <-jobsChan
-				if !ok {
-					doneCh <- struct{}{}
-					return
-				}
-				SaveScreenshot(job.Tmpl, job.Show, job.TmplType)
-			}
-		}()
-	}
-
-	// Fill the channel with jobs
 	for _, job := range jobsList {
-		jobsChan <- job
+		job := job // Capture for closure
+		g.Go(func() error {
+			SaveScreenshot(job.Tmpl, job.Show, job.TmplType)
+			return nil
+		})
 	}
-	close(jobsChan)
 
-	// Wait for all workers to be done
-	for range maxWorkers {
-		<-doneCh
+	if err := g.Wait(); err != nil {
+		log.Printf("Error processing jobs: %v", err)
 	}
 
 	// Generate the index.html

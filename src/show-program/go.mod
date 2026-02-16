@@ -6,6 +6,7 @@ require (
 	github.com/chromedp/chromedp v0.14.2
 	github.com/xuri/excelize/v2 v2.10.0
 	golang.org/x/oauth2 v0.35.0
+	golang.org/x/sync v0.19.0
 	google.golang.org/api v0.266.0
 )
 
