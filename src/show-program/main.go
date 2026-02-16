@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -32,6 +34,12 @@ var POST_TYPES = []string{
 	POST_TYPE_MEETUP,
 	POST_TYPE_SIO,
 	POST_TYPE_STORY,
+}
+
+type Banner struct {
+	Filename string   `json:"filename"`
+	URL      string   `json:"url"`
+	Teams    []string `json:"teams"`
 }
 
 // GetLocalFileModifiedDate returns the last modified date of the file at the given filePath.
@@ -246,6 +254,44 @@ func CreateShowPage(show Show) {
 	}
 }
 
+func CreateBannersManifest(shows []Show) {
+	const base = "https://improneuf.github.io/management/"
+	var banners []Banner
+
+	for _, show := range shows {
+		if len(show.Teams) == 0 {
+			continue
+		}
+
+		dateStr := show.Date.Format("2006-01-02")
+		filename := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, POST_TYPE_FB)
+
+		banners = append(banners, Banner{
+			Filename: filename,
+			URL:      base + url.PathEscape(filename),
+			Teams:    show.Teams,
+		})
+	}
+
+	manifestPath := "output/screenshots/banners.json"
+	file, err := os.Create(manifestPath)
+	if err != nil {
+		log.Printf("Failed to create banners.json: %v", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(banners); err != nil {
+		log.Printf("Failed to encode banners.json: %v", err)
+		return
+	}
+
+	fmt.Printf("banners.json has been successfully created with %d entries.\n", len(banners))
+}
+
 // getShowColorIndex returns a color index (0-6) based on the ISO week number,
 // rotating through 7 options: 6 colors + 1 original/no-color.
 func getShowColorIndex(date time.Time) int {
@@ -389,4 +435,7 @@ func main() {
 
 	// Generate the index.html
 	CreateIndex(shows)
+
+	// Generate the banners.json manifest
+	CreateBannersManifest(shows)
 }
