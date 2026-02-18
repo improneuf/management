@@ -131,6 +131,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, February 11, 2026",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Celebrating Mistakes",
+			BackgroundHaze: "banner-bg-6.png",
+			MainTitle:      "Celebrating Mistakes",
+			Subtitle:       "Celebrating Mistakes",
+			HostName1:      "Mike Altorjay",
+			HostName2:      "",
+			HostImage1:     "host_miklos.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, February 18, 2026",
+			Room:           "Betong",
+		},
+		{
+			PageTitle:      "Make things that are not real, real",
+			BackgroundHaze: "banner-bg-1.png",
+			MainTitle:      "Make things that are not real, real",
+			Subtitle:       "Make things that are not real, real",
+			HostName1:      "Liv Grøthe",
+			HostName2:      "Nikki Michelle Soo",
+			HostImage1:     "host_liv.png",
+			HostImage2:     "host_nikki.png",
+			EventDate:      "Wednesday, February 25, 2026",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
