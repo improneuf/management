@@ -15,10 +15,10 @@ build:
 	$(GOBUILD) -o $(BINARY_NAME) $(SOURCES)
 
 # Run the project
-run:
+run: build
 	mkdir -p output/screenshots
 	cp -R icons output/screenshots/icons
-	$(GORUN) $(SOURCES)
+	./$(BINARY_NAME)
 
 # Clean build artifacts
 clean:

@@ -2,15 +2,18 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/chromedp/chromedp"
+	"golang.org/x/sync/errgroup"
 )
 
 const (
@@ -32,6 +35,23 @@ var POST_TYPES = []string{
 	POST_TYPE_MEETUP,
 	POST_TYPE_SIO,
 	POST_TYPE_STORY,
+}
+
+type Banner struct {
+	Filename  string            `json:"filename"`
+	URL       string            `json:"url"`
+	Teams     []string          `json:"teams"`
+	Title     string            `json:"title"`
+	ShowStart string            `json:"showStart"`
+	IsPast    bool              `json:"isPast"`
+	Types     []string          `json:"types"`
+	Images    map[string]string `json:"images"`
+}
+
+type Job struct {
+	Tmpl     *template.Template
+	Show     Show
+	TmplType string
 }
 
 // GetLocalFileModifiedDate returns the last modified date of the file at the given filePath.
@@ -246,6 +266,61 @@ func CreateShowPage(show Show) {
 	}
 }
 
+func CreateBannersManifest(shows []Show) {
+	const base = "https://improneuf.github.io/management/"
+	var banners []Banner
+
+	today := TruncateToDate(time.Now())
+	for _, show := range shows {
+		if len(show.Teams) == 0 {
+			continue
+		}
+
+		dateStr := show.Date.Format("2006-01-02")
+		filename := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, POST_TYPE_FB)
+
+		var types []string
+		for _, t := range show.Types {
+			types = append(types, string(t))
+		}
+
+		images := make(map[string]string)
+		for _, postType := range POST_TYPES {
+			imgFilename := fmt.Sprintf("%s - %s - %s.jpg", dateStr, show.Title, postType)
+			images[postType] = base + url.PathEscape(imgFilename)
+		}
+
+		banners = append(banners, Banner{
+			Filename:  filename,
+			URL:       base + url.PathEscape(filename),
+			Teams:     show.Teams,
+			Title:     show.Title,
+			ShowStart: "20:00", // Default show start time
+			IsPast:    TruncateToDate(show.Date).Before(today),
+			Types:     types,
+			Images:    images,
+		})
+	}
+
+	manifestPath := "output/screenshots/banners.json"
+	file, err := os.Create(manifestPath)
+	if err != nil {
+		log.Printf("Failed to create banners.json: %v", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(banners); err != nil {
+		log.Printf("Failed to encode banners.json: %v", err)
+		return
+	}
+
+	fmt.Printf("banners.json has been successfully created with %d entries.\n", len(banners))
+}
+
 // getShowColorIndex returns a color index (0-6) based on the ISO week number,
 // rotating through 7 options: 6 colors + 1 original/no-color.
 func getShowColorIndex(date time.Time) int {
@@ -333,6 +408,9 @@ func main() {
 	xlsxFilePath := GetGoogleSheetsPath(SHOW_PROGRAM_SHEET_ID)
 	showSchedule := ReadShowScheduleFromFile(xlsxFilePath, SHOW_PROGRAM_SHEET_NAME)
 
+	var shows []Show
+	var jobsList []Job
+
 	funcMap := template.FuncMap{
 		"GetTeamPhoto":   GetTeamPhoto,
 		"formatMonth":    formatMonth,
@@ -343,50 +421,52 @@ func main() {
 		"GetTagline":     GetTagline,
 	}
 
-	var shows []Show
-
 	for _, show := range showSchedule {
 		if show.Types[0] != ShowTypeRegular {
 			continue
 		}
 
-		// Parse the template file
-		tmplFb, err := template.New("regular-fb.tmpl").Funcs(funcMap).ParseFiles("regular-fb.tmpl")
-		if err != nil {
-			panic(err)
-		}
-		tmplInsta, err := template.New("regular-insta.tmpl").Funcs(funcMap).ParseFiles("regular-insta.tmpl")
-		if err != nil {
-			panic(err)
-		}
-		tmplSio, err := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
-		if err != nil {
-			panic(err)
-		}
-		tmplMeetup, err := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
-		if err != nil {
-			panic(err)
-		}
-		tmplStory, err := template.New("regular-story.tmpl").Funcs(funcMap).ParseFiles("regular-story.tmpl")
-		if err != nil {
-			panic(err)
-		}
-		//show.Teams = deduplicateStrings(show.Teams)
+		// Parse the templates once (or as needed, but here we can prepare jobs)
+
+		tmplFb, _ := template.New("regular-fb.tmpl").Funcs(funcMap).ParseFiles("regular-fb.tmpl")
+		tmplInsta, _ := template.New("regular-insta.tmpl").Funcs(funcMap).ParseFiles("regular-insta.tmpl")
+		tmplSio, _ := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
+		tmplMeetup, _ := template.New("regular-sio-meetup.tmpl").Funcs(funcMap).ParseFiles("regular-sio-meetup.tmpl")
+		tmplStory, _ := template.New("regular-story.tmpl").Funcs(funcMap).ParseFiles("regular-story.tmpl")
 
 		// Save the show for index generation
 		shows = append(shows, show)
 
-		SaveScreenshot(tmplFb, show, POST_TYPE_FB)
-		SaveScreenshot(tmplInsta, show, POST_TYPE_INSTA)
-		SaveScreenshot(tmplSio, show, POST_TYPE_SIO)
-		SaveScreenshot(tmplMeetup, show, POST_TYPE_MEETUP)
-		SaveScreenshot(tmplStory, show, POST_TYPE_STORY)
+		jobsList = append(jobsList, Job{Tmpl: tmplFb, Show: show, TmplType: POST_TYPE_FB})
+		jobsList = append(jobsList, Job{Tmpl: tmplInsta, Show: show, TmplType: POST_TYPE_INSTA})
+		jobsList = append(jobsList, Job{Tmpl: tmplSio, Show: show, TmplType: POST_TYPE_SIO})
+		jobsList = append(jobsList, Job{Tmpl: tmplMeetup, Show: show, TmplType: POST_TYPE_MEETUP})
+		jobsList = append(jobsList, Job{Tmpl: tmplStory, Show: show, TmplType: POST_TYPE_STORY})
 
 		// Generate date-specific HTML file with links
 		CreateShowPage(show)
+	}
 
+	// Process jobs with worker pool
+	var g errgroup.Group
+	maxWorkers := 5
+	g.SetLimit(maxWorkers)
+
+	for _, job := range jobsList {
+		job := job // Capture for closure
+		g.Go(func() error {
+			SaveScreenshot(job.Tmpl, job.Show, job.TmplType)
+			return nil
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		log.Printf("Error processing jobs: %v", err)
 	}
 
 	// Generate the index.html
 	CreateIndex(shows)
+
+	// Generate the banners.json manifest
+	CreateBannersManifest(shows)
 }

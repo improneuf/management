@@ -116,7 +116,7 @@
             <!-- Title centered at the top -->
             <div
                 class="absolute left-0 right-0 top-0 flex flex-col items-center justify-center text-center"
-                style="padding-top: 120px"
+                style="padding-top: 80px"
             >
                 <h1
                     class="title text-7xl font-bold uppercase tracking-widest subpixel-antialiased"
@@ -130,7 +130,7 @@
             <div
                 id="team-container"
                 class="absolute left-0 right-0 flex flex-wrap items-center justify-center"
-                style="top: 400px; padding: 0 40px;"
+                style="top: 300px; padding: 0 40px;"
             >
                 {{ range .Teams }}
                 <div
@@ -154,7 +154,7 @@
 
             <!-- Footer with price, timing, and location -->
             <div
-                class="price-and-timing-footer absolute bottom-0 left-0 right-0 flex flex-col items-center font-extrabold text-slate-200 opacity-80 mb-10"
+                class="price-and-timing-footer absolute bottom-[120px] left-0 right-0 flex flex-col items-center font-extrabold text-slate-200 opacity-80"
             >
                 <p class="text-5xl text-cyan-500">
                     {{ GetFreeText . }} / 70 Kr / 100 Kr
@@ -248,8 +248,8 @@
                     teamContainer.style.paddingTop = '200px';
 
                     teamDivs.forEach((div) => {
-                        div.style.width = '420px';
-                        div.style.margin = '12px';
+                        div.style.width = '400px';
+                        div.style.margin = '8px';
                         teamContainer.appendChild(div);
                     });
 
