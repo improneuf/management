@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+const defaultTeamPhoto = "logo.png"
+
 func GetTeamPhoto(teamName string) string {
 	// Normalize team name for comparison
 	normalized := strings.ToLower(strings.TrimSpace(teamName))
@@ -35,7 +37,7 @@ func GetTeamPhoto(teamName string) string {
 
 	files, err := os.ReadDir("team-photos")
 	if err != nil {
-		return ""
+		return defaultTeamPhoto
 	}
 
 	for _, file := range files {
@@ -49,5 +51,5 @@ func GetTeamPhoto(teamName string) string {
 		}
 	}
 
-	return ""
+	return defaultTeamPhoto
 }
