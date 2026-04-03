@@ -191,6 +191,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, March 18, 2026",
 			Room:           "Klubbscenen",
 		},
+		{
+			PageTitle:      "Just Go For It!",
+			BackgroundHaze: "banner-bg-5.png",
+			MainTitle:      "Just Go For It!",
+			Subtitle:       "Just Go For It!",
+			HostName1:      "Cole Grabinsky",
+			HostName2:      "Mari Svenkerud",
+			HostImage1:     "host_cole.png",
+			HostImage2:     "host_mari_sven.png",
+			EventDate:      "Wednesday, March 25, 2026",
+			Room:           "Klubbscenen",
+		},
 	}
 
 	// Create output directory
