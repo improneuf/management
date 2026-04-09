@@ -203,6 +203,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, March 25, 2026",
 			Room:           "Klubbscenen",
 		},
+		{
+			PageTitle:      "Using chores to empower your improv",
+			BackgroundHaze: "banner-bg-6.png",
+			MainTitle:      "Using chores to empower your improv",
+			Subtitle:       "Using chores to empower your improv",
+			HostName1:      "Paul Omar",
+			HostName2:      "",
+			HostImage1:     "host_paul.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, April 8, 2026",
+			Room:           "Klubbscenen",
+		},
 	}
 
 	// Create output directory
