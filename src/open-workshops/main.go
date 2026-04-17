@@ -215,6 +215,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, April 8, 2026",
 			Room:           "Klubbscenen",
 		},
+		{
+			PageTitle:      "Be present and react",
+			BackgroundHaze: "banner-bg-1.png",
+			MainTitle:      "Be present and react",
+			Subtitle:       "Be present and react",
+			HostName1:      "Siddanth Nayak",
+			HostName2:      "Alejandro Saksida",
+			HostImage1:     "host_sid.png",
+			HostImage2:     "host_alejandro.png",
+			EventDate:      "Wednesday, April 15, 2026",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
