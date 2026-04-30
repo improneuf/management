@@ -227,6 +227,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, April 15, 2026",
 			Room:           "Betong",
 		},
+		{
+			PageTitle:      "Be Great to Play with",
+			BackgroundHaze: "banner-bg-2.png",
+			MainTitle:      "Be Great to Play with",
+			Subtitle:       "Be Great to Play with",
+			HostName1:      "Kevin Gow",
+			HostName2:      "",
+			HostImage1:     "host_kevin.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, April 22, 2026",
+			Room:           "Klubbscenen",
+		},
+		{
+			PageTitle:      "Who, what, where - the basics",
+			BackgroundHaze: "banner-bg-3.png",
+			MainTitle:      "Who, what, where - the basics",
+			Subtitle:       "Who, what, where - the basics",
+			HostName1:      "Mari Olimstad",
+			HostName2:      "Øyvind Dragsten",
+			HostImage1:     "host_mari.png",
+			HostImage2:     "host_øyvind.png",
+			EventDate:      "Wednesday, April 29, 2026",
+			Room:           "Sysesalen",
+		},
 	}
 
 	// Create output directory
