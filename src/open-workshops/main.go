@@ -311,6 +311,30 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, June 10, 2026",
 			Room:           "Teaterscenen",
 		},
+		{
+			PageTitle:      "The Little Things",
+			BackgroundHaze: "banner-bg-3.png",
+			MainTitle:      "The Little Things",
+			Subtitle:       "The Little Things",
+			HostName1:      "Julie Outterside",
+			HostName2:      "",
+			HostImage1:     "host_julie.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, June 17, 2026",
+			Room:           "Teaterscenen",
+		},
+		{
+			PageTitle:      "Mind Meld",
+			BackgroundHaze: "banner-bg-4.png",
+			MainTitle:      "Mind Meld",
+			Subtitle:       "Mind Meld",
+			HostName1:      "Kevin Gow",
+			HostName2:      "",
+			HostImage1:     "host_kevin.png",
+			HostImage2:     "",
+			EventDate:      "Wednesday, June 24, 2026",
+			Room:           "Teaterscenen",
+		},
 	}
 
 	// Create output directory
