@@ -18,7 +18,7 @@ import (
 
 const (
 	//SHOW_PROGRAM_SHEET_ID string = "1ejEDxQJIwQ1ougcpWIKTqauT-05PDVT1" // Test Sheet
-	SHOW_PROGRAM_SHEET_ID    string = "1H1EsuQDAgltdtIhp1Iy5XwRzputQ6691fPJ3p9JcCiY" // Live Sheet
+	SHOW_PROGRAM_SHEET_ID    string = "1nrlmborFx99-S1aQ7pncJig4Xc3xcmdraFipbSIKlyI" // Live Sheet
 	SHOW_PROGRAM_SHEET_NAME  string = "shows  spring 26"
 	SERVICE_ACCOUNT_KEY_FILE string = "impro-neuf-management-99d59b5d3102.json"
 

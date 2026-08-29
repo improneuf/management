@@ -45,25 +45,30 @@ func GetShowFromRow(row []string) Show {
 	var day string
 	var showLanguages []ShowLanguage
 	var showTypes []ShowType
-	var err error
 
 	// Skip empty rows
 	if len(row) == 0 || strings.TrimSpace(row[0]) == "" {
 		return Show{}
 	}
 
-	// Skip rows that have empty team1 (index 5)
-	if len(row) <= 5 || strings.TrimSpace(row[5]) == "" {
+	// Team 1 through Team 3 are columns F-H.
+	for i := 5; i <= 7 && i < len(row); i++ {
+		if team := strings.TrimSpace(row[i]); team != "" {
+			teams = append(teams, team)
+		}
+	}
+	if len(teams) == 0 {
 		return Show{}
 	}
 
 	fmt.Printf("Processing row: %v\n", row)
 
-	// Parse date (format: MM-DD-YY)
+	// Date is column A in DD.MM.YY format.
 	dateStr := strings.TrimSpace(row[0])
-	date, err = time.Parse("01-02-06", dateStr)
+	date, err := time.Parse("02.01.06", dateStr)
 	if err != nil {
-		log.Fatalf("Failed to parse date: %v", err)
+		log.Printf("Skipping row with invalid date %q: %v", dateStr, err)
+		return Show{}
 	}
 
 	fmt.Printf("Parsed date: %v\n", date)
@@ -73,28 +78,10 @@ func GetShowFromRow(row []string) Show {
 		day = strings.TrimSpace(row[1])
 	}
 
-	// Get venue
+	// Room is column D; column C is the booking time.
 	venue := "Lillesalen, Chateau Neuf" // Default venue
-	if len(row) > 2 {
-		venue = strings.TrimSpace(row[2])
-	}
-
-	// Get show type
-	if len(row) > 4 {
-		showTypeStr := strings.TrimSpace(row[4])
-		if showTypeStr != "" {
-			showTypes = append(showTypes, getShowType(showTypeStr))
-		}
-	}
-
-	// Get teams (Team 1, Team 2, Team 3)
-	for i := 5; i <= 7; i++ {
-		if i < len(row) {
-			team := strings.TrimSpace(row[i])
-			if team != "" {
-				teams = append(teams, team)
-			}
-		}
+	if len(row) > 3 && strings.TrimSpace(row[3]) != "" {
+		venue = strings.TrimSpace(row[3])
 	}
 
 	fmt.Printf("Found teams: %v\n", teams)
@@ -117,15 +104,16 @@ func GetShowFromRow(row []string) Show {
 	fmt.Printf("Generated title: %s, subtitle: %s\n", showTitle, showSubtitle)
 
 	return Show{
-		Date:      date,
-		Day:       day,
-		Teams:     teams,
-		Languages: showLanguages,
-		Types:     showTypes,
-		Title:     showTitle,
-		Subtitle:  showSubtitle,
-		Venue:     venue,
-		Price:     GetPriceFromShowType(showTypes[0]),
+		Date:         date,
+		Day:          day,
+		CrewSjefTeam: strings.TrimSpace(row[4]),
+		Teams:        teams,
+		Languages:    showLanguages,
+		Types:        showTypes,
+		Title:        showTitle,
+		Subtitle:     showSubtitle,
+		Venue:        venue,
+		Price:        GetPriceFromShowType(showTypes[0]),
 	}
 }
 
