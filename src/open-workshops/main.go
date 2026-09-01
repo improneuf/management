@@ -1,12 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 // PageData holds the dynamic values for the page.
@@ -40,6 +43,72 @@ type WorkshopConfig struct {
 	HostImage2     string // Empty string means no second host image
 	EventDate      string
 	Room           string
+}
+
+type Banner struct {
+	Filename  string            `json:"filename"`
+	URL       string            `json:"url"`
+	Teams     []string          `json:"teams"`
+	Title     string            `json:"title"`
+	ShowStart string            `json:"showStart"`
+	IsPast    bool              `json:"isPast"`
+	Types     []string          `json:"types"`
+	Images    map[string]string `json:"images"`
+}
+
+func createBannersManifest(workshops []WorkshopConfig) {
+	const base = "https://improneuf.github.io/management/open-workshops/output/"
+	today := time.Now().Truncate(24 * time.Hour)
+	banners := make([]Banner, 0, len(workshops))
+
+	for i, workshop := range workshops {
+		safeTitle := sanitizeFilename(workshop.MainTitle)
+		filename := fmt.Sprintf("workshop-%d-%s-fb.jpg", i+1, safeTitle)
+		date, err := time.Parse("Monday, January 02, 2006", workshop.EventDate)
+		if err != nil {
+			log.Printf("Failed to parse workshop date %q: %v", workshop.EventDate, err)
+			continue
+		}
+
+		images := map[string]string{}
+		for _, postType := range []string{"fb", "meetup"} {
+			imageFilename := fmt.Sprintf("workshop-%d-%s-%s.jpg", i+1, safeTitle, postType)
+			images[postType] = base + url.PathEscape(imageFilename)
+		}
+		hosts := []string{workshop.HostName1}
+		if workshop.HostName2 != "" {
+			hosts = append(hosts, workshop.HostName2)
+		}
+
+		banners = append(banners, Banner{
+			Filename:  filename,
+			URL:       images["fb"],
+			Teams:     hosts,
+			Title:     workshop.MainTitle,
+			ShowStart: "18:00",
+			IsPast:    date.Before(today),
+			Types:     []string{"Workshop"},
+			Images:    images,
+		})
+	}
+
+	if err := os.MkdirAll("output", 0755); err != nil {
+		log.Printf("Failed to create output directory: %v", err)
+		return
+	}
+	file, err := os.Create("output/banners.json")
+	if err != nil {
+		log.Printf("Failed to create banners.json: %v", err)
+		return
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(banners); err != nil {
+		log.Printf("Failed to encode banners.json: %v", err)
+	}
 }
 
 // sanitizeFilename creates a Windows-safe filename by removing or replacing invalid characters
@@ -95,6 +164,18 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, August 26, 2026",
 			Room:           "Galleriet",
 		},
+		{
+			PageTitle:      "Turning Mistakes into Magic",
+			BackgroundHaze: "banner-bg-3.png",
+			MainTitle:      "Turning Mistakes into Magic",
+			Subtitle:       "Turning Mistakes into Magic",
+			HostName1:      "Remi Rossi",
+			HostName2:      "Santiago Beltran",
+			HostImage1:     "host_remi.png",
+			HostImage2:     "host_santiago.png",
+			EventDate:      "Wednesday, September 02, 2026",
+			Room:           "Betong",
+		},
 	}
 
 	// Create output directory
@@ -149,6 +230,8 @@ func GenerateAllWorkshops() {
 
 		fmt.Printf("Generated: %s\n", filename)
 	}
+
+	createBannersManifest(workshops)
 
 	fmt.Printf("\nGenerated %d HTML files successfully!\n", len(workshops))
 	fmt.Println("\nTo convert to PNG, run this command from the html-to-png directory:")
