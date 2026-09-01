@@ -12,7 +12,6 @@ import (
 	"time"
 )
 
-// PageData holds the dynamic values for the page.
 type PageData struct {
 	PageTitle           string
 	BackgroundHazeURL   string
@@ -31,29 +30,31 @@ type PageData struct {
 	SignUpPrompt        string
 }
 
-// WorkshopConfig holds all the parameters for a workshop
 type WorkshopConfig struct {
 	PageTitle      string
 	BackgroundHaze string
 	MainTitle      string
 	Subtitle       string
 	HostName1      string
-	HostName2      string // Empty string means no second host
+	HostName2      string
 	HostImage1     string
-	HostImage2     string // Empty string means no second host image
+	HostImage2     string
 	EventDate      string
 	Room           string
 }
 
 type Banner struct {
-	Filename  string            `json:"filename"`
-	URL       string            `json:"url"`
-	Teams     []string          `json:"teams"`
-	Title     string            `json:"title"`
-	ShowStart string            `json:"showStart"`
-	IsPast    bool              `json:"isPast"`
-	Types     []string          `json:"types"`
-	Images    map[string]string `json:"images"`
+	Date         string            `json:"date"`
+	Filename     string            `json:"filename"`
+	URL          string            `json:"url"`
+	Teams        []string          `json:"teams"`
+	Facilitators []string          `json:"facilitators"`
+	Title        string            `json:"title"`
+	ShowStart    string            `json:"showStart"`
+	Room         string            `json:"room"`
+	IsPast       bool              `json:"isPast"`
+	Types        []string          `json:"types"`
+	Images       map[string]string `json:"images"`
 }
 
 func createBannersManifest(workshops []WorkshopConfig) {
@@ -75,20 +76,24 @@ func createBannersManifest(workshops []WorkshopConfig) {
 			imageFilename := fmt.Sprintf("workshop-%d-%s-%s.jpg", i+1, safeTitle, postType)
 			images[postType] = base + url.PathEscape(imageFilename)
 		}
+
 		hosts := []string{workshop.HostName1}
 		if workshop.HostName2 != "" {
 			hosts = append(hosts, workshop.HostName2)
 		}
 
 		banners = append(banners, Banner{
-			Filename:  filename,
-			URL:       images["fb"],
-			Teams:     hosts,
-			Title:     workshop.MainTitle,
-			ShowStart: "18:00",
-			IsPast:    date.Before(today),
-			Types:     []string{"Workshop"},
-			Images:    images,
+			Date:         date.Format("2006-01-02"),
+			Filename:     filename,
+			URL:          images["fb"],
+			Teams:        hosts,
+			Facilitators: hosts,
+			Title:        workshop.MainTitle,
+			ShowStart:    "18:00",
+			Room:         workshop.Room,
+			IsPast:       date.Before(today),
+			Types:        []string{"Workshop"},
+			Images:       images,
 		})
 	}
 
@@ -96,6 +101,7 @@ func createBannersManifest(workshops []WorkshopConfig) {
 		log.Printf("Failed to create output directory: %v", err)
 		return
 	}
+
 	file, err := os.Create("output/banners.json")
 	if err != nil {
 		log.Printf("Failed to create banners.json: %v", err)
@@ -111,24 +117,16 @@ func createBannersManifest(workshops []WorkshopConfig) {
 	}
 }
 
-// sanitizeFilename creates a Windows-safe filename by removing or replacing invalid characters
 func sanitizeFilename(title string) string {
-	// Replace spaces with hyphens
 	safeTitle := strings.ReplaceAll(title, " ", "-")
 
-	// Remove or replace invalid characters for Windows filenames
-	// Invalid characters: < > : " | ? * \ /
-	// Also remove other potentially problematic characters
 	invalidChars := regexp.MustCompile(`[<>:"|?*\\/!@#$%^&()+={}[\]~` + "`" + `;,]`)
 	safeTitle = invalidChars.ReplaceAllString(safeTitle, "")
 
-	// Remove multiple consecutive hyphens
 	safeTitle = regexp.MustCompile(`-+`).ReplaceAllString(safeTitle, "-")
 
-	// Remove leading/trailing hyphens
 	safeTitle = strings.Trim(safeTitle, "-")
 
-	// Ensure the filename is not empty
 	if safeTitle == "" {
 		safeTitle = "workshop"
 	}
@@ -136,9 +134,7 @@ func sanitizeFilename(title string) string {
 	return safeTitle
 }
 
-// GenerateAllWorkshops creates HTML files for all workshop combinations
 func GenerateAllWorkshops() {
-	// Define all the workshop configurations
 	workshops := []WorkshopConfig{
 		{
 			PageTitle:      "Improv for everyone",
@@ -178,25 +174,20 @@ func GenerateAllWorkshops() {
 		},
 	}
 
-	// Create output directory
 	if err := os.MkdirAll(".", 0755); err != nil {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
 
-	// Parse the template
 	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
 		log.Fatalf("Failed to parse template: %v", err)
 	}
 
-	// Generate HTML for each workshop
 	for i, workshop := range workshops {
-		// Create filename-safe version of the title
 		safeTitle := sanitizeFilename(workshop.MainTitle)
 
 		filename := fmt.Sprintf("workshop-%d-%s.html", i+1, safeTitle)
 
-		// Create the HTML file
 		file, err := os.Create(filename)
 		if err != nil {
 			log.Printf("Failed to create %s: %v", filename, err)
@@ -204,7 +195,6 @@ func GenerateAllWorkshops() {
 		}
 		defer file.Close()
 
-		// Prepare the data for the template
 		data := PageData{
 			PageTitle:         workshop.PageTitle,
 			BackgroundHazeURL: workshop.BackgroundHaze,
@@ -222,7 +212,6 @@ func GenerateAllWorkshops() {
 			SignUpPrompt:      "Sign up now!",
 		}
 
-		// Execute the template
 		if err := tmpl.Execute(file, data); err != nil {
 			log.Printf("Failed to execute template for %s: %v", filename, err)
 			continue
@@ -239,7 +228,6 @@ func GenerateAllWorkshops() {
 	fmt.Println("go run convert-workshops.go")
 }
 
-// main generates all workshop HTML files and exits
 func main() {
 	GenerateAllWorkshops()
 }
