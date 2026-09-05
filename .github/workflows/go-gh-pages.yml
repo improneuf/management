@@ -28,19 +28,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Calculate Hash
-        id: hash
-        run: |
-          cd "${{ github.workspace }}/src/show-program"
-          echo "HASH=$(sum go.mod go.sum Makefile *.tmpl *.go | sum | awk '{ print $1 }')" >> $GITHUB_OUTPUT
-
-      - name: Restore Cached Binary
-        id: cache-binary
-        uses: actions/cache@v4
-        with:
-          path: src/show-program/show-program
-          key: binary-${{ runner.os }}-${{ steps.hash.outputs.HASH }}
-
       - name: Setup Go environment
         uses: actions/setup-go@v6
         with:
