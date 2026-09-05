@@ -70,7 +70,7 @@ func GetLocalFileModifiedTime(filePath string) (time.Time, error) {
 	return modifiedTime, nil
 }
 
-func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
+func SaveScreenshot(parentCtx context.Context, tmpl *template.Template, show Show, tmplType string) {
 	// Create output file
 	fileName := show.Date.Format("2006-01-02") + " - " + show.Title + " - " + tmplType
 	outputFilePath := "output/" + fileName + ".html"
@@ -92,9 +92,12 @@ func SaveScreenshot(tmpl *template.Template, show Show, tmplType string) {
 	fileUrl := "file://" + filepath.Join(path, outputFile.Name())
 	log.Println("fileUrl:", fileUrl)
 
-	// Create a context with a timeout to prevent hanging
-	ctx, cancel := chromedp.NewContext(context.Background())
-	defer cancel()
+	// Create a new tab context from parent browser with a timeout
+	tabCtx, cancelTab := chromedp.NewContext(parentCtx)
+	defer cancelTab()
+
+	ctx, cancelTimeout := context.WithTimeout(tabCtx, 30*time.Second)
+	defer cancelTimeout()
 
 	// Set image dimensions
 	imageWidth := int64(1920)
@@ -447,15 +450,32 @@ func main() {
 		CreateShowPage(show)
 	}
 
+	// Initialize a single shared Chrome browser instance
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.NoSandbox,
+		chromedp.DisableGPU,
+		chromedp.Flag("disable-dev-shm-usage", true),
+	)
+	allocCtx, cancelAlloc := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancelAlloc()
+
+	browserCtx, cancelBrowser := chromedp.NewContext(allocCtx)
+	defer cancelBrowser()
+
+	// Pre-start browser process
+	if err := chromedp.Run(browserCtx); err != nil {
+		log.Fatalf("Failed to initialize Chrome: %v", err)
+	}
+
 	// Process jobs with worker pool
 	var g errgroup.Group
-	maxWorkers := 5
+	maxWorkers := 4
 	g.SetLimit(maxWorkers)
 
 	for _, job := range jobsList {
 		job := job // Capture for closure
 		g.Go(func() error {
-			SaveScreenshot(job.Tmpl, job.Show, job.TmplType)
+			SaveScreenshot(browserCtx, job.Tmpl, job.Show, job.TmplType)
 			return nil
 		})
 	}
