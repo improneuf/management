@@ -23,26 +23,13 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Calculate Hash
-        id: hash
-        run: |
-          cd "${{ github.workspace }}/src/show-program"
-          echo "HASH=$(sum go.mod go.sum Makefile *.tmpl *.go | sum | awk '{ print $1 }')" >> $GITHUB_OUTPUT
-
-      - name: Restore Cached Binary
-        id: cache-binary
-        uses: actions/cache@v4
-        with:
-          path: src/show-program/show-program
-          key: binary-${{ runner.os }}-${{ steps.hash.outputs.HASH }}
+        uses: actions/configure-pages@v6
 
       - name: Setup Go environment
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
           go-version-file: src/show-program/go.mod
           cache-dependency-path: |
@@ -51,7 +38,6 @@ jobs:
             src/html-to-png/go.sum
 
       - name: Build binary
-        if: steps.cache-binary.outputs.cache-hit != 'true'
         run: |
           cd "${{ github.workspace }}/src/show-program"
           go build -o show-program .
@@ -87,7 +73,7 @@ jobs:
           cp src/open-workshops/output/banners.json _site/workshop-banners.json
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
 
   deploy:
     environment:
@@ -98,4 +84,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
