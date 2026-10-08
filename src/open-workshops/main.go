@@ -476,10 +476,6 @@ func GenerateAllWorkshops() {
 		},
 	}
 
-	for i := range workshops {
-		workshops[i].BackgroundHaze = getWorkshopBackground(workshops[i], i)
-	}
-
 	if err := os.MkdirAll(".", 0755); err != nil {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
@@ -510,15 +506,17 @@ func GenerateAllWorkshops() {
 		isAfter2026 := err == nil && date.Year() > 2026
 
 		logo := "logo.png"
+		backgroundHaze := workshop.BackgroundHaze
 		selectedTmpl := tmplClassic
 		if isAfter2026 {
 			selectedTmpl = tmpl2027
 			logo = "fun-logo.png"
+			backgroundHaze = getWorkshopBackground(workshop, i)
 		}
 
 		data := PageData{
 			PageTitle:         workshop.PageTitle,
-			BackgroundHazeURL: workshop.BackgroundHaze,
+			BackgroundHazeURL: backgroundHaze,
 			LogoPath:          logo,
 			MainTitle:         workshop.MainTitle,
 			Subtitle:          workshop.Subtitle,
