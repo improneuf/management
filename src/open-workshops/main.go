@@ -484,9 +484,14 @@ func GenerateAllWorkshops() {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
 
-	tmpl, err := template.ParseFiles("template.html")
+	tmplClassic, err := template.ParseFiles("template.html")
 	if err != nil {
-		log.Fatalf("Failed to parse template: %v", err)
+		log.Fatalf("Failed to parse template.html: %v", err)
+	}
+
+	tmpl2027, err := template.ParseFiles("template-2027+.html")
+	if err != nil {
+		log.Fatalf("Failed to parse template-2027+.html: %v", err)
 	}
 
 	for i, workshop := range workshops {
@@ -501,10 +506,20 @@ func GenerateAllWorkshops() {
 		}
 		defer file.Close()
 
+		date, err := time.Parse("Monday, January 02, 2006", workshop.EventDate)
+		isAfter2026 := err == nil && date.Year() > 2026
+
+		logo := "logo.png"
+		selectedTmpl := tmplClassic
+		if isAfter2026 {
+			selectedTmpl = tmpl2027
+			logo = "fun-logo.png"
+		}
+
 		data := PageData{
 			PageTitle:         workshop.PageTitle,
 			BackgroundHazeURL: workshop.BackgroundHaze,
-			LogoPath:          "logo.png",
+			LogoPath:          logo,
 			MainTitle:         workshop.MainTitle,
 			Subtitle:          workshop.Subtitle,
 			HostName1:         workshop.HostName1,
@@ -518,12 +533,12 @@ func GenerateAllWorkshops() {
 			SignUpPrompt:      "Sign up now!",
 		}
 
-		if err := tmpl.Execute(file, data); err != nil {
+		if err := selectedTmpl.Execute(file, data); err != nil {
 			log.Printf("Failed to execute template for %s: %v", filename, err)
 			continue
 		}
 
-		fmt.Printf("Generated: %s\n", filename)
+		fmt.Printf("Generated: %s (after 2026: %v)\n", filename, isAfter2026)
 	}
 
 	banners := createBannersManifest(workshops)

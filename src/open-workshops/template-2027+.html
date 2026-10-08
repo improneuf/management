@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=1920, height=1080, initial-scale=1.0"/>
+  <title>{{ .PageTitle }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Fredoka:wght@600;700;800;900&family=Lilita+One&family=Montserrat:wght@700;800;900&family=Titan+One&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Fredoka', 'Montserrat', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* Fixed Canvas 1920x1080 */
+    .banner {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* Venue Background */
+    .bg-venue {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      background-image: url('{{ .BackgroundHazeURL }}');
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+      filter: brightness(0.92) contrast(1.08);
+    }
+
+    /* Vignette darkening overlay */
+    .bg-vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      background: radial-gradient(circle at 50% 45%, rgba(0, 0, 0, 0.15) 0%, rgba(5, 5, 10, 0.45) 55%, rgba(0, 0, 0, 0.78) 100%);
+      z-index: 2;
+    }
+
+    /* --- TOP-LEFT LOGO --- */
+    .logo-container {
+      position: absolute;
+      top: 35px;
+      left: 45px;
+      z-index: 30;
+    }
+
+    .logo-img {
+      width: 250px;
+      height: 250px;
+      object-fit: contain;
+      transform: rotate(-8deg);
+      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55));
+    }
+
+    /* --- TOP-CENTER HEADER BANNER --- */
+    .header-banner-container {
+      position: absolute;
+      top: 48px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-0.5deg);
+      z-index: 25;
+      filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.4));
+    }
+
+    .header-brush {
+      position: relative;
+      background: #ffd000;
+      color: #0c172e;
+      padding: 16px 52px;
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      filter: url(#rough-brush-subtle);
+    }
+
+    .header-brush::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 10px;
+      width: 32px;
+      height: 65%;
+      background: #ffd000;
+      clip-path: polygon(100% 0, 0 35%, 50% 55%, 0 75%, 100% 100%);
+    }
+
+    .header-brush::after {
+      content: "";
+      position: absolute;
+      right: -22px;
+      top: 10px;
+      width: 32px;
+      height: 65%;
+      background: #ffd000;
+      clip-path: polygon(0 0, 100% 35%, 50% 55%, 100% 75%, 0 100%);
+    }
+
+    /* --- TOP-RIGHT HOST SECTION --- */
+    .host-section {
+      position: absolute;
+      top: 45px;
+      right: 65px;
+      z-index: 30;
+    }
+
+    /* Single Host */
+    .host-single-box {
+      position: relative;
+      width: 245px;
+      height: 245px;
+    }
+
+    .host-single-box::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 208, 0, 0.3) 0%, rgba(255, 208, 0, 0.08) 60%, transparent 80%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .host-photo-circle {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 8px solid #ffd000;
+      background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 230, 180, 0.25) 35%, rgba(22, 28, 52, 0.88) 75%, rgba(10, 14, 28, 0.98) 100%);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.55), inset 0 0 20px rgba(0,0,0,0.35);
+      backdrop-filter: blur(12px);
+      z-index: 2;
+    }
+
+    .host-photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+    }
+
+    .host-ring-svg {
+      position: absolute;
+      inset: -14px;
+      width: calc(100% + 28px);
+      height: calc(100% + 28px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .host-badge-single {
+      position: absolute;
+      bottom: -18px;
+      left: -48px;
+      z-index: 10;
+      background: #00c2cb;
+      color: #0b1528;
+      padding: 10px 28px 12px 28px;
+      border-radius: 36px 24px 30px 20px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)) url(#rough-brush-subtle);
+      transform: rotate(-4deg);
+      text-align: left;
+      line-height: 1.1;
+    }
+
+    .host-badge-single .with-text {
+      font-size: 24px;
+      font-weight: 700;
+      display: block;
+      color: #0b1528;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .host-badge-single .host-name {
+      font-size: 34px;
+      font-weight: 900;
+      font-family: 'Fredoka', sans-serif;
+      color: #0b1528;
+      white-space: nowrap;
+    }
+
+    /* Two Hosts */
+    .host-two-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .two-host-item {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    .two-host-item::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .two-host-item:nth-child(1)::before {
+      background: radial-gradient(circle, rgba(255, 208, 0, 0.3) 0%, rgba(255, 208, 0, 0.08) 60%, transparent 80%);
+    }
+
+    .two-host-item:nth-child(2)::before {
+      background: radial-gradient(circle, rgba(255, 42, 109, 0.3) 0%, rgba(255, 42, 109, 0.08) 60%, transparent 80%);
+    }
+
+    .two-host-item .host-photo-circle {
+      inset: 6px;
+      border-width: 6px;
+    }
+
+    .two-host-item:nth-child(1) .host-photo-circle {
+      border-color: #ffd000;
+      background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 230, 180, 0.25) 35%, rgba(22, 28, 52, 0.88) 75%, rgba(10, 14, 28, 0.98) 100%);
+    }
+
+    .two-host-item:nth-child(2) .host-photo-circle {
+      border-color: #ff2a6d;
+      background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 200, 220, 0.25) 35%, rgba(52, 20, 48, 0.88) 75%, rgba(20, 10, 24, 0.98) 100%);
+    }
+
+    .host-badge-two {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      z-index: 10;
+      background: #00c2cb;
+      color: #0b1528;
+      padding: 10px 26px 12px 26px;
+      border-radius: 32px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4)) url(#rough-brush-subtle);
+      text-align: center;
+      white-space: nowrap;
+      line-height: 1.15;
+    }
+
+    .host-badge-two .with-text {
+      font-size: 20px;
+      font-weight: 700;
+      display: block;
+      color: #0b1528;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .host-badge-two .host-names {
+      font-size: 26px;
+      font-weight: 900;
+      font-family: 'Fredoka', sans-serif;
+      color: #0b1528;
+    }
+
+    /* --- CENTER TITLE CLOUD --- */
+    .title-wrapper {
+      position: absolute;
+      top: 165px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 1240px;
+      height: 430px;
+      pointer-events: none;
+    }
+
+    .brush-cloud-target {
+      filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.45)) url(#broad-brush-cloud);
+      display: inline-block;
+      line-height: 1.05;
+      text-align: center;
+      user-select: none;
+      transform-origin: center center;
+      font-family: 'Titan One', cursive, sans-serif;
+      pointer-events: auto;
+    }
+
+    .cloud-line {
+      white-space: pre;
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+    }
+
+    .word-antihighlight {
+      display: inline-block;
+      color: #081745 !important;
+      font-family: 'Titan One', cursive, sans-serif;
+    }
+
+    .colored-char {
+      display: inline-block;
+      font-family: 'Titan One', cursive, sans-serif;
+    }
+
+    .title-swash-box {
+      margin-top: 10px;
+      pointer-events: none;
+      display: flex;
+      justify-content: center;
+    }
+
+    .title-swash-svg {
+      height: 20px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+    }
+
+    /* --- BOTTOM INFO CARDS ROW --- */
+    .info-cards-row {
+      position: absolute;
+      top: 635px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 22;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      width: 1680px;
+    }
+
+    .info-card {
+      background: #ffffff;
+      border-radius: 42px;
+      padding: 16px 36px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.38);
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18)) url(#rough-brush-subtle);
+      height: 130px;
+    }
+
+    /* Card 1: Date */
+    .card-date {
+      width: 530px;
+    }
+
+    .card-date .icon-box {
+      width: 82px;
+      height: 82px;
+      flex-shrink: 0;
+    }
+
+    .card-date-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-date-day {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #0b1528;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .card-date-full {
+      font-family: 'Titan One', 'Lilita One', 'Fredoka', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: #ff1361;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    /* Card 2: Time */
+    .card-time {
+      width: 480px;
+    }
+
+    .card-time .icon-box {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+    }
+
+    .card-time-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-time-text {
+      font-family: 'Titan One', 'Lilita One', 'Fredoka', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: #0066cc;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    /* Card 3: Location */
+    .card-location {
+      width: 550px;
+    }
+
+    .card-location .icon-box {
+      width: 78px;
+      height: 78px;
+      flex-shrink: 0;
+    }
+
+    .card-location-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card-location-venue {
+      font-family: 'Titan One', 'Lilita One', 'Fredoka', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      color: #6b21a8;
+      line-height: 1.1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .card-location-room {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #0b1528;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    /* --- BOTTOM CENTER CTA BUTTON --- */
+    .cta-container {
+      position: absolute;
+      top: 810px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 28;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-brush-btn {
+      position: relative;
+      background: #ff1361;
+      color: #ffffff;
+      padding: 14px 85px 22px 85px;
+      font-family: 'Caveat', cursive, sans-serif;
+      font-size: 64px;
+      font-weight: 700;
+      border-radius: 60px 45px 55px 40px;
+      box-shadow: 0 14px 35px rgba(255, 19, 97, 0.45), 0 8px 24px rgba(0, 0, 0, 0.4);
+      filter: url(#rough-brush-subtle);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      white-space: nowrap;
+      line-height: 1;
+      transform: rotate(-1deg);
+    }
+
+    .cta-brush-btn::before {
+      content: "";
+      position: absolute;
+      left: -28px;
+      top: 10px;
+      width: 36px;
+      height: 70%;
+      background: #ff1361;
+      clip-path: polygon(100% 0, 0 35%, 50% 55%, 0 75%, 100% 100%);
+    }
+
+    .cta-brush-btn::after {
+      content: "";
+      position: absolute;
+      right: -28px;
+      top: 10px;
+      width: 36px;
+      height: 70%;
+      background: #ff1361;
+      clip-path: polygon(0 0, 100% 35%, 50% 55%, 100% 75%, 0 100%);
+    }
+
+    .cta-yellow-stroke {
+      width: 300px;
+      height: 16px;
+      margin-top: 4px;
+    }
+
+    .cta-arrow-svg {
+      position: absolute;
+      right: -90px;
+      top: 20px;
+      width: 78px;
+      height: 78px;
+      pointer-events: none;
+    }
+
+    .cta-rays-left {
+      position: absolute;
+      left: -75px;
+      top: 15px;
+      width: 65px;
+      height: 65px;
+      pointer-events: none;
+    }
+
+    /* --- CORNER WAVES & DECORATIONS --- */
+    .corner-waves-bl {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 520px;
+      height: 270px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .corner-waves-br {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 520px;
+      height: 270px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Scatter Confetti across banner */
+    .confetti-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      z-index: 15;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Brush Noise Filters -->
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <!-- Broad Brush Cloud Filter from Demo Application -->
+      <filter id="broad-brush-cloud" x="-70%" y="-70%" width="240%" height="240%">
+        <!-- 1. Dilation: Expands text alpha silhouette to fuse into solid contiguous backdrop -->
+        <feMorphology in="SourceAlpha" operator="dilate" radius="26" result="dilatedShape" />
+
+        <!-- 2. Low-frequency horizontal turbulence for broad paint-roller brush strokes -->
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.003" numOctaves="2" result="broadBrushTexture" />
+
+        <!-- 3. Displace dilated perimeter along brush sweeps -->
+        <feDisplacementMap in="dilatedShape" in2="broadBrushTexture" scale="32" xChannelSelector="R" yChannelSelector="G" result="sweptEdge" />
+
+        <!-- 4. Gaussian blur rounds and blends sharp spikes into natural fluid paint lumps -->
+        <feGaussianBlur in="sweptEdge" stdDeviation="4.2" result="smoothedEdge" />
+
+        <!-- 5. Component transfer sharpens the blurred boundary back to an opaque solid mask -->
+        <feComponentTransfer in="smoothedEdge" result="solidEdge">
+          <feFuncA type="linear" slope="14" intercept="-6.5" />
+        </feComponentTransfer>
+
+        <!-- 6. Flood with crisp white cloud color -->
+        <feFlood flood-color="#ffffff" result="cloudPaint" />
+        <feComposite in="cloudPaint" in2="solidEdge" operator="in" result="cloudBackdrop" />
+
+        <!-- 7. Stack the crisp colored text glyphs directly on top of the generated brush shape -->
+        <feMerge>
+          <feMergeNode in="cloudBackdrop" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+
+      <!-- Filter for Brush Strokes on Banners & Cards -->
+      <filter id="rough-brush-subtle" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
+
+  <div class="banner">
+    <!-- Venue Background & Lighting Vignette -->
+    <div class="bg-venue"></div>
+    <div class="bg-vignette"></div>
+
+    <!-- Confetti & Droplets Overlay -->
+    <svg class="confetti-layer" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Confetti drops around logo (top left) -->
+      <path d="M55 90 C45 75 70 65 75 80 C80 95 65 105 55 90 Z" fill="#00b4d8" />
+      <path d="M120 45 C115 35 130 30 135 40 C140 50 125 55 120 45 Z" fill="#ff1361" />
+      <path d="M330 110 C320 90 350 80 360 100 C370 120 340 130 330 110 Z" fill="#ffcc00" />
+      <path d="M360 170 C345 155 375 140 390 160 C405 180 375 185 360 170 Z" fill="#ff1361" />
+      <path d="M325 240 C310 225 340 215 355 235 C370 255 340 255 325 240 Z" fill="#00b4d8" />
+      <path d="M35 170 C20 155 50 145 65 165 C80 185 50 185 35 170 Z" fill="#00e5ff" />
+      <circle cx="85" cy="270" r="14" fill="#ffd000"/>
+      <circle cx="340" cy="295" r="10" fill="#ff7a00"/>
+
+      <!-- Confetti drops around header banner -->
+      <path d="M420 75 C405 60 435 50 450 70 C465 90 435 90 420 75 Z" fill="#ff1361" />
+      <path d="M1360 85 C1345 70 1375 60 1390 80 C1405 100 1375 100 1360 85 Z" fill="#00b4d8" />
+      <circle cx="465" cy="125" r="8" fill="#ffd000"/>
+      <circle cx="1405" cy="140" r="9" fill="#ff1361"/>
+
+      <!-- Confetti drops around title -->
+      <path d="M360 340 C340 320 380 300 400 330 C420 360 380 360 360 340 Z" fill="#ff1361" />
+      <path d="M355 425 C335 405 375 385 395 415 C415 445 375 445 355 425 Z" fill="#ffb703" />
+      <path d="M350 515 C330 495 370 475 390 505 C410 535 370 535 350 515 Z" fill="#00b4d8" />
+      <path d="M1420 340 C1400 320 1440 300 1460 330 C1480 360 1440 360 1420 340 Z" fill="#ff1361" />
+      <path d="M1430 430 C1410 410 1450 390 1470 420 C1490 450 1450 450 1430 430 Z" fill="#00b4d8" />
+
+      <!-- Confetti around bottom cards -->
+      <path d="M60 740 C45 725 75 715 90 735 C105 755 75 755 60 740 Z" fill="#ffd000" />
+      <circle cx="215" cy="815" r="12" fill="#00b4d8" />
+      <circle cx="270" cy="790" r="14" fill="#ff1361" />
+      <circle cx="265" cy="845" r="13" fill="#ff1361" />
+
+      <circle cx="1630" cy="740" r="12" fill="#ff1361" />
+      <circle cx="1520" cy="800" r="14" fill="#00b4d8" />
+      <path d="M1650 780 C1635 765 1665 755 1680 775 C1695 795 1665 795 1650 780 Z" fill="#ff1361" />
+      <path d="M1685 815 C1670 800 1700 790 1715 810 C1730 830 1700 830 1685 815 Z" fill="#ff1361" />
+    </svg>
+
+    <!-- Top-Left Logo -->
+    <div class="logo-container">
+      <img src="{{ if .LogoPath }}{{ .LogoPath }}{{ else }}fun-logo.png{{ end }}" alt="Impro Neuf" class="logo-img"/>
+    </div>
+
+    <!-- Top-Center Header Pill -->
+    <div class="header-banner-container">
+      <div class="header-brush">
+        Free, Open Improv Workshop! [English]
+      </div>
+    </div>
+
+    <!-- Top-Right Host Section -->
+    <div class="host-section">
+      {{ if .HostName2 }}
+      <!-- TWO HOSTS LAYOUT -->
+      <div class="host-two-box">
+        <div class="two-host-item">
+          <svg class="host-ring-svg" viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="92" stroke="#ffd000" stroke-width="12" stroke-linecap="round" stroke-dasharray="14 8 20 6"/>
+          </svg>
+          <div class="host-photo-circle">
+            <img src="{{ .HostImage1 }}" alt="{{ .HostName1 }}"/>
+          </div>
+        </div>
+        <div class="two-host-item">
+          <svg class="host-ring-svg" viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="92" stroke="#ff2a6d" stroke-width="12" stroke-linecap="round" stroke-dasharray="16 6 12 8"/>
+          </svg>
+          <div class="host-photo-circle">
+            <img src="{{ .HostImage2 }}" alt="{{ .HostName2 }}"/>
+          </div>
+        </div>
+
+        <div class="host-badge-two">
+          <span class="with-text">with</span>
+          <span class="host-names">{{ .HostName1 }} &amp; {{ .HostName2 }}</span>
+        </div>
+      </div>
+      {{ else }}
+      <!-- SINGLE HOST LAYOUT -->
+      <div class="host-single-box">
+        <svg class="host-ring-svg" viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="145" cy="145" r="132" stroke="#ffd000" stroke-width="16" stroke-linecap="round" stroke-dasharray="24 10 32 8 18 12"/>
+          <circle cx="145" cy="145" r="124" stroke="#ffb703" stroke-width="6" stroke-dasharray="40 16 10 14"/>
+        </svg>
+
+        <div class="host-photo-circle">
+          <img src="{{ .HostImage1 }}" alt="{{ .HostName1 }}"/>
+        </div>
+
+        <div class="host-badge-single">
+          <span class="with-text">with</span>
+          <span class="host-name">{{ .HostName1 }}</span>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+
+    <!-- Center Title Cloud Container -->
+    <div class="title-wrapper">
+      <div id="cloudDisplay" class="brush-cloud-target" data-raw-title="{{ .MainTitle }}">
+        {{ .MainTitle }}
+      </div>
+
+      <!-- Yellow swash accent underline from inspiration -->
+      <div id="swashContainer" class="title-swash-box">
+        <svg id="swashSvg" class="title-swash-svg" viewBox="0 0 260 12" fill="none">
+          <path d="M4 6C45 1.5 130 0.5 256 6.5C180 11 90 10.5 4 6Z" fill="#ffd000"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Bottom Info Cards Row -->
+    <div class="info-cards-row">
+      <!-- Card 1: Date -->
+      <div class="info-card card-date">
+        <div class="icon-box">
+          <svg viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="14" width="72" height="66" rx="16" fill="#ffffff" stroke="#0b1528" stroke-width="7"/>
+            <path d="M8 28 C8 20 14 14 22 14 L66 14 C74 14 80 20 80 28 L80 34 L8 34 Z" fill="#ff1361"/>
+            <rect x="22" y="6" width="8" height="16" rx="4" fill="#0b1528"/>
+            <rect x="58" y="6" width="8" height="16" rx="4" fill="#0b1528"/>
+            <rect x="20" y="44" width="10" height="10" rx="3" fill="#0b1528"/>
+            <rect x="39" y="44" width="10" height="10" rx="3" fill="#0b1528"/>
+            <rect x="58" y="44" width="10" height="10" rx="3" fill="#0b1528"/>
+            <rect x="20" y="60" width="10" height="10" rx="3" fill="#0b1528"/>
+            <rect x="39" y="60" width="10" height="10" rx="3" fill="#0b1528"/>
+            <rect x="58" y="60" width="10" height="10" rx="3" fill="#0b1528"/>
+          </svg>
+        </div>
+        <div class="card-date-content">
+          <span id="date-weekday" class="card-date-day">WEDNESDAY</span>
+          <span id="date-main" class="card-date-full">{{ .EventDate }}</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Time -->
+      <div class="info-card card-time">
+        <div class="icon-box">
+          <svg viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="44" cy="44" r="34" fill="#38bdf8" stroke="#0b1528" stroke-width="7"/>
+            <path d="M44 24 L44 44 L58 44" stroke="#0b1528" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="44" cy="44" r="4" fill="#0b1528"/>
+            <path d="M78 60 L85 64" stroke="#ffd000" stroke-width="5" stroke-linecap="round"/>
+            <path d="M80 72 L87 74" stroke="#ffd000" stroke-width="5" stroke-linecap="round"/>
+            <path d="M72 80 L76 87" stroke="#ffd000" stroke-width="5" stroke-linecap="round"/>
+            <path d="M12 68 L7 74" stroke="#ffd000" stroke-width="5" stroke-linecap="round"/>
+            <path d="M18 78 L14 85" stroke="#ffd000" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-time-content">
+          <span class="card-time-text">6:00 PM -</span>
+          <span class="card-time-text">8:00 PM</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Location -->
+      <div class="info-card card-location">
+        <div class="icon-box">
+          <svg viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="44" cy="76" rx="22" ry="7" fill="#ffd000"/>
+            <path d="M44 10 C28 10 16 22 16 38 C16 56 44 76 44 76 C44 76 72 56 72 38 C72 22 60 10 44 10 Z" fill="#ff1361" stroke="#0b1528" stroke-width="7" stroke-linejoin="round"/>
+            <circle cx="44" cy="38" r="8" fill="#ffffff" stroke="#0b1528" stroke-width="4"/>
+          </svg>
+        </div>
+        <div class="card-location-content">
+          <span class="card-location-venue">{{ if .Location }}{{ .Location }}{{ else }}CHATEAU NEUF{{ end }}</span>
+          <span class="card-location-room">{{ if .Room }}{{ .Room }}{{ else }}KLUBBSCENEN{{ end }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Center CTA Button -->
+    <div class="cta-container">
+      <div class="cta-brush-btn">
+        {{ if .SignUpPrompt }}{{ .SignUpPrompt }}{{ else }}Sign up now!{{ end }}
+        <svg class="cta-yellow-stroke" viewBox="0 0 300 16" fill="none">
+          <path d="M4 8 C100 3, 210 3, 296 9 C210 13, 100 13, 4 8 Z" fill="#ffd000"/>
+        </svg>
+
+        <svg class="cta-rays-left" viewBox="0 0 65 65" fill="none">
+          <path d="M52 32 L10 16" stroke="#ffd000" stroke-width="6" stroke-linecap="round"/>
+          <path d="M54 38 L12 42" stroke="#ffd000" stroke-width="6" stroke-linecap="round"/>
+          <path d="M48 46 L22 60" stroke="#ffd000" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+
+        <svg class="cta-arrow-svg" viewBox="0 0 78 78" fill="none">
+          <path d="M64 60 C52 44 38 28 16 20" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+          <path d="M14 36 L16 20 L32 18" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Bottom Left Fluid Ribbon Waves & Golden Star -->
+    <svg class="corner-waves-bl" viewBox="0 0 520 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 90 C90 35 200 60 170 155 C150 250 40 270 0 270 Z" fill="#ff007f"/>
+      <path d="M0 175 C130 110 260 145 250 220 C240 255 160 270 0 270 Z" fill="#00b4d8"/>
+      <path d="M0 220 C90 175 200 195 220 270 L0 270 Z" fill="#ffd000"/>
+      <path d="M0 240 C155 220 350 240 460 270 L0 270 Z" fill="#00e676"/>
+
+      <!-- Golden Star -->
+      <path d="M375 140 C376 118 383 102 394 102 C405 102 411 118 412 140 C413 162 430 167 441 176 C452 185 441 198 424 202 C408 206 402 222 394 230 C385 222 380 206 363 202 C347 198 336 185 347 176 C358 167 374 162 375 140 Z" fill="#ffd000" filter="drop-shadow(0 8px 16px rgba(255, 208, 0, 0.45))"/>
+      <circle cx="500" cy="215" r="15" fill="#ffb703"/>
+    </svg>
+
+    <!-- Bottom Right Fluid Ribbon Waves & Golden Star -->
+    <svg class="corner-waves-br" viewBox="0 0 520 270" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M520 75 C390 65 280 155 360 240 C390 270 480 270 520 270 Z" fill="#ff7a00"/>
+      <path d="M520 155 C430 145 330 200 365 270 L520 270 Z" fill="#7928ca"/>
+      <path d="M520 220 C390 210 220 235 130 270 L520 270 Z" fill="#00e676"/>
+
+      <!-- Golden Star -->
+      <path d="M165 130 C166 108 173 92 184 92 C195 92 201 108 202 130 C203 152 220 157 231 166 C242 175 231 188 214 192 C198 196 192 212 184 220 C175 212 170 196 153 192 C137 188 126 175 137 166 C148 157 164 152 165 130 Z" fill="#ffd000" filter="drop-shadow(0 8px 16px rgba(255, 208, 0, 0.45))"/>
+    </svg>
+  </div>
+
+  <script>
+    // Vibrant highlight palette cycling through characters from reference app
+    const HIGHLIGHT_PALETTE = [
+      '#f9b800', // Yellow
+      '#ff2572', // Hot Pink
+      '#00bef0', // Cyan
+      '#7f22dd', // Purple
+      '#ff7200', // Orange
+      '#02c853', // Emerald Green
+      '#ff4d6d'  // Coral / Red
+    ];
+
+    // Reserved strictly for anti-highlight words (Dark Navy)
+    const ANTI_HIGHLIGHT_COLOR = '#081745';
+
+    // Comprehensive list of anti-highlight words (English & Norwegian)
+    const ANTI_HIGHLIGHT_WORDS = new Set([
+      // English prepositions, conjunctions, articles, small connector words
+      'for', 'in', 'on', 'at', 'to', 'into', 'of', 'with', 'and', 'the', 'a', 'an', 
+      'by', 'from', 'as', 'or', 'nor', 'but', 'over', 'under', 'through', 'about', 
+      'out', 'off', 'up', 'down', 'is', 'it', 'its', 'via', 'vs', 'per', 
+      'within', 'without', 'between', 'among',
+
+      // Norwegian prepositions, conjunctions, articles, pronouns, connectors
+      'for', 'i', 'på', 'til', 'av', 'med', 'og', 'den', 'det', 'de', 'en', 'et', 
+      'ei', 'fra', 'om', 'ved', 'eller', 'men', 'som', 'mot', 'under', 'over', 
+      'inn', 'ut', 'opp', 'ned', 'der', 'her', 'hvor', 'hos', 'etter', 'blant',
+      'mellom', 'uten', 'innen', 'både', 'så'
+    ]);
+
+    /**
+     * Splits title into balanced lines (at most 2 lines)
+     */
+    function splitTitleIntoLines(rawText) {
+      if (rawText.includes('\n')) {
+        return rawText.split('\n').map(s => s.trim()).filter(Boolean);
+      }
+
+      const words = rawText.trim().split(/\s+/);
+      if (words.length <= 2) {
+        return [words.join(' ')];
+      }
+
+      if (words.length === 3) {
+        return [words.slice(0, 2).join(' '), words[2]];
+      }
+
+      if (words.length === 4) {
+        return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+      }
+
+      const mid = Math.ceil(words.length / 2);
+      return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+    }
+
+    /**
+     * Builds the text DOM structure by parsing words and applying anti-highlighting.
+     * Supports both automatic dictionary matching and explicit <ah>...</ah> tags.
+     */
+    function buildTextDOM() {
+      const cloudDisplay = document.getElementById('cloudDisplay');
+      if (!cloudDisplay) return;
+
+      const rawText = cloudDisplay.getAttribute('data-raw-title') || cloudDisplay.textContent.trim();
+      const lines = splitTitleIntoLines(rawText);
+      cloudDisplay.innerHTML = '';
+
+      let highlightColorIndex = 0;
+
+      lines.forEach((line) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'cloud-line';
+
+        const words = line.split(/\s+/);
+
+        words.forEach((wordWithPunct, wIdx) => {
+          const isExplicitAh = /<ah>[\s\S]*?<\/ah>/i.test(wordWithPunct);
+          const cleanWord = wordWithPunct.replace(/<ah>|<\/ah>/gi, '').replace(/[^\wæøåÆØÅ-]/g, '').toLowerCase();
+          const isAntiHighlight = isExplicitAh || ANTI_HIGHLIGHT_WORDS.has(cleanWord);
+
+          const displayWord = wordWithPunct.replace(/<ah>|<\/ah>/gi, '');
+          const wordSpan = document.createElement('span');
+          wordSpan.style.display = 'inline-block';
+          wordSpan.style.whiteSpace = 'nowrap';
+
+          if (isAntiHighlight) {
+            wordSpan.className = 'word-antihighlight';
+            const chars = Array.from(displayWord);
+            chars.forEach((char) => {
+              const charSpan = document.createElement('span');
+              charSpan.textContent = char;
+              charSpan.style.color = ANTI_HIGHLIGHT_COLOR;
+              wordSpan.appendChild(charSpan);
+            });
+          } else {
+            const chars = Array.from(displayWord);
+            chars.forEach((char) => {
+              const charSpan = document.createElement('span');
+              charSpan.className = 'colored-char';
+              charSpan.textContent = char;
+              charSpan.style.color = HIGHLIGHT_PALETTE[highlightColorIndex % HIGHLIGHT_PALETTE.length];
+              highlightColorIndex++;
+              wordSpan.appendChild(charSpan);
+            });
+          }
+
+          lineDiv.appendChild(wordSpan);
+
+          if (wIdx < words.length - 1) {
+            const spaceSpan = document.createElement('span');
+            spaceSpan.innerHTML = '&nbsp;';
+            lineDiv.appendChild(spaceSpan);
+          }
+        });
+
+        cloudDisplay.appendChild(lineDiv);
+      });
+    }
+
+    /**
+     * Binary Search Auto-Fit from reference application:
+     * Calculates the maximum font size ensuring the text + cloud backdrop
+     * stays completely within target boundaries and NEVER overflows into other elements.
+     */
+    function fitTextToBounds() {
+      buildTextDOM();
+
+      const cloudDisplay = document.getElementById('cloudDisplay');
+      if (!cloudDisplay) return;
+
+      const targetAvailableWidth = 1100;
+      const targetAvailableHeight = 340; // Safe height strictly above lower info cards
+
+      let low = 16;
+      let high = 140;
+      let bestSize = low;
+
+      for (let i = 0; i < 12; i++) {
+        const mid = (low + high) / 2;
+        cloudDisplay.style.fontSize = `${mid}px`;
+
+        const textWidth = cloudDisplay.scrollWidth;
+        const textHeight = cloudDisplay.scrollHeight;
+
+        if (textWidth <= targetAvailableWidth && textHeight <= targetAvailableHeight) {
+          bestSize = mid;
+          low = mid + 0.5;
+        } else {
+          high = mid - 0.5;
+        }
+      }
+
+      const finalSize = Math.floor(bestSize);
+      cloudDisplay.style.fontSize = `${finalSize}px`;
+
+      // Scale bottom swash proportionally
+      const swashSvg = document.getElementById('swashSvg');
+      if (swashSvg && cloudDisplay.scrollWidth) {
+        const swashWidth = Math.min(650, Math.max(160, Math.round(cloudDisplay.scrollWidth * 0.72)));
+        swashSvg.style.width = `${swashWidth}px`;
+      }
+    }
+
+    function formatDateCard() {
+      const mainDateEl = document.getElementById('date-main');
+      const weekdayEl = document.getElementById('date-weekday');
+      if (!mainDateEl || !weekdayEl) return;
+
+      const raw = mainDateEl.textContent.trim();
+      const parts = raw.split(',');
+      if (parts.length >= 2) {
+        weekdayEl.textContent = parts[0].trim().toUpperCase();
+        
+        let monthDayYear = parts.slice(1).join(',').trim();
+        const monthMatch = monthDayYear.match(/^([A-Za-z]+)\s+0?(\d+),\s*(\d{4})$/);
+        if (monthMatch) {
+          const shortMonth = monthMatch[1].substring(0, 3).toUpperCase();
+          const day = monthMatch[2];
+          const year = monthMatch[3];
+          mainDateEl.textContent = `${shortMonth} ${day}, ${year}`;
+        } else {
+          mainDateEl.textContent = monthDayYear.toUpperCase();
+        }
+      }
+    }
+
+    // Initialize and fit text when fonts are ready
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        fitTextToBounds();
+        formatDateCard();
+      });
+    } else {
+      fitTextToBounds();
+      formatDateCard();
+    }
+  </script>
+</body>
+</html>
