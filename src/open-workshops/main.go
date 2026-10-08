@@ -7,7 +7,9 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 )
@@ -195,6 +197,89 @@ func sanitizeFilename(title string) string {
 	}
 
 	return safeTitle
+}
+
+// findRoomBackground searches for a background image matching the room name in the same directory.
+// It checks lowercase, exact, and sanitized variations of {{room}}.png, matching actual files on disk.
+func findRoomBackground(room string) string {
+	room = strings.TrimSpace(room)
+	if room == "" {
+		return ""
+	}
+
+	targets := []string{
+		strings.ToLower(room) + ".png",
+		room + ".png",
+		strings.ToLower(sanitizeFilename(room)) + ".png",
+		sanitizeFilename(room) + ".png",
+	}
+
+	entries, err := os.ReadDir(".")
+	if err != nil {
+		for _, target := range targets {
+			if _, statErr := os.Stat(target); statErr == nil {
+				return target
+			}
+		}
+		return ""
+	}
+
+	// First pass: exact filename match against disk entries
+	for _, target := range targets {
+		for _, entry := range entries {
+			if !entry.IsDir() && entry.Name() == target {
+				return entry.Name()
+			}
+		}
+	}
+
+	// Second pass: case-insensitive match against disk entries
+	for _, target := range targets {
+		for _, entry := range entries {
+			if !entry.IsDir() && strings.EqualFold(entry.Name(), target) {
+				return entry.Name()
+			}
+		}
+	}
+
+	return ""
+}
+
+func getFallbackBackgrounds() []string {
+	matches, err := filepath.Glob("banner-bg-*.png")
+	if err == nil && len(matches) > 0 {
+		sort.Strings(matches)
+		return matches
+	}
+	return []string{
+		"banner-bg-1.png",
+		"banner-bg-2.png",
+		"banner-bg-3.png",
+		"banner-bg-4.png",
+		"banner-bg-5.png",
+		"banner-bg-6.png",
+	}
+}
+
+// getWorkshopBackground returns {{room}}.png if it exists in the same path;
+// otherwise falls back to one of the other backgrounds.
+func getWorkshopBackground(workshop WorkshopConfig, index int) string {
+	if bg := findRoomBackground(workshop.Room); bg != "" {
+		return bg
+	}
+
+	if workshop.BackgroundHaze != "" {
+		if _, err := os.Stat(workshop.BackgroundHaze); err == nil {
+			return workshop.BackgroundHaze
+		}
+	}
+
+	fallbacks := getFallbackBackgrounds()
+	if len(fallbacks) > 0 {
+		return fallbacks[index%len(fallbacks)]
+	}
+
+	return "banner-bg-1.png"
 }
 
 func GenerateAllWorkshops() {
@@ -389,6 +474,10 @@ func GenerateAllWorkshops() {
 			EventDate:      "Wednesday, December 16, 2026",
 			Room:           "Klubbscenen",
 		},
+	}
+
+	for i := range workshops {
+		workshops[i].BackgroundHaze = getWorkshopBackground(workshops[i], i)
 	}
 
 	if err := os.MkdirAll(".", 0755); err != nil {
